@@ -22,7 +22,7 @@ public class PlacementType {
 	private String NAME;
     
     @Column(name = "ACTIVE")
-	private String ACTIVE;
+	private int ACTIVE;
 	
     
     public PlacementType () {}
@@ -40,10 +40,10 @@ public class PlacementType {
 	public void setNAME(String nAME) {
 		NAME = nAME;
 	}
-	public String getACTIVE() {
+	public int getACTIVE() {
 		return ACTIVE;
 	}
-	public void setACTIVE(String aCTIVE) {
+	public void setACTIVE(int aCTIVE) {
 		ACTIVE = aCTIVE;
 	}
 	public long getID() {

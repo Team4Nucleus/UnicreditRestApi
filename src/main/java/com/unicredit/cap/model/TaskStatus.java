@@ -22,7 +22,7 @@ public class TaskStatus {
 	private String NAME;
     
     @Column(name = "ACTIVE")
-	private String ACTIVE;
+	private int ACTIVE;
 	
     
     public TaskStatus () {}
@@ -40,10 +40,10 @@ public class TaskStatus {
 	public void setNAME(String nAME) {
 		NAME = nAME;
 	}
-	public String getACTIVE() {
+	public int getACTIVE() {
 		return ACTIVE;
 	}
-	public void setACTIVE(String aCTIVE) {
+	public void setACTIVE(int aCTIVE) {
 		ACTIVE = aCTIVE;
 	}
 	public long getID() {

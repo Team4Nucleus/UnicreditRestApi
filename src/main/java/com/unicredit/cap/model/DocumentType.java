@@ -22,7 +22,7 @@ public class DocumentType {
 	private String NAME;
     
     @Column(name = "ACTIVE")
-	private String ACTIVE;
+	private int ACTIVE;
     
     @Column(name = "ORG", nullable = true)
     private Integer ORG;
@@ -55,10 +55,10 @@ public class DocumentType {
 	public void setNAME(String nAME) {
 		NAME = nAME;
 	}
-	public String getACTIVE() {
+	public int getACTIVE() {
 		return ACTIVE;
 	}
-	public void setACTIVE(String aCTIVE) {
+	public void setACTIVE(int aCTIVE) {
 		ACTIVE = aCTIVE;
 	}
 	public long getID() {
