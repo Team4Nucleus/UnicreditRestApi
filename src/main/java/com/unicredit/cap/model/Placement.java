@@ -1,7 +1,10 @@
 package com.unicredit.cap.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -95,6 +99,30 @@ public class Placement {
     private PlacementType PLACEMENTTYPE;
     
     
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true )
+    @JoinColumn(name = "PLACEMENT")
+    private List<PlacementTransfer> TRANSFERS = new ArrayList<>();
+    
+    
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "PLACEMENT")
+    private List<Task> TASKS = new ArrayList<>();
+    
+    
+    
+    
+	public List<Task> getTASKS() {
+		return TASKS;
+	}
+	public void setTASKS(List<Task> tASKS) {
+		TASKS = tASKS;
+	}
+	public List<PlacementTransfer> getTRANSFERS() {
+		return TRANSFERS;
+	}
+	public void setTRANSFERS(List<PlacementTransfer> tRANSFERS) {
+		TRANSFERS = tRANSFERS;
+	}
 	public PlacementType getPLACEMENTTYPE() {
 		return PLACEMENTTYPE;
 	}
