@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -21,105 +22,138 @@ public class Task {
     @Id
     @GeneratedValue
     @Column(name = "ID")
-	private long ID;
+	private long id;
     
     @Column(name = "PLACEMENT")
-	private long IDPLACEMENT;
+	private long placement;
     
     @Column(name = "DESCRIPTION")
-	private String DESCRIPTION;
+	private String description;
     
     @Column(name = "STATUS")
-	private int STATUS;
+	private int status;
     
     @Column(name = "PRIORITY")
-	private String PRIORITY;
+	private String priority;
     
     @Column(name = "CREATE_USER")
-	private int CREATE_USER;
+	private int createUser;
     
     @Column(name = "CREATION_DATE")
-	private Date CREATION_DATE;
+	private Date createDate;
     
     @Column(name = "CLOSING_DATE")
-	private Date CLOSING_DATE;
+	private Date closingDate;
 	
 	@ManyToOne
-	@JoinColumn(name = "STATUS", insertable=false, updatable=false)
-	private TaskStatus TASKSTATUS;
+	@JoinColumn(name = "status", insertable=false, updatable=false)
+	private TaskStatus taskstatus;
 	
 	
-	 @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	 @JoinColumn(name = "TASK")
-	 private List<TaskDetail> TASKSDETAILS = new ArrayList<>();
-	 
-	/*
-    @ManyToOne
-	@JoinColumn(name = "PLACEMENT", insertable=false, updatable=false)
-	private Placement PLACEMENT;
-	*/
-	
-	public TaskStatus getTASKSTATUS() {
-		return TASKSTATUS;
-	}
-	public List<TaskDetail> getTASKSDETAILS() {
-		return TASKSDETAILS;
-	}
-	public void setTASKSDETAILS(List<TaskDetail> tASKSDETAILS) {
-		TASKSDETAILS = tASKSDETAILS;
-	}
-	public void setTASKSTATUS(TaskStatus tASKSTATUS) {
-		TASKSTATUS = tASKSTATUS;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "task", fetch = FetchType.LAZY)
+	private List<TaskDetail> taskdetails = new ArrayList<>();
+
+
+	public long getId() {
+		return id;
 	}
 
-	public long getID() {
-		return ID;
+
+	public void setId(long id) {
+		this.id = id;
 	}
-	public void setID(long iD) {
-		ID = iD;
+
+
+	public long getPlacement() {
+		return placement;
 	}
-	public long getIDPLACEMENT() {
-		return IDPLACEMENT;
+
+
+	public void setPlacement(long idplacement) {
+		this.placement = idplacement;
 	}
-	public void setIDPLACEMENT(long iDPLACEMENT) {
-		IDPLACEMENT = iDPLACEMENT;
+
+
+	public String getDescription() {
+		return description;
 	}
-	public String getDESCRIPTION() {
-		return DESCRIPTION;
+
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
-	public void setDESCRIPTION(String dESCRIPTION) {
-		DESCRIPTION = dESCRIPTION;
+
+
+	public int getStatus() {
+		return status;
 	}
-	public int getSTATUS() {
-		return STATUS;
+
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
-	public void setSTATUS(int sTATUS) {
-		STATUS = sTATUS;
+
+
+	public String getPriority() {
+		return priority;
 	}
-	public String getPRIORITY() {
-		return PRIORITY;
+
+
+	public void setPriority(String priority) {
+		this.priority = priority;
 	}
-	public void setPRIORITY(String pRIORITY) {
-		PRIORITY = pRIORITY;
+
+
+	public int getCreateUser() {
+		return createUser;
 	}
-	public int getCREATE_USER() {
-		return CREATE_USER;
+
+
+	public void setCreateUser(int createUser) {
+		this.createUser = createUser;
 	}
-	public void setCREATE_USER(int cREATE_USER) {
-		CREATE_USER = cREATE_USER;
+
+
+	public Date getCreateDate() {
+		return createDate;
 	}
-	public Date getCREATION_DATE() {
-		return CREATION_DATE;
+
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
-	public void setCREATION_DATE(Date cREATION_DATE) {
-		CREATION_DATE = cREATION_DATE;
+
+
+	public Date getClosingDate() {
+		return closingDate;
 	}
-	public Date getCLOSING_DATE() {
-		return CLOSING_DATE;
+
+
+	public void setClosingDate(Date closingDate) {
+		this.closingDate = closingDate;
 	}
-	public void setCLOSING_DATE(Date cLOSING_DATE) {
-		CLOSING_DATE = cLOSING_DATE;
+
+
+	public TaskStatus getTaskstatus() {
+		return taskstatus;
 	}
+
+
+	public void setTaskstatus(TaskStatus taskstatus) {
+		this.taskstatus = taskstatus;
+	}
+
+
+	public List<TaskDetail> getTASKSDETAILS() {
+		return taskdetails;
+	}
+
+
+	public void setTASKSDETAILS(List<TaskDetail> tASKSDETAILS) {
+		taskdetails = tASKSDETAILS;
+	}
+	 
+	
 	
 	
 	

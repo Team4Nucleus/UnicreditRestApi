@@ -1,8 +1,8 @@
 package com.unicredit.cap.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 @Table(name = "PLACEMENT")
 public class Placement {
@@ -22,259 +24,342 @@ public class Placement {
     @Id
     @GeneratedValue
     @Column(name = "ID")
-	private long ID;
+    @JsonView(Placement.class)
+	private long id;
     
+    @JsonView(Placement.class)
     @Column(name = "APPLICATION")
-	private int APPLICATION;
+	private int application;
     
+    @JsonView(Placement.class)
     @Column(name = "DECISION_NUMBER")
-	private String DECISION_NUMBER;
+	private String decisionNumber;
 	
+    @JsonView(Placement.class)
     @Column(name = "CLIENT_CORE_NO")
-    private long CLIENT_CORE_NO;
+    private long clientCoreNo;
     
+    @JsonView(Placement.class)
     @Column(name = "CLIENT_NAME")
-	private String CLIENT_NAME;
+	private String clientName;
     
+    @JsonView(Placement.class)
     @Column(name = "CLIENT_JIB")
-	private String CLIENT_JIB;
+	private String clientJib;
     
+    @JsonView(Placement.class)
     @Column(name = "CLIENT_PERSONAL_DOC")
-	private String CLIENT_PERSONAL_DOC;
+	private String clientPersonalDoc;
     
+    @JsonView(Placement.class)
     @Column(name = "CLIENT_PHONE")
-	private String CLIENT_PHONE;
+	private String clientPhone;
     
+    @JsonView(Placement.class)
     @Column(name = "CLIENT_EMAIL")
-	private String CLIENT_EMAIL;
+	private String clientEmail;
     
+    @JsonView(Placement.class)
     @Column(name = "TYPE")
-	private int TYPE;
+	private int type;
     
+    @JsonView(Placement.class)
     @Column(name = "REQUEST_DATE")
-	private Date REQUEST_DATE;
+	private Date requestDAte;
     
+    @JsonView(Placement.class)
     @Column(name = "CREATING_DATE")
-	private Date CREATING_DATE;
+	private Date cretaingDate;
     
+    @JsonView(Placement.class)
     @Column(name = "CLOSING_DATE")
-	private Date CLOSING_DATE;
+	private Date closingDate;
     
+    @JsonView(Placement.class)
     @Column(name = "CREATING_ORG")
-	private int CREATING_ORG;
+	private int creatingOrg;
     
+    @JsonView(Placement.class)
     @Column(name = "CURRENT_ORG")
-	private Integer CURRENT_ORG;
+	private Integer currentOrg;
     
+    @JsonView(Placement.class)
     @Column(name = "CREATE_USER")
-	private int CREATE_USER;
+	private int createUser;
     
+    @JsonView(Placement.class)
     @Column(name = "CURRENT_USER")
-	private Integer CURRENT_USER;
+	private Integer currentUser;
     
+    @JsonView(Placement.class)
     @Column(name = "LOAN_AMOUNT")
-	private long LOAN_AMOUNT;
+	private long loanAmount;
     
+    @JsonView(Placement.class)
     @Column(name = "PAYMENT_PERIOD")
-	private String PAYMENT_PERIOD;
+	private String paymentPeriod;
     
+    @JsonView(Placement.class)
     @Column(name = "LOAN_USAGE")
-	private String LOAN_USAGE;
+	private String loanUsage;
     
+    @JsonView(Placement.class)
     @Column(name = "TOTAL_EXPOSURE")
-	private long TOTAL_EXPOSURE;
+	private long totalExposure;
     
+    @JsonView(Placement.class)
     @Column(name = "USER_COMMENT")
-	private String USER_COMMENT;
+	private String userComment;
     
+    @JsonView(Placement.class)
     @Column(name = "STATUS")
-    private int STATUS;
+    private int status;
     
+    @JsonView(Placement.class)
     @ManyToOne
-	@JoinColumn(name = "STATUS", insertable=false, updatable=false)
-    private PlacementStatus PLACEMENTSTATUS;
+	@JoinColumn(name = "status", insertable=false, updatable=false)
+    private PlacementStatus placementstatus;
     
+    @JsonView(Placement.class)
     @ManyToOne
-   	@JoinColumn(name = "TYPE", insertable=false, updatable=false)
-    private PlacementType PLACEMENTTYPE;
+   	@JoinColumn(name = "type", insertable=false, updatable=false)
+    private PlacementType placementtype;
+       
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true )
+    private Set<PlacementTransfer> transfers = new HashSet<PlacementTransfer>();
+       
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Task> tasks = new HashSet<Task>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Document> documents = new HashSet<Document>();
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public int getApplication() {
+		return application;
+	}
+
+	public void setApplication(int application) {
+		this.application = application;
+	}
+
+	public String getDecisionNumber() {
+		return decisionNumber;
+	}
+
+	public void setDecisionNumber(String decisionNumber) {
+		this.decisionNumber = decisionNumber;
+	}
+
+	public long getClientCoreNo() {
+		return clientCoreNo;
+	}
+
+	public void setClientCoreNo(long clientCoreNo) {
+		this.clientCoreNo = clientCoreNo;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getClientJib() {
+		return clientJib;
+	}
+
+	public void setClientJib(String clientJib) {
+		this.clientJib = clientJib;
+	}
+
+	public String getClientPersonalDoc() {
+		return clientPersonalDoc;
+	}
+
+	public void setClientPersonalDoc(String clientPersonalDoc) {
+		this.clientPersonalDoc = clientPersonalDoc;
+	}
+
+	public String getClientPhone() {
+		return clientPhone;
+	}
+
+	public void setClientPhone(String clientPhone) {
+		this.clientPhone = clientPhone;
+	}
+
+	public String getClientEmail() {
+		return clientEmail;
+	}
+
+	public void setClientEmail(String clientEmail) {
+		this.clientEmail = clientEmail;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public Date getRequestDAte() {
+		return requestDAte;
+	}
+
+	public void setRequestDAte(Date requestDAte) {
+		this.requestDAte = requestDAte;
+	}
+
+	public Date getCretaingDate() {
+		return cretaingDate;
+	}
+
+	public void setCretaingDate(Date cretaingDate) {
+		this.cretaingDate = cretaingDate;
+	}
+
+	public Date getClosingDate() {
+		return closingDate;
+	}
+
+	public void setClosingDate(Date closingDate) {
+		this.closingDate = closingDate;
+	}
+
+	public int getCreatingOrg() {
+		return creatingOrg;
+	}
+
+	public void setCreatingOrg(int creatingOrg) {
+		this.creatingOrg = creatingOrg;
+	}
+
+	public Integer getCurrentOrg() {
+		return currentOrg;
+	}
+
+	public void setCurrentOrg(Integer currentOrg) {
+		this.currentOrg = currentOrg;
+	}
+
+	public int getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(int createUser) {
+		this.createUser = createUser;
+	}
+
+	public Integer getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(Integer currentUser) {
+		this.currentUser = currentUser;
+	}
+
+	public long getLoanAmount() {
+		return loanAmount;
+	}
+
+	public void setLoanAmount(long loanAmount) {
+		this.loanAmount = loanAmount;
+	}
+
+	public String getPaymentPeriod() {
+		return paymentPeriod;
+	}
+
+	public void setPaymentPeriod(String paymentPeriod) {
+		this.paymentPeriod = paymentPeriod;
+	}
+
+	public String getLoanUsage() {
+		return loanUsage;
+	}
+
+	public void setLoanUsage(String loanUsage) {
+		this.loanUsage = loanUsage;
+	}
+
+	public long getTotalExposure() {
+		return totalExposure;
+	}
+
+	public void setTotalExposure(long totalExposure) {
+		this.totalExposure = totalExposure;
+	}
+
+	public String getUserComment() {
+		return userComment;
+	}
+
+	public void setUserComment(String userComment) {
+		this.userComment = userComment;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public PlacementStatus getPlacementstatus() {
+		return placementstatus;
+	}
+
+	public void setPlacementstatus(PlacementStatus placementstatus) {
+		this.placementstatus = placementstatus;
+	}
+
+	public PlacementType getPlacementtype() {
+		return placementtype;
+	}
+
+	public void setPlacementtype(PlacementType placementtype) {
+		this.placementtype = placementtype;
+	}
+
+	public Set<PlacementTransfer> getTransfers() {
+		return transfers;
+	}
+
+	public void setTransfers(Set<PlacementTransfer> transfers) {
+		this.transfers = transfers;
+	}
+
+	public Set<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(Set<Task> tasks) {
+		this.tasks = tasks;
+	}
+
+	public Set<Document> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(Set<Document> documents) {
+		this.documents = documents;
+	}
     
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true )
-    @JoinColumn(name = "PLACEMENT")
-    private List<PlacementTransfer> TRANSFERS = new ArrayList<>();
-    
-    
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "PLACEMENT")
-    private List<Task> TASKS = new ArrayList<>();
-    
-    
-    
-    
-	public List<Task> getTASKS() {
-		return TASKS;
-	}
-	public void setTASKS(List<Task> tASKS) {
-		TASKS = tASKS;
-	}
-	public List<PlacementTransfer> getTRANSFERS() {
-		return TRANSFERS;
-	}
-	public void setTRANSFERS(List<PlacementTransfer> tRANSFERS) {
-		TRANSFERS = tRANSFERS;
-	}
-	public PlacementType getPLACEMENTTYPE() {
-		return PLACEMENTTYPE;
-	}
-	public void setPLACEMENTTYPE(PlacementType pLACEMENTTYPE) {
-		PLACEMENTTYPE = pLACEMENTTYPE;
-	}
-	public PlacementStatus getPLACEMENTSTATUS() {
-		return PLACEMENTSTATUS;
-	}
-	public void setPLACEMENTSTATUS(PlacementStatus pLACEMENTSTATUS) {
-		PLACEMENTSTATUS = pLACEMENTSTATUS;
-	}
-	public long getID() {
-		return ID;
-	}
-	public void setID(long iD) {
-		ID = iD;
-	}
-	public int getAPPLICATION() {
-		return APPLICATION;
-	}
-	public void setAPPLICATION(int aPPLICATION) {
-		APPLICATION = aPPLICATION;
-	}
-	public String getDECISION_NUMBER() {
-		return DECISION_NUMBER;
-	}
-	public void setDECISION_NUMBER(String dECISION_NUMBER) {
-		DECISION_NUMBER = dECISION_NUMBER;
-	}
-	public long getCLIENT_CORE_NO() {
-		return CLIENT_CORE_NO;
-	}
-	public void setCLIENT_CORE_NO(long cLIENT_CORE_NO) {
-		CLIENT_CORE_NO = cLIENT_CORE_NO;
-	}
-	public String getCLIENT_NAME() {
-		return CLIENT_NAME;
-	}
-	public void setCLIENT_NAME(String cLIENT_NAME) {
-		CLIENT_NAME = cLIENT_NAME;
-	}
-	public String getCLIENT_JIB() {
-		return CLIENT_JIB;
-	}
-	public void setCLIENT_JIB(String cLIENT_JIB) {
-		CLIENT_JIB = cLIENT_JIB;
-	}
-	public String getCLIENT_PERSONAL_DOC() {
-		return CLIENT_PERSONAL_DOC;
-	}
-	public void setCLIENT_PERSONAL_DOC(String cLIENT_PERSONAL_DOC) {
-		CLIENT_PERSONAL_DOC = cLIENT_PERSONAL_DOC;
-	}
-	public String getCLIENT_PHONE() {
-		return CLIENT_PHONE;
-	}
-	public void setCLIENT_PHONE(String cLIENT_PHONE) {
-		CLIENT_PHONE = cLIENT_PHONE;
-	}
-	public String getCLIENT_EMAIL() {
-		return CLIENT_EMAIL;
-	}
-	public void setCLIENT_EMAIL(String cLIENT_EMAIL) {
-		CLIENT_EMAIL = cLIENT_EMAIL;
-	}
-	public int getTYPE() {
-		return TYPE;
-	}
-	public void setTYPE(int tYPE) {
-		TYPE = tYPE;
-	}
-	public Date getREQUEST_DATE() {
-		return REQUEST_DATE;
-	}
-	public void setREQUEST_DATE(Date rEQUEST_DATE) {
-		REQUEST_DATE = rEQUEST_DATE;
-	}
-	public Date getCREATING_DATE() {
-		return CREATING_DATE;
-	}
-	public void setCREATING_DATE(Date cREATING_DATE) {
-		CREATING_DATE = cREATING_DATE;
-	}
-	public Date getCLOSING_DATE() {
-		return CLOSING_DATE;
-	}
-	public void setCLOSING_DATE(Date cLOSING_DATE) {
-		CLOSING_DATE = cLOSING_DATE;
-	}
-	public int getCREATING_ORG() {
-		return CREATING_ORG;
-	}
-	public void setCREATING_ORG(int cREATING_ORG) {
-		CREATING_ORG = cREATING_ORG;
-	}
-	public Integer getCURRENT_ORG() {
-		return CURRENT_ORG;
-	}
-	public void setCURRENT_ORG(Integer cURRENT_ORG) {
-		CURRENT_ORG = cURRENT_ORG;
-	}
-	public int getCREATE_USER() {
-		return CREATE_USER;
-	}
-	public void setCREATE_USER(int cREATE_USER) {
-		CREATE_USER = cREATE_USER;
-	}
-	public Integer getCURRENT_USER() {
-		return CURRENT_USER;
-	}
-	public void setCURRENT_USER(Integer cURRENT_USER) {
-		CURRENT_USER = cURRENT_USER;
-	}
-	public long getLOAN_AMOUNT() {
-		return LOAN_AMOUNT;
-	}
-	public void setLOAN_AMOUNT(long lOAN_AMOUNT) {
-		LOAN_AMOUNT = lOAN_AMOUNT;
-	}
-	public String getPAYMENT_PERIOD() {
-		return PAYMENT_PERIOD;
-	}
-	public void setPAYMENT_PERIOD(String pAYMENT_PERIOD) {
-		PAYMENT_PERIOD = pAYMENT_PERIOD;
-	}
-	public String getLOAN_USAGE() {
-		return LOAN_USAGE;
-	}
-	public void setLOAN_USAGE(String lOAN_USAGE) {
-		LOAN_USAGE = lOAN_USAGE;
-	}
-	public long getTOTAL_EXPOSURE() {
-		return TOTAL_EXPOSURE;
-	}
-	public void setTOTAL_EXPOSURE(long tOTAL_EXPOSURE) {
-		TOTAL_EXPOSURE = tOTAL_EXPOSURE;
-	}
-	public String getUSER_COMMENT() {
-		return USER_COMMENT;
-	}
-	public void setUSER_COMMENT(String uSER_COMMENT) {
-		USER_COMMENT = uSER_COMMENT;
-	}
 	
-	
-	public int getSTATUS() {
-		return STATUS;
-	}
-	public void setSTATUS(int sTATUS) {
-		STATUS = sTATUS;
-	}
 	
 	
 }

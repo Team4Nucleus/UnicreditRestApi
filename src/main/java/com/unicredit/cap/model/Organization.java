@@ -1,14 +1,20 @@
 package com.unicredit.cap.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="DOCUMENTTYPE")
-public class DocumentType {
+@Table(name="HRORGANIZATION")
+public class Organization {
 
     @Id
     @GeneratedValue
@@ -21,11 +27,11 @@ public class DocumentType {
     @Column(name = "NAME")
 	private String name;
     
-    @Column(name = "ACTIVE")
-	private int active;
-    
-    @Column(name = "ORG", nullable = true)
-    private Integer org;
+    @Column(name = "DESCRIPTION")
+	private String description;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "hrOrganization")
+    private List<User> users = new ArrayList<>();
 
 	public long getId() {
 		return id;
@@ -51,24 +57,24 @@ public class DocumentType {
 		this.name = name;
 	}
 
-	public int getActive() {
-		return active;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setActive(int active) {
-		this.active = active;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public Integer getOrg() {
-		return org;
+	public List<User> getUsers() {
+		return users;
 	}
 
-	public void setOrg(Integer org) {
-		this.org = org;
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
-	
     
-   
+    
+	
 
 	
 }

@@ -16,104 +16,105 @@ public class TaskDetail {
     @Id
     @GeneratedValue
     @Column(name = "ID")
-	private long ID;
+	private long id;
     
     @Column(name = "TASK")
-	private long TASK;
+	private long task;
 	
     @Column(name = "TEXT")
-	private String TEXT;
+	private String text;
 	
     @Column(name = "FROM_USER")
-	private int FROM_USER;
+	private int fromUser;
 	
     @Column(name = "FROM_ORG")
-	private int FROM_ORG;
+	private int fromOrg;
 	
     @Column(name = "TO_USER")
-	private int TO_USER;
+	private int toUser;
 	
     @Column(name = "TO_ORG")
-	private int TO_ORG;
+	private int toOrg;
 	
     @Column(name = "FROM_DATE")
-	private Date FROM_DATE;
+	private Date fromDate;
 	
     @Column(name = "TO_DATE")
-	private Date TO_DATE;
+	private Date toDate;
 
-	public long getID() {
-		return ID;
+	public long getId() {
+		return id;
 	}
 
-	public void setID(long iD) {
-		ID = iD;
+	public void setId(long id) {
+		this.id = id;
 	}
 
-	public long getTASK() {
-		return TASK;
+	public long getTask() {
+		return task;
 	}
 
-	public void setTASK(long tASK) {
-		TASK = tASK;
+	public void setTask(long task) {
+		this.task = task;
 	}
 
-	public String getTEXT() {
-		return TEXT;
+	public String getText() {
+		return text;
 	}
 
-	public void setTEXT(String tEXT) {
-		TEXT = tEXT;
+	public void setText(String text) {
+		this.text = text;
 	}
 
-	public int getFROM_USER() {
-		return FROM_USER;
+	public int getFromUser() {
+		return fromUser;
 	}
 
-	public void setFROM_USER(int fROM_USER) {
-		FROM_USER = fROM_USER;
+	public void setFromUser(int fromUser) {
+		this.fromUser = fromUser;
 	}
 
-	public int getFROM_ORG() {
-		return FROM_ORG;
+	public int getFromOrg() {
+		return fromOrg;
 	}
 
-	public void setFROM_ORG(int fROM_ORG) {
-		FROM_ORG = fROM_ORG;
+	public void setFromOrg(int fromOrg) {
+		this.fromOrg = fromOrg;
 	}
 
-	public int getTO_USER() {
-		return TO_USER;
+	public int getToUser() {
+		return toUser;
 	}
 
-	public void setTO_USER(int tO_USER) {
-		TO_USER = tO_USER;
+	public void setToUser(int toUser) {
+		this.toUser = toUser;
 	}
 
-	public int getTO_ORG() {
-		return TO_ORG;
+	public int getToOrg() {
+		return toOrg;
 	}
 
-	public void setTO_ORG(int tO_ORG) {
-		TO_ORG = tO_ORG;
+	public void setToOrg(int toOrg) {
+		this.toOrg = toOrg;
 	}
 
-	public Date getFROM_DATE() {
-		return FROM_DATE;
+	public Date getFromDate() {
+		return fromDate;
 	}
 
-	public void setFROM_DATE(Date fROM_DATE) {
-		FROM_DATE = fROM_DATE;
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
 	}
 
-	public Date getTO_DATE() {
-		return TO_DATE;
+	public Date getToDate() {
+		return toDate;
 	}
 
-	public void setTO_DATE(Date tO_DATE) {
-		TO_DATE = tO_DATE;
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
 	}
-    
+
+	
     
     
 	

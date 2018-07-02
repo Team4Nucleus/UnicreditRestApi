@@ -4,11 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,98 +19,112 @@ public class PlacementTransfer {
 	
 	
 	@Column(name = "PLACEMENT")
-	private long IDPLACEMENT;
+	private long placement;
 	
 	@Column(name = "FROM_ORG")
-	private int FROM_ORG;
+	private int fromOrg;
 	
 	@Column(name = "FROM_USER")
-	private int FROM_USER;
+	private int fromUser;
 	
 	@Column(name = "TO_ORG")
-	private int TO_ORG;
+	private int toOrg;
 	
 	@Column(name = "TO_USER")
-	private int TO_USER;
+	private int toUser;
 	
 	@Column(name = "DATE_FROM")
-	private Date DATE_FROM;
+	private Date dateFrom;
 	
 	@Column(name = "DATE_TO")
-	private Date DATE_TO;
+	private Date dateTo;
 	
 	@Column(name = "USER_COMMENT")
-	private String USER_COMMENT;
+	private String userComment;
 	
 	@Column(name = "MOVEMENT_TYPE")
-	private String MOVEMENT_TYPE;
-	
-	/*
-	 @ManyToOne(fetch = FetchType.LAZY)
-	    @JoinColumn(name = "PLACEMENT", insertable=false, updatable = false)
-	 private Placement PLACEMENT;
-	*/
-	
+	private String movementType;
+
 	public long getID() {
 		return ID;
 	}
+
 	public void setID(long iD) {
 		ID = iD;
 	}
-	public long getPLACEMENT() {
-		return IDPLACEMENT;
+
+	public long getPlacement() {
+		return placement;
 	}
-	public void setPLACEMENT(long pLACEMENT) {
-		IDPLACEMENT = pLACEMENT;
+
+	public void setPlacement(long idplacement) {
+		this.placement = idplacement;
 	}
-	public int getFROM_ORG() {
-		return FROM_ORG;
+
+	public int getFromOrg() {
+		return fromOrg;
 	}
-	public void setFROM_ORG(int fROM_ORG) {
-		FROM_ORG = fROM_ORG;
+
+	public void setFromOrg(int fromOrg) {
+		this.fromOrg = fromOrg;
 	}
-	public int getFROM_USER() {
-		return FROM_USER;
+
+	public int getFromUser() {
+		return fromUser;
 	}
-	public void setFROM_USER(int fROM_USER) {
-		FROM_USER = fROM_USER;
+
+	public void setFromUser(int fromUser) {
+		this.fromUser = fromUser;
 	}
-	public int getTO_ORG() {
-		return TO_ORG;
+
+	public int getToOrg() {
+		return toOrg;
 	}
-	public void setTO_ORG(int tO_ORG) {
-		TO_ORG = tO_ORG;
+
+	public void setToOrg(int toOrg) {
+		this.toOrg = toOrg;
 	}
-	public int getTO_USER() {
-		return TO_USER;
+
+	public int getToUser() {
+		return toUser;
 	}
-	public void setTO_USER(int tO_USER) {
-		TO_USER = tO_USER;
+
+	public void setToUser(int toUser) {
+		this.toUser = toUser;
 	}
-	public Date getDATE_FROM() {
-		return DATE_FROM;
+
+	public Date getDateFrom() {
+		return dateFrom;
 	}
-	public void setDATE_FROM(Date dATE_FROM) {
-		DATE_FROM = dATE_FROM;
+
+	public void setDateFrom(Date dateFrom) {
+		this.dateFrom = dateFrom;
 	}
-	public Date getDATE_TO() {
-		return DATE_TO;
+
+	public Date getDateTo() {
+		return dateTo;
 	}
-	public void setDATE_TO(Date dATE_TO) {
-		DATE_TO = dATE_TO;
+
+	public void setDateTo(Date dateTo) {
+		this.dateTo = dateTo;
 	}
-	public String getUSER_COMMENT() {
-		return USER_COMMENT;
+
+	public String getUserComment() {
+		return userComment;
 	}
-	public void setUSER_COMMENT(String uSER_COMMENT) {
-		USER_COMMENT = uSER_COMMENT;
+
+	public void setUserComment(String userComment) {
+		this.userComment = userComment;
 	}
-	public String getMOVEMENT_TYPE() {
-		return MOVEMENT_TYPE;
+
+	public String getMovementType() {
+		return movementType;
 	}
-	public void setMOVEMENT_TYPE(String mOVEMENT_TYPE) {
-		MOVEMENT_TYPE = mOVEMENT_TYPE;
+
+	public void setMovementType(String movementType) {
+		this.movementType = movementType;
 	}
+	
 	
 	
 	

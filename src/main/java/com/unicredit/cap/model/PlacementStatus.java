@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 @Table(name="PLACEMENTSTATUS")
 public class PlacementStatus {
@@ -13,45 +15,54 @@ public class PlacementStatus {
     @Id
     @GeneratedValue
     @Column(name = "ID")
-	private long ID;
+    @JsonView(Placement.class)
+	private long id;
     
     @Column(name = "CODE")
-	private String CODE;
+    @JsonView(Placement.class)
+	private String code;
     
     @Column(name = "NAME")
-	private String NAME;
+    @JsonView(Placement.class)
+	private String name;
     
     @Column(name = "ACTIVE")
-	private int ACTIVE;
-	
-    
-    public PlacementStatus () {}
-    
-    
-	public String getCODE() {
-		return CODE;
-	}
-	public void setCODE(String cODE) {
-		CODE = cODE;
-	}
-	public String getNAME() {
-		return NAME;
-	}
-	public void setNAME(String nAME) {
-		NAME = nAME;
-	}
-	public int getACTIVE() {
-		return ACTIVE;
-	}
-	public void setACTIVE(int aCTIVE) {
-		ACTIVE = aCTIVE;
-	}
-	public long getID() {
-		return ID;
-	}
-	public void setID(int iD) {
-		ID = iD;
+    @JsonView(Placement.class)
+	private int active;
+
+	public long getId() {
+		return id;
 	}
 
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
+	}
+	
+    
+   
 	
 }

@@ -9,29 +9,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.unicredit.cap.model.Placement;
-import com.unicredit.cap.repository.PlacementRepository;
-
+import com.unicredit.cap.model.PlacementTransfer;
+import com.unicredit.cap.repository.PlacementTransferRepository;
 
 @RestController
-@RequestMapping("/rest/placement")
-public class PlacementController {
+@RequestMapping("/rest/placementtransfer")
+public class PlacementTransferController {
 
-	
 	 @Autowired
-	 private PlacementRepository repository;
+	 private PlacementTransferRepository repository;
 	 
-	 @JsonView(Placement.class)
 	 @GetMapping(value = "/all")
-	    public List<Placement> findAll() {
+	    public List<PlacementTransfer> findAll() {
 	        return repository.findAll();
 	    }
 
-	 
 	 @GetMapping(value = "/{id}")
-	 public Optional<Placement> findById(@PathVariable final Long id){
+	 public Optional<PlacementTransfer> findById(@PathVariable final Long id){
 		
 	    return repository.findById(id);
 	    }
+	
+	
 }
