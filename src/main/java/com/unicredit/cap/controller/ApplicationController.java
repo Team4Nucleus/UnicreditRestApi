@@ -1,5 +1,6 @@
 package com.unicredit.cap.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.unicredit.cap.model.Application;
 import com.unicredit.cap.repository.ApplicationRepository;
+import com.unicredit.cap.service.ExchangeMailService;
+import com.unicredit.cap.service.GmailService;
+import com.unicredit.cap.service.MailService;
 
 @RestController
 @RequestMapping("/rest/application")
@@ -30,6 +34,12 @@ public class ApplicationController {
 	 @JsonView(Application.class)
 	 @GetMapping(value = "/allapp")
 	    public List<Application> findAllApp() {
+		 
+		 List<String> str = new ArrayList<>();
+		 
+		 MailService ms = new GmailService();
+		 ms.SendMail("",str, "", "");
+		 
 	        return repository.getAllAplications();
 	    }
 	 
