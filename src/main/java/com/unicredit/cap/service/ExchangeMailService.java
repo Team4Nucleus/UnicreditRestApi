@@ -19,10 +19,10 @@ public class ExchangeMailService implements MailService {
 		 Boolean flag = false;
 	        try {
 	            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1); // your server version
-	            ExchangeCredentials credentials = new WebCredentials("sapwebservices@poreskaupravars.org", "sap!2016","poreskaupravars.org");   // change them to your email username, password, email domain
+	            ExchangeCredentials credentials = new WebCredentials("sapwebservices", "sap!2016");   // change them to your email username, password, email domain
 	            service.setCredentials(credentials);
 	         
-	            service.setUrl(new URI("https://exchange1.purs.int/EWS/Exchange.asmx")); //https://webmail.poreskaupravars.org
+	            service.setUrl(new URI("https://exchange1.poreskaupravars.org/EWS/Exchange.asmx")); //https://webmail.poreskaupravars.org
 	            EmailMessage msg = new EmailMessage(service);
 	            msg.setSubject("This is a test!!!"); //email subject
 	            msg.setBody(MessageBody.getMessageBodyFromText("This is a test!!! pls ignore it!")); //email body

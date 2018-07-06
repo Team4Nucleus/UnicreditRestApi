@@ -1,18 +1,21 @@
 package com.unicredit.cap.model;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
@@ -21,7 +24,7 @@ public class Application  {
 
 	@JsonView(Application.class)
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
 	private long id;
     
@@ -44,14 +47,11 @@ public class Application  {
 	@JsonView(Application.class)
     @Column(name = "DESCRIPTION")
 	private String description;
-	
-	    
-
-	
-	
+	  
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "application", cascade = CascadeType.ALL)
-    private Set<Placement> placements = new HashSet<Placement>();
+    private List<Placement> placements = new ArrayList<Placement>();
 
+    
 
 	public long getId() {
 		return id;
@@ -113,12 +113,12 @@ public class Application  {
 	}
 
 
-	public Set<Placement> getPlacements() {
+	public List<Placement> getPlacements() {
 		return placements;
 	}
 
 
-	public void setPlacements(Set<Placement> placements) {
+	public void setPlacements(List<Placement> placements) {
 		this.placements = placements;
 	}
 

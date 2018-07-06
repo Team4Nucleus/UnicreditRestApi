@@ -6,7 +6,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "TASKDETAIL")
@@ -18,9 +22,11 @@ public class TaskDetail {
     @Column(name = "ID")
 	private long id;
     
+    /*
     @Column(name = "TASK")
 	private long task;
-	
+	*/
+    
     @Column(name = "TEXT")
 	private String text;
 	
@@ -42,6 +48,12 @@ public class TaskDetail {
     @Column(name = "TO_DATE")
 	private Date toDate;
 
+   
+    @ManyToOne
+    @JsonIgnore
+	@JoinColumn(name = "task")
+    private Task task;
+    
 	public long getId() {
 		return id;
 	}
@@ -50,11 +62,13 @@ public class TaskDetail {
 		this.id = id;
 	}
 
-	public long getTask() {
+
+
+	public Task getTask() {
 		return task;
 	}
 
-	public void setTask(long task) {
+	public void setTask(Task task) {
 		this.task = task;
 	}
 

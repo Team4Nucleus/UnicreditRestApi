@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 @Entity
 @Table(name = "TASK")
 public class Task {
@@ -24,8 +27,10 @@ public class Task {
     @Column(name = "ID")
 	private long id;
     
+    /*
     @Column(name = "PLACEMENT")
 	private long placement;
+    */
     
     @Column(name = "DESCRIPTION")
 	private String description;
@@ -49,11 +54,16 @@ public class Task {
 	@JoinColumn(name = "status", insertable=false, updatable=false)
 	private TaskStatus taskstatus;
 	
-	
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "task", fetch = FetchType.LAZY)
-	private List<TaskDetail> taskdetails = new ArrayList<>();
+	private List<TaskDetail> taskdetails = new ArrayList<TaskDetail>();
 
-
+    @ManyToOne
+    @JsonIgnore
+	@JoinColumn(name = "placement")
+    private Placement placement;
+	
+	
 	public long getId() {
 		return id;
 	}
@@ -64,13 +74,15 @@ public class Task {
 	}
 
 
-	public long getPlacement() {
+
+
+	public Placement getPlacement() {
 		return placement;
 	}
 
 
-	public void setPlacement(long idplacement) {
-		this.placement = idplacement;
+	public void setPlacement(Placement placement) {
+		this.placement = placement;
 	}
 
 
@@ -144,17 +156,18 @@ public class Task {
 	}
 
 
-	public List<TaskDetail> getTASKSDETAILS() {
+	public List<TaskDetail> getTaskdetails() {
 		return taskdetails;
 	}
 
 
-	public void setTASKSDETAILS(List<TaskDetail> tASKSDETAILS) {
-		taskdetails = tASKSDETAILS;
+	public void setTaskdetails(List<TaskDetail> taskdetails) {
+		this.taskdetails = taskdetails;
 	}
+
+
+
 	 
-	
-	
 	
 	
 }

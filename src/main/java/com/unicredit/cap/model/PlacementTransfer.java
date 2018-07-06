@@ -6,7 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name="PLACEMENTTRANSFER")
@@ -17,9 +22,10 @@ public class PlacementTransfer {
 	@Column(name = "ID")
 	private long ID;
 	
-	
+	/*
 	@Column(name = "PLACEMENT")
 	private long placement;
+	*/
 	
 	@Column(name = "FROM_ORG")
 	private int fromOrg;
@@ -45,6 +51,21 @@ public class PlacementTransfer {
 	@Column(name = "MOVEMENT_TYPE")
 	private String movementType;
 
+
+    @ManyToOne
+    @JsonIgnore
+	@JoinColumn(name = "placement")
+    private Placement placement;
+    
+
+	public Placement getPlacement() {
+		return placement;
+	}
+
+	public void setPlacement(Placement placement) {
+		this.placement = placement;
+	}
+
 	public long getID() {
 		return ID;
 	}
@@ -53,13 +74,6 @@ public class PlacementTransfer {
 		ID = iD;
 	}
 
-	public long getPlacement() {
-		return placement;
-	}
-
-	public void setPlacement(long idplacement) {
-		this.placement = idplacement;
-	}
 
 	public int getFromOrg() {
 		return fromOrg;

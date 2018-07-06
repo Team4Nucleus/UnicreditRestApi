@@ -1,8 +1,9 @@
 package com.unicredit.cap.model;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
@@ -27,10 +30,13 @@ public class Placement {
     @JsonView(Placement.class)
 	private long id;
     
-    @JsonView(Placement.class)
+
+	/*
+	@JsonView(Placement.class)
     @Column(name = "APPLICATION")
 	private int application;
-    
+*/
+	
     @JsonView(Placement.class)
     @Column(name = "DECISION_NUMBER")
 	private String decisionNumber;
@@ -65,7 +71,7 @@ public class Placement {
     
     @JsonView(Placement.class)
     @Column(name = "REQUEST_DATE")
-	private Date requestDAte;
+	private Date requestDate;
     
     @JsonView(Placement.class)
     @Column(name = "CREATING_DATE")
@@ -126,13 +132,27 @@ public class Placement {
     private PlacementType placementtype;
        
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true )
-    private Set<PlacementTransfer> transfers = new HashSet<PlacementTransfer>();
+    private List<PlacementTransfer> transfers = new ArrayList<PlacementTransfer>();
        
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<Task> tasks = new HashSet<Task>();
+    private List<Task> tasks = new ArrayList<Task>();
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true)
-    private Set<Document> documents = new HashSet<Document>();
+    private List<Document> documents = new ArrayList<Document>();
+
+    @ManyToOne
+    @JsonIgnore
+	@JoinColumn(name = "application")
+    private Application application;
+    
+    
+	public Application getApplication() {
+		return application;
+	}
+
+	public void setApplication(Application application) {
+		this.application = application;
+	}
 
 	public long getId() {
 		return id;
@@ -142,13 +162,6 @@ public class Placement {
 		this.id = id;
 	}
 
-	public int getApplication() {
-		return application;
-	}
-
-	public void setApplication(int application) {
-		this.application = application;
-	}
 
 	public String getDecisionNumber() {
 		return decisionNumber;
@@ -214,12 +227,12 @@ public class Placement {
 		this.type = type;
 	}
 
-	public Date getRequestDAte() {
-		return requestDAte;
+	public Date getRequestDate() {
+		return requestDate;
 	}
 
-	public void setRequestDAte(Date requestDAte) {
-		this.requestDAte = requestDAte;
+	public void setRequestDate(Date requestDate) {
+		this.requestDate = requestDate;
 	}
 
 	public Date getCretaingDate() {
@@ -334,27 +347,27 @@ public class Placement {
 		this.placementtype = placementtype;
 	}
 
-	public Set<PlacementTransfer> getTransfers() {
+	public List<PlacementTransfer> getTransfers() {
 		return transfers;
 	}
 
-	public void setTransfers(Set<PlacementTransfer> transfers) {
+	public void setTransfers(List<PlacementTransfer> transfers) {
 		this.transfers = transfers;
 	}
 
-	public Set<Task> getTasks() {
+	public List<Task> getTasks() {
 		return tasks;
 	}
 
-	public void setTasks(Set<Task> tasks) {
+	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
 	}
 
-	public Set<Document> getDocuments() {
+	public List<Document> getDocuments() {
 		return documents;
 	}
 
-	public void setDocuments(Set<Document> documents) {
+	public void setDocuments(List<Document> documents) {
 		this.documents = documents;
 	}
     

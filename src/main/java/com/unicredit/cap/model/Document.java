@@ -8,6 +8,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 
 @Entity
 @Table(name="DOCUMENT")
@@ -18,12 +21,13 @@ public class Document {
     @Column(name = "ID")
 	private long id;
     
-    
+    /*
     @Column(name = "APPLICATION")
 	private Integer application;
     
     @Column(name = "PLACEMENT")
 	private Integer placement;
+    */
     
     @Column(name = "NAME")
 	private String name;
@@ -51,11 +55,26 @@ public class Document {
     
     @Column(name = "TYPE")
 	private int type;
-	
-	
+		
 	@ManyToOne
 	@JoinColumn(name = "type", insertable=false, updatable=false)
 	private DocumentType documenttype;
+	
+
+    @ManyToOne
+    @JsonIgnore
+	@JoinColumn(name = "placement")
+    private Placement placement;
+	
+    
+	public Placement getPlacement() {
+		return placement;
+	}
+
+
+	public void setPlacement(Placement placement) {
+		this.placement = placement;
+	}
 
 
 	public long getId() {
@@ -65,26 +84,6 @@ public class Document {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-
-	public Integer getApplication() {
-		return application;
-	}
-
-
-	public void setApplication(Integer application) {
-		this.application = application;
-	}
-
-
-	public Integer getPlacement() {
-		return placement;
-	}
-
-
-	public void setPlacement(Integer placement) {
-		this.placement = placement;
 	}
 
 
