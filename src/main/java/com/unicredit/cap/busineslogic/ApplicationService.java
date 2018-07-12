@@ -27,8 +27,6 @@ public class ApplicationService {
 
 	@Autowired
 	private DbContext db;
-	
-	
 	private MailService mailService = new ExchangeMailService();
 	
 	
@@ -90,6 +88,7 @@ public class ApplicationService {
 		}
 		
 			
+		
 		 db.Application().save(application);	 
 		 
 		 Optional<Application> app = db.Application().findById(application.getId());		

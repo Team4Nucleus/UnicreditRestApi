@@ -8,7 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.unicredit.cap.exception.CapNotFoundException;
 import com.unicredit.cap.model.Application;
+import com.unicredit.cap.model.Document;
 import com.unicredit.cap.model.Placement;
+import com.unicredit.cap.model.PlacementTransfer;
+import com.unicredit.cap.model.Task;
+import com.unicredit.cap.model.TaskDetail;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.repository.PlacementRepository;
 import com.unicredit.cap.service.ExchangeMailService;
@@ -40,8 +44,39 @@ public class PlacementService {
 		
 	}
 	
-	public Placement saveNewPlacement(Placement placement){
+	public Placement saveNewPlacement(Placement placement, Long id){
 		
+	
+		
+		Optional<Application> app = db.Application().findById(id);
+		if (!app.isPresent())
+			throw new CapNotFoundException("Appliaction with id=" + id + " was not found"); 
+		
+		Application application  = app.get();
+		
+		
+		
+			for(Task task : placement.getTasks())
+	   		{	   			
+	   				for (TaskDetail taskDetail : task.getTaskdetails())
+	   				{
+	   					taskDetail.setTask(task);	
+	   				}
+	   				task.setPlacement(placement);
+	   		}
+			
+		   		for(Document doc : placement.getDocuments())
+		   		{
+		   			doc.setPlacement(placement);
+		   		}
+		   		
+		   		for(PlacementTransfer transfer : placement.getTransfers())
+		   		{
+		   			transfer.setPlacement(placement);
+		   		}
+		   		
+		placement.setApplication(application);
+		   		
 		Placement plac = db.Placement().save(placement);	
 		// mailService.SendMail("", new List<String>() , "", "");		
 		return plac;
