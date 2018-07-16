@@ -20,7 +20,7 @@ public class TaskService {
 	
 	public Task getTaskById(Long id){
 		
-		Optional<Task> task = db.Tasks().findById(id);
+		Optional<Task> task = db.Task().findById(id);
 		
 		if(!task.isPresent())
 			 throw new CapNotFoundException("Task with id=" + id + " was not found");
@@ -30,7 +30,7 @@ public class TaskService {
 	
 	public List<Task> getAllTask(){
 		
-		return db.Tasks().findAll();
+		return db.Task().findAll();
 		
 	}
 	
@@ -58,7 +58,7 @@ public class TaskService {
 		
 		task.setPlacement(placement.get());
 
-		db.Tasks().save(task);		
+		db.Task().save(task);		
 		return task;
 		
 	}

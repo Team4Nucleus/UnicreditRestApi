@@ -19,10 +19,10 @@ public class TaskStatusService {
 	
 	public TaskStatus getTaskStatusById(Long id){
 		
-		Optional<TaskStatus> taskStatus = db.TaskStatuse().findById(id);
+		Optional<TaskStatus> taskStatus = db.TaskStatus().findById(id);
 		
-		if(taskStatus.isPresent())
-			throw new CapNotFoundException("TaskStatus Status with id=" + id + " was not found");
+		if(!taskStatus.isPresent())
+			throw new CapNotFoundException("Task Status with id=" + id + " was not found");
 		
 		return taskStatus.get();
 	}
@@ -30,14 +30,14 @@ public class TaskStatusService {
 	
 	public List<TaskStatus> getAllTaskStatus(){
 		
-		return db.TaskStatuse().findAll();
+		return db.TaskStatus().findAll();
 		
 	}
 	
 	
 	public TaskStatus createNewTaskStatus(TaskStatus status)
 	{
-		db.TaskStatuse().save(status);
+		db.TaskStatus().save(status);
 		return status;
 	}
 	

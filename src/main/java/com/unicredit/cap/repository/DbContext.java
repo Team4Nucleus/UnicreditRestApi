@@ -37,7 +37,7 @@ public class DbContext {
 	public ApplicationRepository Application() {
 		return applications;
 	}
-	public ClientBusinesPartnerRepository ClientBusinesPartners() {
+	public ClientBusinesPartnerRepository ClientBusinesPartner() {
 		return clientBusinesPartners;
 	}
 	public DocumentRepository Document() {
@@ -52,7 +52,7 @@ public class DbContext {
 	public PlacementRepository Placement() {
 		return placements;
 	}
-	public PlacementStatusRepository PlacementStatuse() {
+	public PlacementStatusRepository PlacementStatus() {
 		return placementStatuses;
 	}
 	public PlacementTransferRepository PlacementTransfer() {
@@ -64,13 +64,13 @@ public class DbContext {
 	public TaskDetailRepository TaskDetail() {
 		return taskDetails;
 	}
-	public TaskRepository Tasks() {
+	public TaskRepository Task() {
 		return tasks;
 	}
-	public TaskStatusRepository TaskStatuse() {
+	public TaskStatusRepository TaskStatus() {
 		return taskStatuses;
 	}
-	public UserRepository Usere() {
+	public UserRepository User() {
 		return useres;
 	}
 	

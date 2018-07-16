@@ -19,9 +19,9 @@ public class PlacementStatusService {
 	
 	public PlacementStatus getPlacementStatusById(Long id){
 		
-		Optional<PlacementStatus> placementStatus = db.PlacementStatuse().findById(id);
+		Optional<PlacementStatus> placementStatus = db.PlacementStatus().findById(id);
 		
-		if(placementStatus.isPresent())
+		if(!placementStatus.isPresent())
 			throw new CapNotFoundException("Placement Status with id=" + id + " was not found");
 		
 		return placementStatus.get();
@@ -30,14 +30,14 @@ public class PlacementStatusService {
 	
 	public List<PlacementStatus> getAllPlacementStatus(){
 		
-		return db.PlacementStatuse().findAll();
+		return db.PlacementStatus().findAll();
 		
 	}
 	
 	
 	public PlacementStatus createNewPlacementStatus(PlacementStatus status)
 	{
-		db.PlacementStatuse().save(status);
+		db.PlacementStatus().save(status);
 		return status;
 	}
 }

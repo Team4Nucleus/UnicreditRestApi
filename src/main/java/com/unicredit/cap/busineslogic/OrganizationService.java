@@ -21,7 +21,7 @@ public class OrganizationService {
 		
 		Optional<Organization> organization = db.Orgnaization().findById(id);
 		
-		if(organization.isPresent())
+		if(!organization.isPresent())
 			 throw new CapNotFoundException("Organization with id=" + id + " was not found");
 		
 		return organization.get();

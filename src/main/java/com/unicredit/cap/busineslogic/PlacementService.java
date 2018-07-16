@@ -14,7 +14,6 @@ import com.unicredit.cap.model.PlacementTransfer;
 import com.unicredit.cap.model.Task;
 import com.unicredit.cap.model.TaskDetail;
 import com.unicredit.cap.repository.DbContext;
-import com.unicredit.cap.repository.PlacementRepository;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.MailService;
 

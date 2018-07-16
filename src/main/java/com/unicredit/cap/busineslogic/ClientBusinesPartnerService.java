@@ -19,13 +19,13 @@ public class ClientBusinesPartnerService {
 	
 	public List<ClientBusinesPartner> getAllClientBusinesPartner()
 	{		
-		return db.ClientBusinesPartners().findAll();
+		return db.ClientBusinesPartner().findAll();
 	}
 	
 	public ClientBusinesPartner getClientByCodeNo(Long id)
 	{
 		
-		Optional<ClientBusinesPartner> client = db.ClientBusinesPartners().findById(id);
+		Optional<ClientBusinesPartner> client = db.ClientBusinesPartner().findById(id);
 		
 		if(!client.isPresent())
 			 throw new CapNotFoundException("Client with CoreNo=" + id + " was not found");
@@ -37,7 +37,7 @@ public class ClientBusinesPartnerService {
 	public ClientBusinesPartner getClientByJib(String jib)
 	{
 		
-		ClientBusinesPartner client = db.ClientBusinesPartners().getClientBusinesPartnerByJib(jib);
+		ClientBusinesPartner client = db.ClientBusinesPartner().getClientBusinesPartnerByJib(jib);
 		
 		if(client == null)
 			 throw new CapNotFoundException("Client with JIB = " + jib + " was not found");

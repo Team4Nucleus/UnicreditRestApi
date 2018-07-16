@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unicredit.cap.exception.CapNotFoundException;
-import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.model.Task;
 import com.unicredit.cap.model.TaskDetail;
 import com.unicredit.cap.repository.DbContext;
@@ -36,7 +35,7 @@ public class TaskDetailService {
 	}
 	
 	public List<TaskDetail> getAllTaskDetailByTask(Long id){
-		Optional<Task> task = db.Tasks().findById(id);
+		Optional<Task> task = db.Task().findById(id);
 	
 			if (!task.isPresent())
 				throw new CapNotFoundException("Task with id=" + id + " was not found");
@@ -46,7 +45,7 @@ public class TaskDetailService {
 	
 	public TaskDetail createNewTaskDetail(TaskDetail taskDetail, Long id){
 		
-		Optional<Task> task = db.Tasks().findById(id);
+		Optional<Task> task = db.Task().findById(id);
 
 		if (!task.isPresent())
 			 throw new CapNotFoundException("Task with id=" + id + " was not found");

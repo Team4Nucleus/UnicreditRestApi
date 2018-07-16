@@ -3,10 +3,6 @@ package com.unicredit.cap.busineslogic;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +24,6 @@ public class ApplicationService {
 	@Autowired
 	private DbContext db;
 	private MailService mailService = new ExchangeMailService();
-	
 	
 	public Application getApplicationById(long id){
 		
@@ -60,15 +55,11 @@ public class ApplicationService {
 		for (Placement placement : application.getPlacements())
 		{
 			for(Task task : placement.getTasks())
-	   		{
-	   				   			
+	   		{	   				   			
 	   				for (TaskDetail taskDetail : task.getTaskdetails())
 	   				{
 	   					taskDetail.setTask(task);
-	   					
-	   					
 	   				}
-	   				
 	   				task.setPlacement(placement);
 	   		}
 		   
@@ -81,13 +72,9 @@ public class ApplicationService {
 		   		{
 		   			transfer.setPlacement(placement);
 		   		}
-		   		
-		   		
-		   		
+
 		   		placement.setApplication(application);
 		}
-		
-			
 		
 		 db.Application().save(application);	 
 		 
@@ -99,16 +86,12 @@ public class ApplicationService {
 	public Application updateApplication(Application application)  {
 		
 		 Optional<Application> currentApplication = db.Application().findById(application.getId());
-		 
-		 
+
 	        if (!currentApplication.isPresent())
 	        {
-	        	throw new CapNotFoundException("Application with id=" + application.getId() + " was not found"); 
-	        		
+	        	throw new CapNotFoundException("Application with id=" + application.getId() + " was not found"); 		
 	        }
-	       
-	        
-	        
+
 	        Application App = currentApplication.get();
 	 
 	        App.setApplicationDate(application.getApplicationDate());
