@@ -7,6 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -66,7 +69,20 @@ public class Document {
 	@JoinColumn(name = "placement")
     private Placement placement;
 	
+    @Transient
+    private MultipartFile file;
     
+    
+	public MultipartFile getFile() {
+		return file;
+	}
+
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
+	}
+
+
 	public Placement getPlacement() {
 		return placement;
 	}

@@ -1,10 +1,14 @@
 package com.unicredit.cap.busineslogic;
 
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 
 import com.unicredit.cap.exception.CapNotFoundException;
 import com.unicredit.cap.model.Application;
@@ -37,14 +41,14 @@ public class ApplicationService {
 	
 	public List<Application> getAllApplications() {
 		
-		List<Application> list = db.Application().findAll();
+		List<Application> list = db.Application().findTop100ByOrderByCreateDateDesc();
 		
 		return list;
 	}
 	
 	public List<Application> getApplicationsByUser(int id){
 		
-		List<Application> list = db.Application().getAllApplicationByCreateUser(id);
+		List<Application> list = db.Application().findTop100ByCreateUserOrderByCreateDateDesc(id);
 		
 		return list;
 	}
@@ -58,14 +62,19 @@ public class ApplicationService {
 	   		{	   				   			
 	   				for (TaskDetail taskDetail : task.getTaskdetails())
 	   				{
+	   					taskDetail.setFromDate(new Date());
 	   					taskDetail.setTask(task);
 	   				}
+	   				
+	   				task.setCreateDate(new Date());
 	   				task.setPlacement(placement);
 	   		}
 		   
 		   		for(Document doc : placement.getDocuments())
 		   		{
-		   			doc.setPlacement(placement);
+		   		
+						doc.setPlacement(placement);
+	
 		   		}
 		   		
 		   		for(PlacementTransfer transfer : placement.getTransfers())
@@ -73,8 +82,11 @@ public class ApplicationService {
 		   			transfer.setPlacement(placement);
 		   		}
 
+		   		placement.setCretaingDate(new Date());
 		   		placement.setApplication(application);
 		}
+		
+		application.setCreateDate(new Date());
 		
 		 db.Application().save(application);	 
 		 

@@ -1,10 +1,12 @@
 package com.unicredit.cap.busineslogic;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.unicredit.cap.exception.CapNotFoundException;
 import com.unicredit.cap.model.Application;
@@ -28,12 +30,12 @@ public class PlacementService {
 	
 	public Placement getPlacementById(long id){
 		
-		Optional<Placement> placement = db.Placement().findById(id);
+		Optional<Placement> plac = db.Placement().findById(id);
 		
-		if (!placement.isPresent())
+		if (!plac.isPresent())
 			throw new CapNotFoundException("Placement with id=" + id + " was not found");     
 			
-		return placement.get();
+		return plac.get();
 	}
 	
 	public List<Placement> getAllPlacements(){
