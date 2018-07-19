@@ -69,22 +69,14 @@ public class Document {
     @JsonIgnore
 	@JoinColumn(name = "placement")
     private Placement placement;
-<<<<<<< HEAD
-	
-=======
+
     
     @JsonView(Document.class)
     @ManyToOne
 	@JoinColumn(name ="ATTACH_USER", insertable=false, updatable=false)
     private User attachUserDetails;
     
-    
-    
-    
-    
-
-	
-
+   
 
 	public User getAttachUserDetails() {
 		return attachUserDetails;
@@ -96,7 +88,6 @@ public class Document {
 
 	}
 
->>>>>>> 515f938e083644581faf3c2c89489e183299f2c9
 
 	public Placement getPlacement() {
 		return placement;
