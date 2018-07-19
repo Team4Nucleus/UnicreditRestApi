@@ -1,8 +1,15 @@
 package com.unicredit.cap.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import javax.annotation.Resource;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,8 +67,34 @@ public class DocumentController {
 	 
 	 
 	 @PostMapping(value = "/upload")
-	 public ResponseEntity<?>  uploadDocument ( @RequestParam("idPlacement") Long idPlacement, @RequestParam("files")  MultipartFile[] uploadFiles){		
-		    return service.uploadDocumentInPlacement(idPlacement, uploadFiles);
+	 public ResponseEntity<?>  uploadDocument ( 
+			 @RequestParam("idPlacement") Long idPlacement, 
+			 @RequestParam("files")  MultipartFile[] uploadFiles,
+			 @RequestParam("type") int type,
+			 @RequestParam("attachUser") int attachUser){
+		 
+		    return service.uploadDocumentInPlacement(idPlacement, uploadFiles, type, attachUser);
+		    
 		 }
+	 
+	 
+	 @GetMapping(value = "/download/{id}")
+	 public ResponseEntity<ByteArrayResource> downloadFile (@PathVariable final Long id ) {
+		 return service.getFile(id);
+	 }
+	 
+	 
+	 @GetMapping(value = "/download2/{id}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	 
+			public @ResponseBody byte[] downloadFile2() {
+		 
+			    InputStream in = getClass().getResourceAsStream("C:/Documents/43/test.pdf");
+			    try {
+					return IOUtils.toByteArray(in);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					return null;
+				}
+			}
 	 
 }

@@ -1,12 +1,16 @@
 package com.unicredit.cap.busineslogic;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -24,9 +28,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileOwnerAttributeView;
+import java.nio.file.attribute.UserPrincipal;
+import org.springframework.core.io.ByteArrayResource;
 
 @Service
 public class DocumentService {
@@ -115,17 +120,24 @@ public class DocumentService {
 	            }
 	            
 	            
+	            
 	            byte[] bytes = file.getBytes();
 	            Path path = Paths.get(directory+"/"+file.getOriginalFilename());
 	            Files.write(path, bytes);
+
 
 	        }
 
 	    }
 
 
-	public ResponseEntity<?> uploadDocumentInPlacement(Long idPlacement, MultipartFile[] uploadFiles) {
+	public ResponseEntity<?> uploadDocumentInPlacement(Long idPlacement, MultipartFile[] uploadFiles, int type, int attachUser) {
 		// TODO Auto-generated method stub
+		
+		Optional<Placement> plac = db.Placement().findById(idPlacement);
+		
+		if(!plac.isPresent())
+		throw new CapNotFoundException("Placement with id="+idPlacement+" was not found!");
 		
 		 String uploadedFileName = Arrays.stream(uploadFiles).map(x -> x.getOriginalFilename())
 	                .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
@@ -135,15 +147,62 @@ public class DocumentService {
 	        }
 
 	        try {
-
+        	
 	            saveUploadedFiles(Arrays.asList(uploadFiles), idPlacement);
-
+	            
+	            Document document = new Document();
+	            document.setAttachUser(attachUser);
+	            document.setType(type);
+	            document.setOriginal(0);
+	            document.setName(uploadFiles[0].getOriginalFilename());
+	            document.setPath("C:/Documents/"+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
+	            document.setPlacement(plac.get());
+	            
+	            Path path = Paths.get("C:/Documents/"+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
+	            BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
+	            FileOwnerAttributeView ownerAttributeView = Files.getFileAttributeView(path, FileOwnerAttributeView.class);
+	            
+	            document.setMetaDate("Created: "+ attr.creationTime() + ", Uploaded: " + new Date());
+	            document.setMetaName(uploadFiles[0].getOriginalFilename());	 
+	            document.setMetaSize(attr.size() + " bytes");
+	            document.setMetaUSer(ownerAttributeView.getOwner().getName());	
+	            
+	            db.Document().save(document);
+	            
 	        } catch (IOException e) {
 	        	 throw new CapNotFoundException("Error saving file: " + e.getMessage());
 	        }
 		
 		return new ResponseEntity("Successfully uploaded - "+ uploadedFileName, HttpStatus.OK);
 		
+	}
+
+	
+	public ResponseEntity<ByteArrayResource> getFile(Long id){
+		
+		 Optional<Document> document = db.Document().findById(id);
+		 
+		 if(!document.isPresent())
+				throw new CapNotFoundException("Document with id="+id+" was not found!");
+		 
+		 	try {
+		 
+	     Path path = Paths.get(document.get().getPath());
+	     File file = new File(document.get().getPath());
+	     
+	    // ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+	     ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+	
+	     return ResponseEntity.ok()
+	             .contentLength(file.length())
+	             .contentType(MediaType.parseMediaType("application/octet-stream"))
+	             .body(resource);	
+	     
+		} catch (IOException e) {
+			throw new CapNotFoundException("Error: " + e.getMessage());
+			
+		}
+	     
 	}
 	
 }
