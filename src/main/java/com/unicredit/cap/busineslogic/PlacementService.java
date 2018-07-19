@@ -1,16 +1,21 @@
 package com.unicredit.cap.busineslogic;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.unicredit.cap.exception.CapNotFoundException;
 import com.unicredit.cap.model.Application;
+import com.unicredit.cap.model.Document;
 import com.unicredit.cap.model.Placement;
+import com.unicredit.cap.model.PlacementTransfer;
+import com.unicredit.cap.model.Task;
+import com.unicredit.cap.model.TaskDetail;
 import com.unicredit.cap.repository.DbContext;
-import com.unicredit.cap.repository.PlacementRepository;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.MailService;
 
@@ -25,12 +30,12 @@ public class PlacementService {
 	
 	public Placement getPlacementById(long id){
 		
-		Optional<Placement> placement = db.Placement().findById(id);
+		Optional<Placement> plac = db.Placement().findById(id);
 		
-		if (!placement.isPresent())
+		if (!plac.isPresent())
 			throw new CapNotFoundException("Placement with id=" + id + " was not found");     
 			
-		return placement.get();
+		return plac.get();
 	}
 	
 	public List<Placement> getAllPlacements(){
@@ -40,8 +45,39 @@ public class PlacementService {
 		
 	}
 	
-	public Placement saveNewPlacement(Placement placement){
+	public Placement saveNewPlacement(Placement placement, Long id){
 		
+	
+		
+		Optional<Application> app = db.Application().findById(id);
+		if (!app.isPresent())
+			throw new CapNotFoundException("Appliaction with id=" + id + " was not found"); 
+		
+		Application application  = app.get();
+		
+		
+		
+			for(Task task : placement.getTasks())
+	   		{	   			
+	   				for (TaskDetail taskDetail : task.getTaskdetails())
+	   				{
+	   					taskDetail.setTask(task);	
+	   				}
+	   				task.setPlacement(placement);
+	   		}
+			
+		   		for(Document doc : placement.getDocuments())
+		   		{
+		   			doc.setPlacement(placement);
+		   		}
+		   		
+		   		for(PlacementTransfer transfer : placement.getTransfers())
+		   		{
+		   			transfer.setPlacement(placement);
+		   		}
+		   		
+		placement.setApplication(application);
+		   		
 		Placement plac = db.Placement().save(placement);	
 		// mailService.SendMail("", new List<String>() , "", "");		
 		return plac;

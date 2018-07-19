@@ -1,16 +1,17 @@
 package com.unicredit.cap.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unicredit.cap.busineslogic.TaskDetailService;
 import com.unicredit.cap.model.TaskDetail;
-import com.unicredit.cap.repository.TaskDetailRepository;
 
 @RestController
 @RequestMapping("/rest/taskdetail")
@@ -18,17 +19,31 @@ public class TaskDetailController {
 
 	
 	 @Autowired
-	 private TaskDetailRepository repository;
+	 private TaskDetailService service;
 	 
 	 @GetMapping(value = "/all")
 	    public List<TaskDetail> findAll() {
-	        return repository.findAll();
+	        return service.getAllTaskDetail();
 	    }
 
 	 @GetMapping(value = "/{id}")
-	 public Optional<TaskDetail> findById(@PathVariable final Long id){
+	 public TaskDetail findById(@PathVariable final Long id){
 		
-	    return repository.findById(id);
+	    return service.getTaskDetailById(id);
+	    }
+	 
+	 
+	 
+	 @GetMapping(value = "/task/{id}")
+	 public List<TaskDetail> findByTask(@PathVariable final Long id){
+		
+	    return service.getAllTaskDetailByTask(id);
+	    }
+	 
+	 
+	 @PostMapping(value = "/create/{id}")
+	    public TaskDetail createApplication(@RequestBody final TaskDetail taskDetail, @PathVariable final Long id) {	       
+		 return service.createNewTaskDetail(taskDetail, id);         
 	    }
 	
 }

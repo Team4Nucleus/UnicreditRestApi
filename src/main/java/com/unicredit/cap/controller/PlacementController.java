@@ -38,9 +38,9 @@ public class PlacementController {
 	    }
 	 
 	 
-	 @PostMapping(value = "/create")
-	 public Placement createPlacement(@RequestBody final Placement placement) {       
-	        return service.saveNewPlacement(placement);        
+	 @PostMapping(value = "/create/{id}")
+	 public Placement createPlacement(@RequestBody final Placement placement, @PathVariable final Long id) {       
+	        return service.saveNewPlacement(placement, id);        
 	    }
 	 
 	 

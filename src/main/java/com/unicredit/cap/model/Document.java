@@ -7,6 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -80,7 +83,11 @@ public class Document {
     
     
 	
+    @Transient
+    private MultipartFile file;
     
+    
+<<<<<<< HEAD
 	public User getMetaUserDetails() {
 		return metaUserDetails;
 	}
@@ -98,6 +105,15 @@ public class Document {
 
 	public void setAttachUserDetails(User attachUserDetails) {
 		this.attachUserDetails = attachUserDetails;
+=======
+	public MultipartFile getFile() {
+		return file;
+	}
+
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
+>>>>>>> 39dfa1f834c3047f4e22d05f3ee3965cbbfe51a2
 	}
 
 
