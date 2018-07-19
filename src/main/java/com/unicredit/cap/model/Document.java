@@ -12,6 +12,7 @@ import javax.persistence.Transient;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 
 
@@ -68,7 +69,34 @@ public class Document {
     @JsonIgnore
 	@JoinColumn(name = "placement")
     private Placement placement;
+<<<<<<< HEAD
 	
+=======
+    
+    @JsonView(Document.class)
+    @ManyToOne
+	@JoinColumn(name ="ATTACH_USER", insertable=false, updatable=false)
+    private User attachUserDetails;
+    
+    
+    
+    
+    
+
+	
+
+
+	public User getAttachUserDetails() {
+		return attachUserDetails;
+	}
+
+
+	public void setAttachUserDetails(User attachUserDetails) {
+		this.attachUserDetails = attachUserDetails;
+
+	}
+
+>>>>>>> 515f938e083644581faf3c2c89489e183299f2c9
 
 	public Placement getPlacement() {
 		return placement;

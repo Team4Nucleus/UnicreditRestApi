@@ -89,9 +89,11 @@ public class Placement {
     @Column(name = "CURRENT_ORG")
 	private Integer currentOrg;
     
+    
     @JsonView(Placement.class)
     @Column(name = "CREATE_USER")
-	private int createUser;
+	private Long createUser;
+	
     
     @JsonView(Placement.class)
     @Column(name = "CURRENT_USER")
@@ -145,7 +147,33 @@ public class Placement {
 	@JoinColumn(name = "application")
     private Application application;
     
+    @JsonView(Placement.class)
+    @ManyToOne
+	@JoinColumn(name ="CREATE_USER", insertable=false, updatable=false)
+    private User createUserDetails;
     
+    @JsonView(Placement.class)
+    @ManyToOne
+	@JoinColumn(name ="CURRENT_USER", insertable=false, updatable=false)
+    private User currentUserDetails;
+    
+    
+	public User getCurrentUserDetails() {
+		return currentUserDetails;
+	}
+
+	public void setCurrentUserDetails(User currentUserDetails) {
+		this.currentUserDetails = currentUserDetails;
+	}
+
+	public User getCreateUserDetails() {
+		return createUserDetails;
+	}
+
+	public void setCreateUserDetails(User createUserDetails) {
+		this.createUserDetails = createUserDetails;
+	}
+
 	public Application getApplication() {
 		return application;
 	}
@@ -267,11 +295,11 @@ public class Placement {
 		this.currentOrg = currentOrg;
 	}
 
-	public int getCreateUser() {
+	public Long getCreateUser() {
 		return createUser;
 	}
 
-	public void setCreateUser(int createUser) {
+	public void setCreateUser(Long createUser) {
 		this.createUser = createUser;
 	}
 

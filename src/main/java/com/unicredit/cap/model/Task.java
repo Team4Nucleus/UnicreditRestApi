@@ -41,8 +41,10 @@ public class Task {
     @Column(name = "PRIORITY")
 	private String priority;
     
+    
     @Column(name = "CREATE_USER")
-	private int createUser;
+	private long createUser;
+	
     
     @Column(name = "CREATION_DATE")
 	private Date createDate;
@@ -62,8 +64,23 @@ public class Task {
     @JsonIgnore
 	@JoinColumn(name = "placement")
     private Placement placement;
+    
+    
+    @ManyToOne
+	@JoinColumn(name ="CREATE_USER", insertable=false, updatable=false)
+    private User createUserDetails;
 	
 	
+	public User getCreateUserDetails() {
+		return createUserDetails;
+	}
+
+
+	public void setCreateUserDetails(User createUserDetails) {
+		this.createUserDetails = createUserDetails;
+	}
+
+
 	public long getId() {
 		return id;
 	}
@@ -116,12 +133,12 @@ public class Task {
 	}
 
 
-	public int getCreateUser() {
+	public Long getCreateUser() {
 		return createUser;
 	}
 
 
-	public void setCreateUser(int createUser) {
+	public void setCreateUser(Long createUser) {
 		this.createUser = createUser;
 	}
 
