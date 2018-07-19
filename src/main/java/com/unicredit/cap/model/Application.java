@@ -12,9 +12,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -32,9 +35,11 @@ public class Application  {
     @Column(name = "CODE")
 	private String code;
     
+	
 	@JsonView(Application.class)
     @Column(name = "CREATE_USER")
-	private int createUser;
+	private long createUser;
+	
     
 	@JsonView(Application.class)
     @Column(name = "APPLICATION_DATE")
@@ -50,8 +55,23 @@ public class Application  {
 	  
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "application", cascade = CascadeType.ALL)
     private List<Placement> placements = new ArrayList<Placement>();
+    
+    @JsonView(Application.class)
+    @ManyToOne
+	@JoinColumn(name = "CREATE_USER", insertable=false, updatable=false)
+    private User createUserDetails;
 
     
+
+	public User getCreateUserDetails() {
+		return createUserDetails;
+	}
+
+
+	public void setCreateUserDetails(User createUserDetails) {
+		this.createUserDetails = createUserDetails;
+	}
+
 
 	public long getId() {
 		return id;
@@ -73,12 +93,12 @@ public class Application  {
 	}
 
 
-	public int getCreateUser() {
+	public Long getCreateUser() {
 		return createUser;
 	}
 
 
-	public void setCreateUser(int createUser) {
+	public void setCreateUser(Long createUser) {
 		this.createUser = createUser;
 	}
 

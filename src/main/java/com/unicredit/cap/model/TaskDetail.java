@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "TASKDETAIL")
@@ -54,6 +55,36 @@ public class TaskDetail {
 	@JoinColumn(name = "task")
     private Task task;
     
+    
+    @JsonView(TaskDetail.class)
+    @ManyToOne
+	@JoinColumn(name ="FROM_USER", insertable=false, updatable=false)
+    private User fromUserDetails;
+    
+    
+    @JsonView(TaskDetail.class)
+    @ManyToOne
+	@JoinColumn(name ="TO_USER", insertable=false, updatable=false)
+    private User toUserDetails;
+    
+    
+    
+	public User getToUserDetails() {
+		return toUserDetails;
+	}
+
+	public void setToUserDetails(User toUserDetails) {
+		this.toUserDetails = toUserDetails;
+	}
+
+	public User getFromUserDetails() {
+		return fromUserDetails;
+	}
+
+	public void setFromUserDetails(User fromUserDetails) {
+		this.fromUserDetails = fromUserDetails;
+	}
+
 	public long getId() {
 		return id;
 	}

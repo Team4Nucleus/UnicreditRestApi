@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 
 
@@ -65,8 +66,41 @@ public class Document {
     @JsonIgnore
 	@JoinColumn(name = "placement")
     private Placement placement;
+    
+    @JsonView(Document.class)
+    @ManyToOne
+	@JoinColumn(name ="ATTACH_USER", insertable=false, updatable=false)
+    private User attachUserDetails;
+    
+    
+    @JsonView(Document.class)
+    @ManyToOne
+	@JoinColumn(name ="META_USER", insertable=false, updatable=false)
+    private User metaUserDetails;
+    
+    
 	
     
+	public User getMetaUserDetails() {
+		return metaUserDetails;
+	}
+
+
+	public void setMetaUserDetails(User metaUserDetails) {
+		this.metaUserDetails = metaUserDetails;
+	}
+
+
+	public User getAttachUserDetails() {
+		return attachUserDetails;
+	}
+
+
+	public void setAttachUserDetails(User attachUserDetails) {
+		this.attachUserDetails = attachUserDetails;
+	}
+
+
 	public Placement getPlacement() {
 		return placement;
 	}
