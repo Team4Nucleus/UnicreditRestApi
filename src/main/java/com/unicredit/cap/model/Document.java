@@ -76,26 +76,11 @@ public class Document {
     private User attachUserDetails;
     
     
-    @JsonView(Document.class)
-    @ManyToOne
-	@JoinColumn(name ="META_USER", insertable=false, updatable=false)
-    private User metaUserDetails;
     
     
+    
+
 	
-    @Transient
-    private MultipartFile file;
-    
-    
-<<<<<<< HEAD
-	public User getMetaUserDetails() {
-		return metaUserDetails;
-	}
-
-
-	public void setMetaUserDetails(User metaUserDetails) {
-		this.metaUserDetails = metaUserDetails;
-	}
 
 
 	public User getAttachUserDetails() {
@@ -105,15 +90,7 @@ public class Document {
 
 	public void setAttachUserDetails(User attachUserDetails) {
 		this.attachUserDetails = attachUserDetails;
-=======
-	public MultipartFile getFile() {
-		return file;
-	}
 
-
-	public void setFile(MultipartFile file) {
-		this.file = file;
->>>>>>> 39dfa1f834c3047f4e22d05f3ee3965cbbfe51a2
 	}
 
 
