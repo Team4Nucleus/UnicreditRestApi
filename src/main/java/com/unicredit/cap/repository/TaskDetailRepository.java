@@ -7,7 +7,14 @@ import com.unicredit.cap.model.TaskDetail;;
 public interface TaskDetailRepository extends JpaRepository<TaskDetail, Long> {
 
 	
-	@Query(value = "SELECT * FROM TASKDETAIL WHERE TASK = ? AND ROWNUM = 1 ORDER BY FROM_DATE DESC",  nativeQuery = true)
+	@Query(value = "SELECT A.* FROM "
+			+ "( SELECT MAX(ID) AS ID FROM TASKDETAIL WHERE TASK = ? ) B "
+			+ "JOIN TASKDETAIL A on A.ID = B.ID",  nativeQuery = true)
 	public TaskDetail getLastDetailOfTask(Long id);
+	
+	
+	
+	
+	
 	
 }

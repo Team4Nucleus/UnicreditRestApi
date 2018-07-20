@@ -1,6 +1,7 @@
 package com.unicredit.cap.busineslogic;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -87,6 +88,10 @@ public class ApplicationService {
 		   		transfer.setMovementType("Kreiranje Plasmana");  
 		   		transfer.setPlacement(placement);
 		   		
+		   		List<PlacementTransfer> list = new ArrayList<PlacementTransfer>();
+		   		list.add(transfer);
+		
+		   		placement.setTransfers(list);
 		   		placement.setCretaingDate(new Date());
 		   		placement.setApplication(application);
 		}

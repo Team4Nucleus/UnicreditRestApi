@@ -133,13 +133,13 @@ public class Placement {
    	@JoinColumn(name = "type", insertable=false, updatable=false)
     private PlacementType placementtype;
        
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true )
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true )
     private List<PlacementTransfer> transfers = new ArrayList<PlacementTransfer>();
        
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<Task>();
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Document> documents = new ArrayList<Document>();
 
     @ManyToOne

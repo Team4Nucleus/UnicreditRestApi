@@ -9,6 +9,11 @@ import com.unicredit.cap.model.TaskDetail;
 public interface PlacementTransferRepository extends JpaRepository<PlacementTransfer, Long> {
 
 	
-	@Query(value = "SELECT * FROM PLACEMENTTRANSFER WHERE PLACEMENT = ? AND ROWNUM = 1 ORDER BY DATE_FROM DESC",  nativeQuery = true)
+	@Query(value = "SELECT A.* FROM "
+			+ "( SELECT MAX(ID) AS ID FROM PLACEMENTTRANSFER WHERE PLACEMENT = ? ) B "
+			+ "JOIN PLACEMENTTRANSFER A on A.ID = B.ID",  nativeQuery = true)
 	public PlacementTransfer getLastTransferOfPlacement(Long id);
 }
+
+
+

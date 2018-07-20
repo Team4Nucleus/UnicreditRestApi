@@ -65,8 +65,12 @@ public class PlacementTransferService {
 		
 		placementTransfer.setDateFrom(new Date());
 		placementTransfer.setPlacement(plac.get());
-		
 		db.PlacementTransfer().save(placementTransfer);
+		
+		Placement placement = plac.get();
+		placement.setCurrentOrg(placementTransfer.getToOrg());
+		placement.setCurrentUser(placementTransfer.getToUser());
+		db.Placement().save(placement);
 		
 		return placementTransfer;
 	}

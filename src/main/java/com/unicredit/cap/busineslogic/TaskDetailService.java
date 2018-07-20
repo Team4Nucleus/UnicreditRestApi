@@ -57,8 +57,14 @@ public class TaskDetailService {
 		
 		taskDetail.setFromDate(new Date());
 		taskDetail.setTask(task.get());
-
-		db.TaskDetail().save(taskDetail);		
+		db.TaskDetail().save(taskDetail);	
+		
+		int taskStatus = taskDetail.getToUser() == task.get().getCreateUser() ? 36 : 35;
+		Task taskWithStatusUpdate = task.get();
+		taskWithStatusUpdate.setStatus(taskStatus);
+		
+		db.Task().save(taskWithStatusUpdate);
+			
 		return taskDetail;
 		
 	}

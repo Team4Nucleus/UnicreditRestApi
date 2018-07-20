@@ -57,7 +57,8 @@ public class Task {
 	private TaskStatus taskstatus;
 	
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "task", fetch = FetchType.LAZY)
+	//@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "task", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "task", fetch = FetchType.LAZY)
 	private List<TaskDetail> taskdetails = new ArrayList<TaskDetail>();
 
     @ManyToOne
