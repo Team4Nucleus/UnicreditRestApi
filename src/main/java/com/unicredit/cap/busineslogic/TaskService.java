@@ -1,5 +1,6 @@
 package com.unicredit.cap.busineslogic;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,9 +54,11 @@ public class TaskService {
 		
 		for (TaskDetail taskDetail : task.getTaskdetails())
 			{
+				taskDetail.setFromDate(new Date());
 				taskDetail.setTask(task);	
 			}
 		
+		task.setCreateDate(new Date());
 		task.setPlacement(placement.get());
 
 		db.Task().save(task);		

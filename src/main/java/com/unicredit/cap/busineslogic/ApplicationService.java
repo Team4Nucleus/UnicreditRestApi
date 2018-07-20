@@ -71,10 +71,8 @@ public class ApplicationService {
 	   		}
 		   
 		   		for(Document doc : placement.getDocuments())
-		   		{
-		   		
+		   		{ 		
 						doc.setPlacement(placement);
-	
 		   		}
 		   		
 		   		for(PlacementTransfer transfer : placement.getTransfers())
@@ -82,11 +80,18 @@ public class ApplicationService {
 		   			transfer.setPlacement(placement);
 		   		}
 
+		   		PlacementTransfer  transfer = new PlacementTransfer();
+		   		transfer.setDateFrom(new Date());
+		   		transfer.setToOrg(placement.getCreatingOrg());
+		   		transfer.setToUser(placement.getCreateUser().intValue());
+		   		transfer.setMovementType("Kreiranje Plasmana");  
+		   		transfer.setPlacement(placement);
+		   		
 		   		placement.setCretaingDate(new Date());
 		   		placement.setApplication(application);
 		}
 		
-		application.setCreateDate(new Date());
+		 application.setCreateDate(new Date());
 		
 		 db.Application().save(application);	 
 		 

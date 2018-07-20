@@ -1,5 +1,6 @@
 package com.unicredit.cap.busineslogic;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +58,12 @@ public class PlacementTransferService {
 		if(!plac.isPresent())
 			 throw new CapNotFoundException("Placement with id=" + id + " was not found");
 		
+		
+		PlacementTransfer placementTransferLast = db.PlacementTransfer().getLastTransferOfPlacement(id);
+		placementTransferLast.setDateTo(new Date());
+		db.PlacementTransfer().save(placementTransferLast);
+		
+		placementTransfer.setDateFrom(new Date());
 		placementTransfer.setPlacement(plac.get());
 		
 		db.PlacementTransfer().save(placementTransfer);

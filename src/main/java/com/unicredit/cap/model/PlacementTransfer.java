@@ -28,10 +28,10 @@ public class PlacementTransfer {
 	*/
 	
 	@Column(name = "FROM_ORG")
-	private int fromOrg;
+	private Integer fromOrg;
 	
 	@Column(name = "FROM_USER")
-	private int fromUser;
+	private Integer fromUser;
 	
 	@Column(name = "TO_ORG")
 	private int toOrg;

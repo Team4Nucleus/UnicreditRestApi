@@ -60,6 +60,19 @@ public class Document {
     @Column(name = "TYPE")
 	private int type;
 		
+    @Column(name = "FILETYPE")
+   	private String fileType;
+    
+	public String getFileType() {
+		return fileType;
+	}
+
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+
 	@ManyToOne
 	@JoinColumn(name = "type", insertable=false, updatable=false)
 	private DocumentType documenttype;

@@ -1,6 +1,8 @@
 package com.unicredit.cap.busineslogic;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,8 +63,10 @@ public class PlacementService {
 	   		{	   			
 	   				for (TaskDetail taskDetail : task.getTaskdetails())
 	   				{
+	   					taskDetail.setFromDate(new Date());
 	   					taskDetail.setTask(task);	
 	   				}
+	   				task.setCreateDate(new Date());
 	   				task.setPlacement(placement);
 	   		}
 			
@@ -76,6 +80,18 @@ public class PlacementService {
 		   			transfer.setPlacement(placement);
 		   		}
 		   		
+		   		PlacementTransfer  transfer = new PlacementTransfer();
+		   		transfer.setDateFrom(new Date());
+		   		transfer.setToOrg(placement.getCreatingOrg());
+		   		transfer.setToUser(placement.getCreateUser().intValue());
+		   		transfer.setMovementType("Kreiranje Plasmana");  
+		   		transfer.setPlacement(placement);
+		   		
+		   		List<PlacementTransfer> list = new ArrayList<PlacementTransfer>();
+		   		list.add(transfer);
+		
+		placement.setTransfers(list);
+		placement.setCretaingDate(new Date());
 		placement.setApplication(application);
 		   		
 		Placement plac = db.Placement().save(placement);	

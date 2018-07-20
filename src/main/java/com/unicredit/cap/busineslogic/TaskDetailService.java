@@ -1,5 +1,6 @@
 package com.unicredit.cap.busineslogic;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +51,11 @@ public class TaskDetailService {
 		if (!task.isPresent())
 			 throw new CapNotFoundException("Task with id=" + id + " was not found");
 		
-
+		TaskDetail taskDetailPrevious = db.TaskDetail().getLastDetailOfTask(id);
+		taskDetailPrevious.setToDate(new Date());
+		db.TaskDetail().save(taskDetailPrevious);
+		
+		taskDetail.setFromDate(new Date());
 		taskDetail.setTask(task.get());
 
 		db.TaskDetail().save(taskDetail);		

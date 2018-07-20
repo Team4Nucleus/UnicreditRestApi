@@ -71,9 +71,10 @@ public class DocumentController {
 			 @RequestParam("idPlacement") Long idPlacement, 
 			 @RequestParam("files")  MultipartFile[] uploadFiles,
 			 @RequestParam("type") int type,
+			 @RequestParam("fileType") String fileType,
 			 @RequestParam("attachUser") int attachUser){
 		 
-		    return service.uploadDocumentInPlacement(idPlacement, uploadFiles, type, attachUser);
+		    return service.uploadDocumentInPlacement(idPlacement, uploadFiles, type, attachUser, fileType);
 		    
 		 }
 	 

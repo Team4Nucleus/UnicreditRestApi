@@ -131,7 +131,7 @@ public class DocumentService {
 	    }
 
 
-	public ResponseEntity<?> uploadDocumentInPlacement(Long idPlacement, MultipartFile[] uploadFiles, int type, int attachUser) {
+	public ResponseEntity<?> uploadDocumentInPlacement(Long idPlacement, MultipartFile[] uploadFiles, int type, int attachUser, String fileType) {
 		// TODO Auto-generated method stub
 		
 		Optional<Placement> plac = db.Placement().findById(idPlacement);
@@ -156,6 +156,7 @@ public class DocumentService {
 	            document.setOriginal(0);
 	            document.setName(uploadFiles[0].getOriginalFilename());
 	            document.setPath("C:/Documents/"+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
+	            document.setFileType(fileType);
 	            document.setPlacement(plac.get());
 	            
 	            Path path = Paths.get("C:/Documents/"+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
@@ -189,13 +190,16 @@ public class DocumentService {
 		 
 	     Path path = Paths.get(document.get().getPath());
 	     File file = new File(document.get().getPath());
-	     
-	    // ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+	     String contentType = Files.probeContentType(path);
+	     if(contentType == null) {
+	    	 contentType = "application/octet-stream";
+	        }
+	    
 	     ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 	
 	     return ResponseEntity.ok()
 	             .contentLength(file.length())
-	             .contentType(MediaType.parseMediaType("application/octet-stream"))
+	             .contentType(MediaType.parseMediaType(contentType))
 	             .body(resource);	
 	     
 		} catch (IOException e) {
