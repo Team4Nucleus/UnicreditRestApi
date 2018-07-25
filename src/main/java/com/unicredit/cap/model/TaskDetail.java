@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.lang.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -38,7 +40,8 @@ public class TaskDetail {
 	private int fromOrg;
 	
     @Column(name = "TO_USER")
-	private int toUser;
+    @Nullable
+	private Integer toUser;
 	
     @Column(name = "TO_ORG")
 	private int toOrg;
@@ -64,6 +67,7 @@ public class TaskDetail {
     
     @JsonView(TaskDetail.class)
     @ManyToOne
+    @Nullable
 	@JoinColumn(name ="TO_USER", insertable=false, updatable=false)
     private User toUserDetails;
     
@@ -127,11 +131,11 @@ public class TaskDetail {
 		this.fromOrg = fromOrg;
 	}
 
-	public int getToUser() {
+	public Integer getToUser() {
 		return toUser;
 	}
 
-	public void setToUser(int toUser) {
+	public void setToUser(Integer toUser) {
 		this.toUser = toUser;
 	}
 

@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -134,9 +135,11 @@ public class Placement {
     private PlacementType placementtype;
        
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true )
+    @OrderBy("DATE_TO DESC")
     private List<PlacementTransfer> transfers = new ArrayList<PlacementTransfer>();
        
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OrderBy("CREATION_DATE DESC")
     private List<Task> tasks = new ArrayList<Task>();
     
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "placement", fetch = FetchType.LAZY, orphanRemoval = true)

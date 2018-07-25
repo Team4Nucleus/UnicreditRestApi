@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.lang.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -28,16 +30,19 @@ public class PlacementTransfer {
 	*/
 	
 	@Column(name = "FROM_ORG")
+	@Nullable
 	private Integer fromOrg;
 	
 	@Column(name = "FROM_USER")
+	@Nullable
 	private Integer fromUser;
 	
 	@Column(name = "TO_ORG")
-	private int toOrg;
+	private Integer toOrg;
 	
 	@Column(name = "TO_USER")
-	private int toUser;
+	@Nullable
+	private Integer toUser;
 	
 	@Column(name = "DATE_FROM")
 	private Date dateFrom;
@@ -75,35 +80,35 @@ public class PlacementTransfer {
 	}
 
 
-	public int getFromOrg() {
+	public Integer getFromOrg() {
 		return fromOrg;
 	}
 
-	public void setFromOrg(int fromOrg) {
+	public void setFromOrg(Integer fromOrg) {
 		this.fromOrg = fromOrg;
 	}
 
-	public int getFromUser() {
+	public Integer getFromUser() {
 		return fromUser;
 	}
 
-	public void setFromUser(int fromUser) {
+	public void setFromUser(Integer fromUser) {
 		this.fromUser = fromUser;
 	}
 
-	public int getToOrg() {
+	public Integer getToOrg() {
 		return toOrg;
 	}
 
-	public void setToOrg(int toOrg) {
+	public void setToOrg(Integer toOrg) {
 		this.toOrg = toOrg;
 	}
 
-	public int getToUser() {
+	public Integer getToUser() {
 		return toUser;
 	}
 
-	public void setToUser(int toUser) {
+	public void setToUser(Integer toUser) {
 		this.toUser = toUser;
 	}
 

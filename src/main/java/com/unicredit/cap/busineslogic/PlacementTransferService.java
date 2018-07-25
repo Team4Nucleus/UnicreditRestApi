@@ -58,7 +58,8 @@ public class PlacementTransferService {
 		if(!plac.isPresent())
 			 throw new CapNotFoundException("Placement with id=" + id + " was not found");
 		
-		
+		try {
+			
 		PlacementTransfer placementTransferLast = db.PlacementTransfer().getLastTransferOfPlacement(id);
 		placementTransferLast.setDateTo(new Date());
 		db.PlacementTransfer().save(placementTransferLast);
@@ -73,6 +74,11 @@ public class PlacementTransferService {
 		db.Placement().save(placement);
 		
 		return placementTransfer;
+		
+		}
+		catch (Exception e) {
+			 throw new CapNotFoundException("Error: " + e.getMessage());
+		}
 	}
 	
 }
