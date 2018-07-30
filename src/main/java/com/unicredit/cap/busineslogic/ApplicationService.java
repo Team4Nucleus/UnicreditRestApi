@@ -83,8 +83,8 @@ public class ApplicationService {
 
 		   		PlacementTransfer  transfer = new PlacementTransfer();
 		   		transfer.setDateFrom(new Date());
-		   		transfer.setToOrg(placement.getCreatingOrg());
-		   		transfer.setToUser(placement.getCreateUser().intValue());
+		   		transfer.setToOrg(placement.getCreatingOrg().longValue());
+		   		transfer.setToUser(placement.getCreateUser().longValue());
 		   		transfer.setMovementType("Kreiranje Plasmana");  
 		   		transfer.setPlacement(placement);
 		   		

@@ -67,27 +67,24 @@ public class TaskDetail {
     
     @JsonView(TaskDetail.class)
     @ManyToOne
+	@JoinColumn(name ="FROM_ORG", insertable=false, updatable=false)
+    private Organization fromOrgDetails;
+    
+
+	@JsonView(TaskDetail.class)
+    @ManyToOne
     @Nullable
 	@JoinColumn(name ="TO_USER", insertable=false, updatable=false)
     private User toUserDetails;
     
     
+    @JsonView(TaskDetail.class)
+    @ManyToOne
+	@JoinColumn(name ="TO_ORG", insertable=false, updatable=false)
+    private Organization toOrgDetails;
     
-	public User getToUserDetails() {
-		return toUserDetails;
-	}
+    
 
-	public void setToUserDetails(User toUserDetails) {
-		this.toUserDetails = toUserDetails;
-	}
-
-	public User getFromUserDetails() {
-		return fromUserDetails;
-	}
-
-	public void setFromUserDetails(User fromUserDetails) {
-		this.fromUserDetails = fromUserDetails;
-	}
 
 	public long getId() {
 		return id;
@@ -162,9 +159,42 @@ public class TaskDetail {
 	public void setToDate(Date toDate) {
 		this.toDate = toDate;
 	}
+	
+	public User getFromUserDetails() {
+		return fromUserDetails;
+	}
+
+	public void setFromUserDetails(User fromUserDetails) {
+		this.fromUserDetails = fromUserDetails;
+	}
+	
+
+    public Organization getFromOrgDetails() {
+		return fromOrgDetails;
+	}
+
+	public void setFromOrgDetails(Organization fromOrgDetails) {
+		this.fromOrgDetails = fromOrgDetails;
+	}
+	
+	 
+	public User getToUserDetails() {
+		return toUserDetails;
+	}
+
+	public void setToUserDetails(User toUserDetails) {
+		this.toUserDetails = toUserDetails;
+	}	    
 
 	
-    
+
+	public Organization getToOrgDetails() {
+		return toOrgDetails;
+	}
+
+	public void setToOrgDetails(Organization toOrgDetails) {
+		this.toOrgDetails = toOrgDetails;
+	}
     
 	
 	

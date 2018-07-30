@@ -84,11 +84,11 @@ public class Placement {
     
     @JsonView(Placement.class)
     @Column(name = "CREATING_ORG")
-	private int creatingOrg;
+	private Long creatingOrg;
     
     @JsonView(Placement.class)
     @Column(name = "CURRENT_ORG")
-	private Integer currentOrg;
+	private Long currentOrg;
     
     
     @JsonView(Placement.class)
@@ -98,7 +98,7 @@ public class Placement {
     
     @JsonView(Placement.class)
     @Column(name = "CURRENT_USER")
-	private Integer currentUser;
+	private Long currentUser;
     
     @JsonView(Placement.class)
     @Column(name = "LOAN_AMOUNT")
@@ -150,7 +150,20 @@ public class Placement {
 	@JoinColumn(name = "application")
     private Application application;
     
+    
     @JsonView(Placement.class)
+    @ManyToOne
+	@JoinColumn(name ="CREATING_ORG", insertable=false, updatable=false)
+    private Organization creatingOrgDetails;
+    
+    @JsonView(Placement.class)
+    @ManyToOne
+	@JoinColumn(name ="CURRENT_ORG", insertable=false, updatable=false)
+    private Organization currentOrgDetails;
+    
+
+
+	@JsonView(Placement.class)
     @ManyToOne
 	@JoinColumn(name ="CREATE_USER", insertable=false, updatable=false)
     private User createUserDetails;
@@ -161,21 +174,7 @@ public class Placement {
     private User currentUserDetails;
     
     
-	public User getCurrentUserDetails() {
-		return currentUserDetails;
-	}
-
-	public void setCurrentUserDetails(User currentUserDetails) {
-		this.currentUserDetails = currentUserDetails;
-	}
-
-	public User getCreateUserDetails() {
-		return createUserDetails;
-	}
-
-	public void setCreateUserDetails(User createUserDetails) {
-		this.createUserDetails = createUserDetails;
-	}
+    
 
 	public Application getApplication() {
 		return application;
@@ -282,19 +281,19 @@ public class Placement {
 		this.closingDate = closingDate;
 	}
 
-	public int getCreatingOrg() {
+	public Long getCreatingOrg() {
 		return creatingOrg;
 	}
 
-	public void setCreatingOrg(int creatingOrg) {
+	public void setCreatingOrg(Long creatingOrg) {
 		this.creatingOrg = creatingOrg;
 	}
 
-	public Integer getCurrentOrg() {
+	public Long getCurrentOrg() {
 		return currentOrg;
 	}
 
-	public void setCurrentOrg(Integer currentOrg) {
+	public void setCurrentOrg(Long currentOrg) {
 		this.currentOrg = currentOrg;
 	}
 
@@ -306,11 +305,11 @@ public class Placement {
 		this.createUser = createUser;
 	}
 
-	public Integer getCurrentUser() {
+	public Long getCurrentUser() {
 		return currentUser;
 	}
 
-	public void setCurrentUser(Integer currentUser) {
+	public void setCurrentUser(Long currentUser) {
 		this.currentUser = currentUser;
 	}
 
@@ -401,8 +400,42 @@ public class Placement {
 	public void setDocuments(List<Document> documents) {
 		this.documents = documents;
 	}
+	
+
+    public Organization getCreatingOrgDetails() {
+		return creatingOrgDetails;
+	}
+
+	public void setCreatingOrgDetails(Organization creatingOrgDetails) {
+		this.creatingOrgDetails = creatingOrgDetails;
+	}
+	
+	public Organization getCurrentOrgDetails() {
+		return currentOrgDetails;
+	}
+
+	public void setCurrentOrgDetails(Organization currentOrgDetails) {
+		this.currentOrgDetails = currentOrgDetails;
+	}
     
-    
+	public User getCreateUserDetails() {
+		return createUserDetails;
+	}
+
+	public void setCreateUserDetails(User createUserDetails) {
+		this.createUserDetails = createUserDetails;
+	}
+	
+	
+	public User getCurrentUserDetails() {
+		return currentUserDetails;
+	}
+
+	public void setCurrentUserDetails(User currentUserDetails) {
+		this.currentUserDetails = currentUserDetails;
+	}
+
+
 	
 	
 	

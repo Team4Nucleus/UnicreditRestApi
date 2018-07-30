@@ -39,7 +39,7 @@ public class Application  {
 	@JsonView(Application.class)
     @Column(name = "CREATE_USER")
 	private long createUser;
-	
+		
     
 	@JsonView(Application.class)
     @Column(name = "APPLICATION_DATE")
@@ -52,27 +52,19 @@ public class Application  {
 	@JsonView(Application.class)
     @Column(name = "DESCRIPTION")
 	private String description;
-	  
+	
+	
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "application", cascade = CascadeType.ALL)
     private List<Placement> placements = new ArrayList<Placement>();
     
-    @JsonView(Application.class)
+
+	@JsonView(Application.class)
     @ManyToOne
-	@JoinColumn(name = "CREATE_USER", insertable=false, updatable=false)
-    private User createUserDetails;
-
+    @JoinColumn(name = "CREATE_USER", insertable=false, updatable=false)
+	private User createUserDetails;
+  
     
-
-	public User getCreateUserDetails() {
-		return createUserDetails;
-	}
-
-
-	public void setCreateUserDetails(User createUserDetails) {
-		this.createUserDetails = createUserDetails;
-	}
-
-
+    
 	public long getId() {
 		return id;
 	}
@@ -141,8 +133,16 @@ public class Application  {
 	public void setPlacements(List<Placement> placements) {
 		this.placements = placements;
 	}
+	
+
+	public User getCreateUserDetails() {
+		return createUserDetails;
+	}
 
 
+	public void setCreateUserDetails(User createUserDetails) {
+		this.createUserDetails = createUserDetails;
+	}
 	
 
 	

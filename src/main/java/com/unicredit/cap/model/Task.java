@@ -74,14 +74,6 @@ public class Task {
     private User createUserDetails;
 	
 	
-	public User getCreateUserDetails() {
-		return createUserDetails;
-	}
-
-
-	public void setCreateUserDetails(User createUserDetails) {
-		this.createUserDetails = createUserDetails;
-	}
 
 
 	public long getId() {
@@ -185,6 +177,14 @@ public class Task {
 		this.taskdetails = taskdetails;
 	}
 
+	public User getCreateUserDetails() {
+		return createUserDetails;
+	}
+
+
+	public void setCreateUserDetails(User createUserDetails) {
+		this.createUserDetails = createUserDetails;
+	}
 
 
 	 

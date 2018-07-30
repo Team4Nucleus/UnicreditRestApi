@@ -90,16 +90,7 @@ public class Document {
     private User attachUserDetails;
     
    
-
-	public User getAttachUserDetails() {
-		return attachUserDetails;
-	}
-
-
-	public void setAttachUserDetails(User attachUserDetails) {
-		this.attachUserDetails = attachUserDetails;
-
-	}
+    
 
 
 	public Placement getPlacement() {
@@ -140,6 +131,7 @@ public class Document {
 	public void setAttachUser(int attachUser) {
 		this.attachUser = attachUser;
 	}
+	
 
 
 	public String getMetaName() {
@@ -219,6 +211,16 @@ public class Document {
 
 	public void setDocumenttype(DocumentType documenttype) {
 		this.documenttype = documenttype;
+	}
+	
+	public User getAttachUserDetails() {
+		return attachUserDetails;
+	}
+
+
+	public void setAttachUserDetails(User attachUserDetails) {
+		this.attachUserDetails = attachUserDetails;
+
 	}
 	
 	
