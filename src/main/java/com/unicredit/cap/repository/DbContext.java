@@ -32,8 +32,19 @@ public class DbContext {
 	private TaskStatusRepository taskStatuses;
 	@Autowired
 	private UserRepository useres;
+	@Autowired
+	private AppUserRepository appUser;
+	@Autowired
+	private AppRolaRepository rola;
 	
 	
+	
+	public AppUserRepository AppUser() {
+		return appUser;
+	}
+	public AppRolaRepository Rola() {
+		return rola;
+	}
 	public ApplicationRepository Application() {
 		return applications;
 	}

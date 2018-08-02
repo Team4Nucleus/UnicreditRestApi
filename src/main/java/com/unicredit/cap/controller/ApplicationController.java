@@ -1,10 +1,18 @@
 package com.unicredit.cap.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +30,7 @@ import com.unicredit.cap.model.Application;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.MailService;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/rest/application")
 public class ApplicationController {
@@ -35,6 +44,7 @@ public class ApplicationController {
 	 
 	 @JsonView(Application.class)
 	 @GetMapping(value = "/all")
+	 @PreAuthorize("hasRole('ROLE_RM')")
 	    public List<Application> findAll() {
 	        return service.getAllApplications();
 	    }
@@ -52,6 +62,7 @@ public class ApplicationController {
 	 
 	 
 	 @JsonView(Application.class)
+	 @Secured("ROLE_RM")
 	 @GetMapping(value = "/user/{id}")
 	    public List<Application> findByUser(@PathVariable final int id) {
 	        return  service.getApplicationsByUser(id);
@@ -81,6 +92,10 @@ public class ApplicationController {
 	    return service.updateApplication(application);  
 	    }
 	 
-	 
+	 @GetMapping(value="podaci")
+	 public Collection<SimpleGrantedAuthority> podaci(){
+		 Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		 return authorities;
+	 }
 	
 }

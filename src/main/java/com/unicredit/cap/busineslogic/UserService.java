@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unicredit.cap.exception.CapNotFoundException;
+import com.unicredit.cap.model.AppRola;
+import com.unicredit.cap.model.AppUser;
 import com.unicredit.cap.model.User;
 import com.unicredit.cap.repository.DbContext;
 
@@ -22,6 +24,7 @@ public class UserService {
 		
 	}
 	
+
 	
 	public User getUserById(Long id){
 		

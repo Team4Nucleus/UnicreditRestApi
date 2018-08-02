@@ -6,6 +6,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+
 @EnableJpaRepositories(basePackages = "com.unicredit.cap.repository")
 @SpringBootApplication
 public class CAPApplication extends SpringBootServletInitializer{
@@ -19,4 +20,6 @@ public class CAPApplication extends SpringBootServletInitializer{
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(CAPApplication.class);
 	}
+	
+
 }
