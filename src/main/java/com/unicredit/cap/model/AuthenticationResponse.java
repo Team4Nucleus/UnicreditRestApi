@@ -4,6 +4,7 @@ import java.util.List;
 
 public class AuthenticationResponse {
 
+	private Long userID;
     private String username;
     private String token;
     private List<AppRola> RoleNames;
@@ -20,6 +21,10 @@ public class AuthenticationResponse {
 	public String getToken() {
         return token;
     }
+	
+	public Long getUserID() {
+		return this.userID;
+	}
 
     public void setToken(String token) {
         this.token = token;
@@ -31,5 +36,8 @@ public class AuthenticationResponse {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+    public	void setUserId(Long userID) {
+    	this.userID = userID;
     }
 }

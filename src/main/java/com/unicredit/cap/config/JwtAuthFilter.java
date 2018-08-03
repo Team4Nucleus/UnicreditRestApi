@@ -33,8 +33,19 @@ public class JwtAuthFilter implements Filter
             
         }
         
+        //
+        response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        if ("OPTIONS".equalsIgnoreCase(((HttpServletRequest) request).getMethod())) {
+        	response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+        	filterChain.doFilter(servletRequest, response);
+        }
         
-        filterChain.doFilter(servletRequest, response);
+        
+       // filterChain.doFilter(servletRequest, response);
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.unicredit.cap.busineslogic.AppUserService;
 import com.unicredit.cap.busineslogic.UserAuthenticationService;
 import com.unicredit.cap.exception.FailedToLoginException;
+import com.unicredit.cap.model.AppUser;
 import com.unicredit.cap.model.AuthenticationResponse;
 import com.unicredit.cap.model.UserCredentials;
 
@@ -34,6 +35,7 @@ public class TokenController {
             AuthenticationResponse authenticationResponse = new AuthenticationResponse();
             authenticationResponse.setUsername(userCredentials.getUsername());
             authenticationResponse.setRoleNames(userService.getUserRoles(userCredentials.getUsername()));
+            authenticationResponse.setUserId(userService.getUserByUsername(userCredentials.getUsername()).getId());
             authenticationResponse.setToken(token);
             
             

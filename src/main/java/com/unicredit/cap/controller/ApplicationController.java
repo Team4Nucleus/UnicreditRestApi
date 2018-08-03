@@ -30,7 +30,7 @@ import com.unicredit.cap.model.Application;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.MailService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin
 @RestController
 @RequestMapping("/rest/application")
 public class ApplicationController {
