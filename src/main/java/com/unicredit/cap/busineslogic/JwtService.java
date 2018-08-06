@@ -26,7 +26,7 @@ public class JwtService {
 
     public String generateToken(String username) throws IOException, URISyntaxException {
         byte[] secretKey = secretKeyProvider.getKey();
-        Date expiration = Date.from(LocalDateTime.now(UTC).plusMinutes(1).toInstant(UTC));
+        Date expiration = Date.from(LocalDateTime.now(UTC).plusHours(2).toInstant(UTC));
         return Jwts.builder()
                 .setSubject(username)
                 .setExpiration(expiration)
