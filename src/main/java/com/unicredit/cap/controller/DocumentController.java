@@ -67,10 +67,10 @@ public class DocumentController {
 		 }
 	 
 	 @PostMapping(value = "/delete/{id}")
-	 public ResponseEntity<?>  deleteDocument (@PathVariable final Long id){		
+	 public ResponseEntity<String>  deleteDocument (@PathVariable final Long id){		
 		    service.deleteDocument(id);
 		    
-		    return new ResponseEntity("document successfully deleted",HttpStatus.OK);
+		    return new ResponseEntity<String>("Document successfully deleted",HttpStatus.OK);
 		 }
 	 
 	 @PostMapping(value = "/upload")

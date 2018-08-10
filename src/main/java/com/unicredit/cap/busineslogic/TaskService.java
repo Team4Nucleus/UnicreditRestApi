@@ -77,6 +77,13 @@ public class TaskService {
 		
 		Task task = taskOp.get();
 		
+	    TaskDetail taskDetail = db.TaskDetail().getLastDetailOfTask(task.getId());
+	    
+	    if (taskDetail != null) {
+	    	taskDetail.setToDate(Calendar.getInstance().getTime());
+	    	db.TaskDetail().save(taskDetail);
+	    }
+		
 		task.setClosingDate(Calendar.getInstance().getTime());
 		task.setStatus((int)db.TaskStatus().getTaskStatusByCode("FINISHED").getId());
 		
