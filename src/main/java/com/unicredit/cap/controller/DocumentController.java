@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,6 +66,12 @@ public class DocumentController {
 		    return service.createDocumentInPlacement(document, id);
 		 }
 	 
+	 @PostMapping(value = "/delete/{id}")
+	 public ResponseEntity<?>  deleteDocument (@PathVariable final Long id){		
+		    service.deleteDocument(id);
+		    
+		    return new ResponseEntity("document successfully deleted",HttpStatus.OK);
+		 }
 	 
 	 @PostMapping(value = "/upload")
 	 public ResponseEntity<?>  uploadDocument ( 

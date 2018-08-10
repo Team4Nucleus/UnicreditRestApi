@@ -209,4 +209,14 @@ public class DocumentService {
 	     
 	}
 	
+	public void deleteDocument(Long id) {
+		Optional<Document> documentOp = db.Document().findById(id);
+		
+		if(!documentOp.isPresent())
+			throw new CapNotFoundException("Document with id="+id+" was not found!");
+		
+		db.Document().delete(documentOp.get());
+
+	}
+	
 }

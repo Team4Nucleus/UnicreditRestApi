@@ -41,6 +41,10 @@ public class TaskController {
 	 @PostMapping(value = "/create/{id}")
 	    public Task createTask(@RequestBody final Task task, @PathVariable final Long id) {	       
 		 return service.createNewTask(task, id);         
-	    }
+	   }
 	 
+	 @PostMapping(value = "/confirm/{id}")
+	    public Task confirmTask(@PathVariable final Long id) {	       		 
+		 return service.confirmTask(id);         
+	   }
 }

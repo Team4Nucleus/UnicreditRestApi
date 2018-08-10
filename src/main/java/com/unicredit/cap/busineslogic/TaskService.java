@@ -1,5 +1,6 @@
 package com.unicredit.cap.busineslogic;
 
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -67,6 +68,21 @@ public class TaskService {
 		
 	}
 	
-	
+	public Task confirmTask(Long id) {
+		Optional<Task> taskOp = db.Task().findById(id);
+		
+		if (!taskOp.isPresent()) {
+			throw new CapNotFoundException("Task with id="+ id +" was not found");
+		}
+		
+		Task task = taskOp.get();
+		
+		task.setClosingDate(Calendar.getInstance().getTime());
+		task.setStatus((int)db.TaskStatus().getTaskStatusByCode("FINISHED").getId());
+		
+		db.Task().save(task);
+		
+		return task;
+	}
 	
 }
