@@ -39,12 +39,17 @@ public class TaskController {
 
 	 
 	 @PostMapping(value = "/create/{id}")
-	    public Task createTask(@RequestBody final Task task, @PathVariable final Long id) {	       
+	    public Task createTask(@RequestBody final Task task, @PathVariable final Long id) throws Exception {	       
 		 return service.createNewTask(task, id);         
 	   }
 	 
 	 @PostMapping(value = "/confirm/{id}")
-	    public Task confirmTask(@PathVariable final Long id) {	       		 
+	    public Task confirmTask(@PathVariable final Long id) throws Exception {	       		 
 		 return service.confirmTask(id);         
+	   }
+	 
+	 @PostMapping(value = "/user/{id}")
+	    public List<Task> findAllByUserId(@PathVariable final Long id) {	       		 
+		 return service.getAllTasksByUserId(id);         
 	   }
 }

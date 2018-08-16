@@ -1,6 +1,8 @@
 package com.unicredit.cap.busineslogic;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unicredit.cap.exception.CapNotFoundException;
+import com.unicredit.cap.helper.EmailTemplateHelper;
 import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.model.PlacementTransfer;
 import com.unicredit.cap.repository.DbContext;
@@ -72,6 +75,20 @@ public class PlacementTransferService {
 		placement.setCurrentOrg(placementTransfer.getToOrg());
 		placement.setCurrentUser(placementTransfer.getToUser());
 		db.Placement().save(placement);
+		
+		HashMap<String, String> emailTemplateModel = new HashMap<>();
+	    emailTemplateModel.put("description", placementTransfer.getUserComment());
+	    emailTemplateModel.put("clientName", placement.getClientName());
+	    emailTemplateModel.put("placementType",placement.getPlacementtype().getName());
+	    
+	        
+	    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
+	    
+	    List<String> toRecipients = new ArrayList<String>();
+	    
+	    toRecipients.add(db.User().getOne((long)placementTransfer.getToOrg()).getEmail());
+	    
+	    new ExchangeMailService().SendMail("", toRecipients,"Predmet kretanje", emailContent, "");
 		
 		return placementTransfer;
 		

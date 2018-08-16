@@ -1,6 +1,8 @@
 package com.unicredit.cap.busineslogic;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unicredit.cap.exception.CapNotFoundException;
+import com.unicredit.cap.helper.EmailTemplateHelper;
 import com.unicredit.cap.model.Task;
 import com.unicredit.cap.model.TaskDetail;
 import com.unicredit.cap.repository.DbContext;
+import com.unicredit.cap.service.ExchangeMailService;
 
 @Service
 public class TaskDetailService {
@@ -44,7 +48,7 @@ public class TaskDetailService {
 				return task.get().getTaskdetails();
 		}
 	
-	public TaskDetail createNewTaskDetail(TaskDetail taskDetail, Long id){
+	public TaskDetail createNewTaskDetail(TaskDetail taskDetail, Long id) throws Exception{
 		
 		Optional<Task> task = db.Task().findById(id);
 
@@ -57,14 +61,31 @@ public class TaskDetailService {
 		
 		taskDetail.setFromDate(new Date());
 		taskDetail.setTask(task.get());
-		db.TaskDetail().save(taskDetail);	
+		taskDetail = db.TaskDetail().save(taskDetail);	
 		
+		/*
 		int taskStatus = taskDetail.getToUser() == (task.get().getCreateUser() == null ? -1 : task.get().getCreateUser().intValue()) ? 36 : 35;
 		Task taskWithStatusUpdate = task.get();
 		taskWithStatusUpdate.setStatus(taskStatus);
 		
 		db.Task().save(taskWithStatusUpdate);
-			
+		
+		*/
+		
+		HashMap<String, String> emailTemplateModel = new HashMap<>();
+	    emailTemplateModel.put("description", taskDetail.getText());
+	    emailTemplateModel.put("clientName", taskDetail.getTask().getPlacement().getClientName());
+	    emailTemplateModel.put("placementType",taskDetail.getTask().getPlacement().getPlacementtype().getName());
+	    
+	        
+	    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
+	    
+	    List<String> toRecipients = new ArrayList<String>();
+	    
+	    toRecipients.add(db.User().getOne((long)taskDetail.getToUser()).getEmail());
+	    
+	    new ExchangeMailService().SendMail("", toRecipients,"Zadatak", emailContent, "");
+	       
 		return taskDetail;
 		
 	}

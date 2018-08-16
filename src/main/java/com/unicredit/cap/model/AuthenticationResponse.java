@@ -6,6 +6,7 @@ public class AuthenticationResponse {
 
 	private Long userID;
     private String username;
+    private Long orgID;
     private String token;
     private List<AppRola> RoleNames;
 
@@ -25,6 +26,10 @@ public class AuthenticationResponse {
 	public Long getUserID() {
 		return this.userID;
 	}
+	
+	public Long getOrgID() {
+		return this.orgID;
+	}
 
     public void setToken(String token) {
         this.token = token;
@@ -39,5 +44,8 @@ public class AuthenticationResponse {
     }
     public	void setUserId(Long userID) {
     	this.userID = userID;
+    }
+    public	void setOrgId(Long orgID) {
+    	this.orgID = orgID;
     }
 }

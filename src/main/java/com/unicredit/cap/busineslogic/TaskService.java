@@ -1,8 +1,11 @@
 package com.unicredit.cap.busineslogic;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,10 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unicredit.cap.exception.CapNotFoundException;
+import com.unicredit.cap.helper.EmailTemplateHelper;
+import com.unicredit.cap.model.AppUser;
 import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.model.Task;
 import com.unicredit.cap.model.TaskDetail;
 import com.unicredit.cap.repository.DbContext;
+import com.unicredit.cap.service.ExchangeMailService;
+import com.unicredit.cap.service.GmailService;
 
 @Service
 public class TaskService {
@@ -47,7 +54,7 @@ public class TaskService {
 		return placement.get().getTasks();
 	}
 	
-	public Task createNewTask(Task task, Long id){
+	public Task createNewTask(Task task, Long id) throws Exception{
 		
 		Optional<Placement> placement = db.Placement().findById(id);
 
@@ -57,18 +64,36 @@ public class TaskService {
 		for (TaskDetail taskDetail : task.getTaskdetails())
 			{
 				taskDetail.setFromDate(new Date());
-				taskDetail.setTask(task);	
+				taskDetail.setTask(task);
 			}
 		
 		task.setCreateDate(new Date());
 		task.setPlacement(placement.get());
 
-		db.Task().save(task);		
+		task = db.Task().save(task);
+		
+		TaskDetail taskDetail = db.TaskDetail().getFirstDetailOfTask(task.getId());
+		
+		if(taskDetail != null) {
+			HashMap<String, String> emailTemplateModel = new HashMap<>();
+		    emailTemplateModel.put("description", task.getDescription());
+		    emailTemplateModel.put("clientName", taskDetail.getTask().getPlacement().getClientName());
+		    emailTemplateModel.put("placementType",taskDetail.getTask().getPlacement().getPlacementtype().getName());
+		    
+		    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
+		    
+		    List<String> toRecipients = new ArrayList<String>();
+		    
+		    toRecipients.add(db.User().getOne((long)taskDetail.getToUser()).getEmail());
+		    
+		    new ExchangeMailService().SendMail("", toRecipients,"Novi zadatak", emailContent, "");
+		}
+		
 		return task;
 		
 	}
 	
-	public Task confirmTask(Long id) {
+	public Task confirmTask(Long id) throws Exception {
 		Optional<Task> taskOp = db.Task().findById(id);
 		
 		if (!taskOp.isPresent()) {
@@ -89,7 +114,34 @@ public class TaskService {
 		
 		db.Task().save(task);
 		
+		TaskDetail firstTaskDetail = db.TaskDetail().getFirstDetailOfTask(task.getId());
+		
+		if(firstTaskDetail != null) {
+			HashMap<String, String> emailTemplateModel = new HashMap<>();
+		    emailTemplateModel.put("description", task.getDescription());
+		    emailTemplateModel.put("clientName", firstTaskDetail.getTask().getPlacement().getClientName());
+		    emailTemplateModel.put("placementType",firstTaskDetail.getTask().getPlacement().getPlacementtype().getName());
+		    
+		    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
+		    
+		    List<String> toRecipients = new ArrayList<String>();
+		    
+		    toRecipients.add(db.User().getOne((long)firstTaskDetail.getToUser()).getEmail());
+		    
+		    new ExchangeMailService().SendMail("", toRecipients,"Zatvaranje zadatka", emailContent, "");
+		}
+		
 		return task;
+	}
+	
+	public List<Task> getAllTasksByUserId(Long id){
+		Optional<AppUser> appUser = db.AppUser().findById(id);
+		
+		if(!appUser.isPresent()) {
+			throw new CapNotFoundException("User with id="+ id +" was not found");
+		}
+		
+		return db.Task().getAllTasksByUserId(id);
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.unicredit.cap.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class TaskDetailController {
 	 
 	 
 	 @PostMapping(value = "/create/{id}")
-	    public TaskDetail createApplication(@RequestBody final TaskDetail taskDetail, @PathVariable final Long id) {	       
+	    public TaskDetail createApplication(@RequestBody final TaskDetail taskDetail, @PathVariable final Long id) throws Exception {	       
 		 return service.createNewTaskDetail(taskDetail, id);         
 	    }
 	

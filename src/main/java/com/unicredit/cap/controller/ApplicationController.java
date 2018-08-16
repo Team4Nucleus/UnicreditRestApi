@@ -55,7 +55,7 @@ public class ApplicationController {
 		 
 		 List<String> str = new ArrayList<>();
 		 MailService mailService = new ExchangeMailService();
-		 mailService.SendMail("", str, "", "");
+		 mailService.SendMail("", str, "","", "");
 		 
 	        return service.getAllApplications();
 	    }

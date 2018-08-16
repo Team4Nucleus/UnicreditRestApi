@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.unicredit.cap.busineslogic.AppUserService;
 import com.unicredit.cap.busineslogic.UserAuthenticationService;
+import com.unicredit.cap.busineslogic.UserService;
 import com.unicredit.cap.exception.FailedToLoginException;
 import com.unicredit.cap.model.AppUser;
 import com.unicredit.cap.model.AuthenticationResponse;
@@ -19,7 +20,10 @@ public class TokenController {
     private UserAuthenticationService authenticationService;
     
     @Autowired
-    private AppUserService userService;
+    private AppUserService appUserService;
+    
+    @Autowired
+    private UserService userService;
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/token", method = RequestMethod.POST)
@@ -34,8 +38,9 @@ public class TokenController {
         if (token != null) {
             AuthenticationResponse authenticationResponse = new AuthenticationResponse();
             authenticationResponse.setUsername(userCredentials.getUsername());
-            authenticationResponse.setRoleNames(userService.getUserRoles(userCredentials.getUsername()));
-            authenticationResponse.setUserId(userService.getUserByUsername(userCredentials.getUsername()).getId());
+            authenticationResponse.setRoleNames(appUserService.getUserRoles(userCredentials.getUsername()));
+            authenticationResponse.setUserId(appUserService.getUserByUsername(userCredentials.getUsername()).getId());
+            authenticationResponse.setOrgId(userService.getUserById(authenticationResponse.getUserID()).getHrOrganization());
             authenticationResponse.setToken(token);
             
             

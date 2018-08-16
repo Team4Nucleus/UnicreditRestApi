@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface MailService {
 
-	public boolean SendMail(String from, List<String> to, String text, String link);
+	public boolean SendMail(String from, List<String> to,String subject, String text, String link);
 	
 }

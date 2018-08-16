@@ -13,8 +13,10 @@ public interface TaskDetailRepository extends JpaRepository<TaskDetail, Long> {
 	public TaskDetail getLastDetailOfTask(Long id);
 	
 	
-	
-	
+	@Query(value = "SELECT A.* FROM "
+			+ "( SELECT MIN(ID) AS ID FROM TASKDETAIL WHERE TASK = ? ) B "
+			+ "JOIN TASKDETAIL A on A.ID = B.ID",  nativeQuery = true)
+	public TaskDetail getFirstDetailOfTask(Long id);
 	
 	
 }

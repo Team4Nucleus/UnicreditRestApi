@@ -23,9 +23,7 @@ public class UserService {
 		return db.User().findAll();
 		
 	}
-	
-
-	
+		
 	public User getUserById(Long id){
 		
 		Optional<User> user = db.User().findById(id);
@@ -36,4 +34,5 @@ public class UserService {
 		return user.get();
 		
 	}
+	
 }

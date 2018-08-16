@@ -14,7 +14,7 @@ import microsoft.exchange.webservices.data.property.complex.MessageBody;
 public class ExchangeMailService implements MailService {
 
 	@Override
-	public boolean SendMail(String from, List<String> to, String text, String link){
+	public boolean SendMail(String from, List<String> to, String subject,String text, String link){
 		
 		 Boolean flag = false;
 	        try {
@@ -24,11 +24,12 @@ public class ExchangeMailService implements MailService {
 	         
 	            service.setUrl(new URI("https://exchange1.poreskaupravars.org/EWS/Exchange.asmx")); //https://webmail.poreskaupravars.org
 	            EmailMessage msg = new EmailMessage(service);
-	            msg.setSubject("This is a test!!!"); //email subject
-	            msg.setBody(MessageBody.getMessageBodyFromText("This is a test!!! pls ignore it!")); //email body
-	            msg.getToRecipients().add("mladen.todorovic@poreskaupravars.org"); //email receiver
-//	        msg.getCcRecipients().add("test2@test.com"); // email cc recipients
-//	        msg.getAttachments().addFileAttachment("D:\\Downloads\\EWSJavaAPI_1.2\\EWSJavaAPI_1.2\\Getting started with EWS Java API.RTF"); // email attachment
+	            msg.setSubject(subject); //email subject
+	            msg.setBody(MessageBody.getMessageBodyFromText(text)); //email body
+	            for(String recipient: to) {
+	            	msg.getToRecipients().add(recipient); //email receiver
+	            }
+	            
 	            msg.send(); //send email
 	            flag = true;
 	        } catch (Exception e) {

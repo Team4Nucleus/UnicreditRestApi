@@ -18,7 +18,7 @@ public class GmailService implements MailService {
 
 	
 	@Override
-	public boolean SendMail(String from, List<String> to, String text, String link) {
+	public boolean SendMail(String from, List<String> to, String subject,String text, String link) {
 
 		final String username = "team4nucleus@gmail.com";
 		final String password = "TeamNucleus123.";
@@ -43,11 +43,10 @@ public class GmailService implements MailService {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("team4nucleus@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse("m.todorovic87@gmail.com"));
+				InternetAddress.parse("gogom.markovic@gmail.com"));
 			message.setSubject("Testing Subject");
 			message.setText("Dear Mail Crawler,"
-				+ "\n\n No spam to my email, please!");
-
+				+ "\n\n No spam to my email, please!");		
 			Transport.send(message);
 					
 		return true;
