@@ -48,7 +48,7 @@ public class TaskController {
 		 return service.confirmTask(id);         
 	   }
 	 
-	 @PostMapping(value = "/user/{id}")
+	 @GetMapping(value = "/user/{id}")
 	    public List<Task> findAllByUserId(@PathVariable final Long id) {	       		 
 		 return service.getAllTasksByUserId(id);         
 	   }
