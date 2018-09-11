@@ -28,7 +28,15 @@ public class UserAuthenticationService {
         
         //String pw_hash = BCrypt.hashpw(password, BCrypt.gensalt(10)); 
         
+        AppUser appUser = userService.getUserByUsername(username);
+        if (appUser == null)
+        	throw new FailedToLoginException(String.format("User [%s] is not found", username));
+        
+        if (appUser.getActive() == 0)
+        	throw new FailedToLoginException(String.format("User [%s] is disabled", username));
+        
         String pw_hash = userService.getUserByUsername(username).getPassword(); 
+        
         
         if (BCrypt.checkpw(password, pw_hash)) {
             isAuthenticated = true;

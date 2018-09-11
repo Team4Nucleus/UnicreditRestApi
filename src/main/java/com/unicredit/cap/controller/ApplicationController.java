@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.unicredit.cap.busineslogic.ApplicationService;
 import com.unicredit.cap.busineslogic.PlacementService;
+import com.unicredit.cap.helper.TimeConsumeWrapper;
 import com.unicredit.cap.model.Application;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.MailService;
@@ -92,10 +93,17 @@ public class ApplicationController {
 	    return service.updateApplication(application);  
 	    }
 	 
+	 /*
 	 @GetMapping(value="podaci")
 	 public Collection<SimpleGrantedAuthority> podaci(){
 		 Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 		 return authorities;
 	 }
+	 */
+	 
+	 @GetMapping(value = "/timeConsument/{id}")
+	 public List<TimeConsumeWrapper> getTimeConsumentByPlacement(@PathVariable final Long id){
+	    return service.getTimeConsumentByApplication(id);
+	    }
 	
 }

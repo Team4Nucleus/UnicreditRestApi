@@ -6,17 +6,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+
+import org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.unicredit.cap.exception.CapNotFoundException;
+import com.unicredit.cap.helper.TimeConsumeWrapper;
 import com.unicredit.cap.model.Application;
 import com.unicredit.cap.model.Document;
 import com.unicredit.cap.model.Placement;
+import com.unicredit.cap.model.PlacementTimeConsument;
 import com.unicredit.cap.model.PlacementTransfer;
 import com.unicredit.cap.model.Task;
 import com.unicredit.cap.model.TaskDetail;
+import com.unicredit.cap.model.TaskTimeConsument;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.MailService;
@@ -139,7 +145,6 @@ public class PlacementService {
 	        return plac;
 	}
 	
-	
 	public String Test(long x)  {
 		
 	
@@ -151,5 +156,25 @@ public class PlacementService {
 		
 		
 	}
+	
+	
+	public List<TimeConsumeWrapper> getTimeConsumentByPlacement (Long id){
+		
+		List<TimeConsumeWrapper> result = new ArrayList<TimeConsumeWrapper>();
+		
+		List<PlacementTimeConsument> PlacementTimeList = db.placementTime().getTimeConsumentByPlacement(id);
+		
+		for( PlacementTimeConsument placementTime : PlacementTimeList )
+		{
+			List<TaskTimeConsument> TaskTimeList = db.taskTime().getTimeConsumentByPlacementAndOrg(id, placementTime.getOrgID());
+			
+			result.add(new TimeConsumeWrapper(placementTime,TaskTimeList ));
+		}
+		
+		return result;
+		
+	}
+	
+	
 	
 }

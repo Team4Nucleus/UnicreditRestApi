@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,10 +30,26 @@ public class User {
     @Column(name = "EMAIL")
 	private String email;
 
+    /*
+    @ManyToOne
+    @JoinColumn(name = "USERNAME", referencedColumnName = "USERNAME")
+	private AppUser appUser;
+    */
+    
 	public long getId() {
 		return id;
 	}
 
+	/*
+	public AppUser getAppUser() {
+		return appUser;
+	}
+
+	public void setAppUser(AppUser appUser) {
+		this.appUser = appUser;
+	}
+*/
+	
 	public void setId(long id) {
 		this.id = id;
 	}

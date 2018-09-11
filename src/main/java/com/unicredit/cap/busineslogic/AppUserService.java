@@ -25,10 +25,20 @@ public class AppUserService {
 		
 	}
 	
+	public List<AppRola> getAllRoles()
+	{
+		
+		List<AppRola> role = db.Rola().findAll();
+		return role;
+		
+	}
+	
+	
 	public AppUser getUserByUsername(String username)
 	{
 		
 		AppUser user = db.AppUser().findByUsername(username);
+		
 		
 		return user;
 		

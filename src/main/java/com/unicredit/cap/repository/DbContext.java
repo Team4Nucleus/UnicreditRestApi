@@ -37,6 +37,17 @@ public class DbContext {
 	@Autowired
 	private AppRolaRepository rola;
 	
+	@Autowired
+	private PlacementTimeConsumentRepository placementTime;
+	@Autowired
+	private TaskTimeConsumentRepository taskTime;
+	
+	public PlacementTimeConsumentRepository placementTime() {
+		return placementTime;
+	}
+	public TaskTimeConsumentRepository taskTime() {
+		return taskTime;
+	}
 	
 	
 	public AppUserRepository AppUser() {
@@ -45,6 +56,7 @@ public class DbContext {
 	public AppRolaRepository Rola() {
 		return rola;
 	}
+
 	public ApplicationRepository Application() {
 		return applications;
 	}

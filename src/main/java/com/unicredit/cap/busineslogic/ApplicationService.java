@@ -12,12 +12,15 @@ import org.springframework.stereotype.Service;
 
 
 import com.unicredit.cap.exception.CapNotFoundException;
+import com.unicredit.cap.helper.TimeConsumeWrapper;
 import com.unicredit.cap.model.Application;
 import com.unicredit.cap.model.Document;
 import com.unicredit.cap.model.Placement;
+import com.unicredit.cap.model.PlacementTimeConsument;
 import com.unicredit.cap.model.PlacementTransfer;
 import com.unicredit.cap.model.Task;
 import com.unicredit.cap.model.TaskDetail;
+import com.unicredit.cap.model.TaskTimeConsument;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.MailService;
@@ -127,4 +130,20 @@ public class ApplicationService {
 	}
 	
 	
+	public List<TimeConsumeWrapper> getTimeConsumentByApplication (Long id){
+		
+		List<TimeConsumeWrapper> result = new ArrayList<TimeConsumeWrapper>();
+		
+		List<PlacementTimeConsument> PlacementTimeList = db.placementTime().getTimeConsumentByApplication(id);
+		
+		for( PlacementTimeConsument placementTime : PlacementTimeList )
+		{
+			List<TaskTimeConsument> TaskTimeList = db.taskTime().getTimeConsumentByApplicationAndOrg(id, placementTime.getOrgID());
+			
+			result.add(new TimeConsumeWrapper(placementTime,TaskTimeList ));
+		}
+		
+		return result;
+		
+	}
 }

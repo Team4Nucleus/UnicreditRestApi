@@ -40,7 +40,8 @@ public class TokenController {
             authenticationResponse.setUsername(userCredentials.getUsername());
             authenticationResponse.setRoleNames(appUserService.getUserRoles(userCredentials.getUsername()));
             authenticationResponse.setUserId(appUserService.getUserByUsername(userCredentials.getUsername()).getId());
-            authenticationResponse.setOrgId(userService.getUserById(authenticationResponse.getUserID()).getHrOrganization());
+            authenticationResponse.setOrgId(userService.getUserByUsername(userCredentials.getUsername()).getHrOrganization());
+            authenticationResponse.setUser(userService.getUserByUsername(userCredentials.getUsername()));
             authenticationResponse.setToken(token);
             
             

@@ -22,6 +22,7 @@ public class AppUser {
 
 	
     @Id
+    @GeneratedValue
     @Column(name = "ID")
 	private Long id;
 	
@@ -29,7 +30,6 @@ public class AppUser {
 	private String username;
 	
     @Column(name = "PASSWORD")
-    @JsonIgnore
 	private String password;
 	
     @Column(name = "FIRSTNAME")
@@ -38,8 +38,18 @@ public class AppUser {
     @Column(name = "LASTNAME")
 	private String lastname;
 
+    @Column(name = "ACTIVE")
+   	private Integer active;
     
-    @ManyToMany(fetch = FetchType.EAGER)
+    public Integer getActive() {
+		return active;
+	}
+
+	public void setActive(Integer active) {
+		this.active = active;
+	}
+
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "APPUSERROLE", joinColumns = @JoinColumn(name = "APPUSER", referencedColumnName = "ID"),
             						 inverseJoinColumns = @JoinColumn(name = "APPROLE", referencedColumnName = "ID"))
     private List<AppRola> roles;

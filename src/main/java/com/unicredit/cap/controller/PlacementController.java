@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.unicredit.cap.busineslogic.PlacementService;
+import com.unicredit.cap.helper.TimeConsumeWrapper;
 import com.unicredit.cap.model.Placement;
+import com.unicredit.cap.model.PlacementTimeConsument;
 
 
 
@@ -47,6 +49,11 @@ public class PlacementController {
 	 @PutMapping(value = "/update")
 	 public Placement updatePlacement(@RequestBody final Placement placement) {
 	        return service.updatePlacement(placement);    
+	    }
+	 
+	 @GetMapping(value = "/timeConsument/{id}")
+	 public List<TimeConsumeWrapper> getTimeConsumentByPlacement(@PathVariable final Long id){
+	    return service.getTimeConsumentByPlacement(id);
 	    }
 	 
 	 
