@@ -63,14 +63,14 @@ public class TaskDetailService {
 		taskDetail.setTask(task.get());
 		taskDetail = db.TaskDetail().save(taskDetail);	
 		
-		/*
+		
 		int taskStatus = taskDetail.getToUser() == (task.get().getCreateUser() == null ? -1 : task.get().getCreateUser().intValue()) ? 36 : 35;
 		Task taskWithStatusUpdate = task.get();
 		taskWithStatusUpdate.setStatus(taskStatus);
 		
 		db.Task().save(taskWithStatusUpdate);
 		
-		*/
+		
 		
 		HashMap<String, String> emailTemplateModel = new HashMap<>();
 	    emailTemplateModel.put("description", taskDetail.getText());

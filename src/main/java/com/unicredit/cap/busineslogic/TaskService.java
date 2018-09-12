@@ -76,15 +76,18 @@ public class TaskService {
 		
 		if(taskDetail != null) {
 			HashMap<String, String> emailTemplateModel = new HashMap<>();
-		    emailTemplateModel.put("description", task.getDescription());
-		    emailTemplateModel.put("clientName", taskDetail.getTask().getPlacement().getClientName());
-		    emailTemplateModel.put("placementType",taskDetail.getTask().getPlacement().getPlacementtype().getName());
+		    emailTemplateModel.put("clientName", "Zadatak od: " + taskDetail.getFromUserDetails().getName() + " [" + taskDetail.getFromOrgDetails().getName() +"]");
+		    emailTemplateModel.put("placementType", "Plasman: " + taskDetail.getTask().getPlacement().getPlacementtype().getName() + ", " + taskDetail.getTask().getPlacement().getClientName());
+		    emailTemplateModel.put("status", "Status: " + taskDetail.getTask().getTaskstatus().getName() + ", Prioritet: " + taskDetail.getTask().getPriority());
+		    emailTemplateModel.put("description", "[" + taskDetail.getFromDate() + "] " + taskDetail.getText());
+		    emailTemplateModel.put("link", "/task/"+taskDetail.getTask().getId());
 		    
 		    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
 		    
 		    List<String> toRecipients = new ArrayList<String>();
 		    
-		    toRecipients.add(db.User().getOne((long)taskDetail.getToUser()).getEmail());
+		    if (taskDetail.getToUser() != null)
+		    	toRecipients.add(taskDetail.getToUserDetails().getEmail());
 		    
 		    new ExchangeMailService().SendMail("", toRecipients,"Novi zadatak", emailContent, "");
 		}
@@ -118,17 +121,21 @@ public class TaskService {
 		
 		if(firstTaskDetail != null) {
 			HashMap<String, String> emailTemplateModel = new HashMap<>();
-		    emailTemplateModel.put("description", task.getDescription());
-		    emailTemplateModel.put("clientName", firstTaskDetail.getTask().getPlacement().getClientName());
-		    emailTemplateModel.put("placementType",firstTaskDetail.getTask().getPlacement().getPlacementtype().getName());
+			emailTemplateModel.put("clientName", "Zadatak od: " + firstTaskDetail.getFromUserDetails().getName() + " [" + firstTaskDetail.getFromOrgDetails().getName() +"]");
+		    emailTemplateModel.put("placementType", "Plasman: " + firstTaskDetail.getTask().getPlacement().getPlacementtype().getName() + ", " + firstTaskDetail.getTask().getPlacement().getClientName());
+		    emailTemplateModel.put("status", "Status: " + firstTaskDetail.getTask().getTaskstatus().getName() + ", Prioritet: " + taskDetail.getTask().getPriority());
+		    emailTemplateModel.put("description", "Ovaj zadatak je uspješno izvršen!");
+		    emailTemplateModel.put("link", "/task/"+firstTaskDetail.getTask().getId());
 		    
 		    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
 		    
 		    List<String> toRecipients = new ArrayList<String>();
 		    
-		    toRecipients.add(db.User().getOne((long)firstTaskDetail.getToUser()).getEmail());
+		    if (firstTaskDetail.getToUser() != null)
+		    toRecipients.add(firstTaskDetail.getToUserDetails().getEmail());
 		    
 		    new ExchangeMailService().SendMail("", toRecipients,"Zatvaranje zadatka", emailContent, "");
+		    
 		}
 		
 		return task;

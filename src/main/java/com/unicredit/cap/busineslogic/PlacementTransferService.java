@@ -77,16 +77,18 @@ public class PlacementTransferService {
 		db.Placement().save(placement);
 		
 		HashMap<String, String> emailTemplateModel = new HashMap<>();
-	    emailTemplateModel.put("description", placementTransfer.getUserComment());
-	    emailTemplateModel.put("clientName", placement.getClientName());
-	    emailTemplateModel.put("placementType",placement.getPlacementtype().getName());
-	    
+		emailTemplateModel.put("clientName", "Plasman od: " + placementTransfer.getFromUserDetails().getName() + " [" + placementTransfer.getFromOrgDetails().getName() +"]");
+	    emailTemplateModel.put("placementType", "Plasman: " + placement.getPlacementtype().getName() + ", " + placement.getClientName());
+	    emailTemplateModel.put("status", "Status: " + placement.getPlacementstatus().getName());
+	    emailTemplateModel.put("description", "Komentar: " + placementTransfer.getUserComment());
+	    emailTemplateModel.put("link", "/placement/"+placement.getId());
 	        
 	    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
 	    
 	    List<String> toRecipients = new ArrayList<String>();
 	    
-	    toRecipients.add(db.User().getOne((long)placementTransfer.getToOrg()).getEmail());
+	    if(placementTransfer.getToUser() != null)
+	    toRecipients.add(placementTransfer.getToUserDetails().getEmail());
 	    
 	    new ExchangeMailService().SendMail("", toRecipients,"Predmet kretanje", emailContent, "");
 		
