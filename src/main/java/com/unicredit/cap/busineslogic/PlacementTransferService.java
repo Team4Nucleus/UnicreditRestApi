@@ -7,12 +7,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.unicredit.cap.exception.CapNotFoundException;
 import com.unicredit.cap.helper.EmailTemplateHelper;
+import com.unicredit.cap.model.Organization;
 import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.model.PlacementTransfer;
+import com.unicredit.cap.model.TaskStatus;
+import com.unicredit.cap.model.User;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.MailService;
@@ -25,6 +29,8 @@ public class PlacementTransferService {
 	private DbContext db;
 	private MailService mailService = new ExchangeMailService();
 	
+	@Autowired
+	private Environment env;
 	
 	public PlacementTransfer getPlacementTransferById(Long id){
 		
@@ -76,19 +82,25 @@ public class PlacementTransferService {
 		placement.setCurrentUser(placementTransfer.getToUser());
 		db.Placement().save(placement);
 		
+				
+		User fromUser = db.User().findById((long)placementTransfer.getFromUser()).get();
+		User toUser = db.User().findById((long)placementTransfer.getToUser()).get();
+		Organization fromOrg = db.Orgnaization().findById((long)placementTransfer.getFromOrg()).get();
+
+		
 		HashMap<String, String> emailTemplateModel = new HashMap<>();
-		emailTemplateModel.put("clientName", "Plasman od: " + placementTransfer.getFromUserDetails().getName() + " [" + placementTransfer.getFromOrgDetails().getName() +"]");
-	    emailTemplateModel.put("placementType", "Plasman: " + placement.getPlacementtype().getName() + ", " + placement.getClientName());
-	    emailTemplateModel.put("status", "Status: " + placement.getPlacementstatus().getName());
-	    emailTemplateModel.put("description", "Komentar: " + placementTransfer.getUserComment());
-	    emailTemplateModel.put("link", "/placement/"+placement.getId());
-	        
+		emailTemplateModel.put("clientName", "Zadatak od: " + fromUser.getName() + " [" + fromOrg.getName() +"]");
+		emailTemplateModel.put("placementType", "Plasman: " + plac.get().getPlacementtype().getName() + ", " + plac.get().getClientName());
+		emailTemplateModel.put("status", "Status: " +  plac.get().getPlacementstatus().getName());
+		emailTemplateModel.put("description", "Komentar: " + placementTransfer.getUserComment());
+		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/loan-requests/placement/" + plac.get().getId() );
+		
 	    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
 	    
 	    List<String> toRecipients = new ArrayList<String>();
 	    
 	    if(placementTransfer.getToUser() != null)
-	    toRecipients.add(placementTransfer.getToUserDetails().getEmail());
+	    toRecipients.add(toUser.getEmail());
 	    
 	    new ExchangeMailService().SendMail("", toRecipients,"Predmet kretanje", emailContent, "");
 		

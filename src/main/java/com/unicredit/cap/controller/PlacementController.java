@@ -56,5 +56,14 @@ public class PlacementController {
 	    return service.getTimeConsumentByPlacement(id);
 	    }
 	 
+	 @GetMapping(value = "/{id}/status/{IdStatus}")
+	 public Placement changeStatus(@PathVariable final Long id, @PathVariable final int IdStatus )
+	 {
+		Placement placement = service.UpdateStatus(id, IdStatus);
+		return placement;
+		
+		 
+	 }
+	 
 	 
 }

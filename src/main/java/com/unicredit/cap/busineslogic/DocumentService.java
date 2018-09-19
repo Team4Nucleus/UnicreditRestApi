@@ -31,6 +31,8 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileOwnerAttributeView;
 import java.nio.file.attribute.UserPrincipal;
+
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ByteArrayResource;
 
 @Service
@@ -38,6 +40,9 @@ public class DocumentService {
 
 	@Autowired
 	private DbContext db;
+	
+	@Autowired
+	private Environment env;
 	
 	private MailService mailService = new ExchangeMailService();
 	
@@ -114,7 +119,7 @@ public class DocumentService {
 	            }
 
 	            
-	            File directory = new File("C:/Documents/"+idPlacement);
+	            File directory = new File(env.getProperty("document.location")+idPlacement);
 	            if (! directory.exists()){
 	                directory.mkdir();
 	            }
@@ -155,11 +160,11 @@ public class DocumentService {
 	            document.setType(type);
 	            document.setOriginal(0);
 	            document.setName(uploadFiles[0].getOriginalFilename());
-	            document.setPath("C:/Documents/"+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
+	            document.setPath(env.getProperty("document.location")+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
 	            document.setFileType(fileType);
 	            document.setPlacement(plac.get());
 	            
-	            Path path = Paths.get("C:/Documents/"+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
+	            Path path = Paths.get(env.getProperty("document.location")+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
 	            BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
 	            FileOwnerAttributeView ownerAttributeView = Files.getFileAttributeView(path, FileOwnerAttributeView.class);
 	            

@@ -10,14 +10,18 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.unicredit.cap.exception.CapNotFoundException;
 import com.unicredit.cap.helper.EmailTemplateHelper;
 import com.unicredit.cap.model.AppUser;
+import com.unicredit.cap.model.Organization;
 import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.model.Task;
 import com.unicredit.cap.model.TaskDetail;
+import com.unicredit.cap.model.TaskStatus;
+import com.unicredit.cap.model.User;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.GmailService;
@@ -27,6 +31,9 @@ public class TaskService {
 
 	@Autowired
 	private DbContext db;
+	
+	@Autowired
+	private Environment env;
 	
 	public Task getTaskById(Long id){
 		
@@ -74,20 +81,27 @@ public class TaskService {
 		
 		TaskDetail taskDetail = db.TaskDetail().getFirstDetailOfTask(task.getId());
 		
+		
 		if(taskDetail != null) {
+						
+			User fromUser = db.User().findById((long)taskDetail.getFromUser()).get();
+			User toUser = db.User().findById((long)taskDetail.getToUser()).get();
+			Organization fromOrg = db.Orgnaization().findById((long)taskDetail.getFromOrg()).get();
+			TaskStatus status = db.TaskStatus().findById((long)task.getStatus()).get();
+			
 			HashMap<String, String> emailTemplateModel = new HashMap<>();
-		    emailTemplateModel.put("clientName", "Zadatak od: " + taskDetail.getFromUserDetails().getName() + " [" + taskDetail.getFromOrgDetails().getName() +"]");
-		    emailTemplateModel.put("placementType", "Plasman: " + taskDetail.getTask().getPlacement().getPlacementtype().getName() + ", " + taskDetail.getTask().getPlacement().getClientName());
-		    emailTemplateModel.put("status", "Status: " + taskDetail.getTask().getTaskstatus().getName() + ", Prioritet: " + taskDetail.getTask().getPriority());
-		    emailTemplateModel.put("description", "[" + taskDetail.getFromDate() + "] " + taskDetail.getText());
-		    emailTemplateModel.put("link", "/task/"+taskDetail.getTask().getId());
-		    
+			emailTemplateModel.put("clientName", "Zadatak od: " + fromUser.getName() + " [" + fromOrg.getName() +"]");
+			emailTemplateModel.put("placementType", "Plasman: " + placement.get().getPlacementtype().getName() + ", " + placement.get().getClientName());
+			emailTemplateModel.put("status", "Status: " + status.getName() + ", Prioritet: " + task.getPriority());
+			emailTemplateModel.put("description", "[" + taskDetail.getFromDate() + "] " + taskDetail.getText());
+			emailTemplateModel.put("link", env.getProperty("app.domain")+ "/user-tasks/details/" + task.getId() );
+			
 		    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
 		    
 		    List<String> toRecipients = new ArrayList<String>();
 		    
 		    if (taskDetail.getToUser() != null)
-		    	toRecipients.add(taskDetail.getToUserDetails().getEmail());
+		    	toRecipients.add(toUser.getEmail());
 		    
 		    new ExchangeMailService().SendMail("", toRecipients,"Novi zadatak", emailContent, "");
 		}
@@ -125,7 +139,7 @@ public class TaskService {
 		    emailTemplateModel.put("placementType", "Plasman: " + firstTaskDetail.getTask().getPlacement().getPlacementtype().getName() + ", " + firstTaskDetail.getTask().getPlacement().getClientName());
 		    emailTemplateModel.put("status", "Status: " + firstTaskDetail.getTask().getTaskstatus().getName() + ", Prioritet: " + taskDetail.getTask().getPriority());
 		    emailTemplateModel.put("description", "Ovaj zadatak je uspješno izvršen!");
-		    emailTemplateModel.put("link", "/task/"+firstTaskDetail.getTask().getId());
+		    emailTemplateModel.put("link", env.getProperty("app.domain")+ "/user-tasks/details/" + id );
 		    
 		    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
 		    

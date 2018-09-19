@@ -176,5 +176,20 @@ public class PlacementService {
 	}
 	
 	
+	public Placement UpdateStatus(Long id, int IdStatus)
+	{
+		Optional<Placement> plac = db.Placement().findById(id);
+		
+		if (!plac.isPresent())
+			throw new CapNotFoundException("Placement with id=" + id + " was not found");    
+		
+		Placement placement = plac.get();
+		
+		placement.setStatus(IdStatus);
+		db.Placement().save(placement);
+		
+		return placement;
+		
+	}
 	
 }
