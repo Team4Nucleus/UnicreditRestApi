@@ -29,7 +29,7 @@ import com.unicredit.cap.busineslogic.PlacementService;
 import com.unicredit.cap.helper.TimeConsumeWrapper;
 import com.unicredit.cap.model.Application;
 import com.unicredit.cap.service.ExchangeMailService;
-import com.unicredit.cap.service.MailService;
+import com.unicredit.cap.service.IMailService;
 
 //@CrossOrigin
 @RestController
@@ -55,8 +55,8 @@ public class ApplicationController {
 	    public List<Application> findAllApp() {
 		 
 		 List<String> str = new ArrayList<>();
-		 MailService mailService = new ExchangeMailService();
-		 mailService.SendMail("", str, "","", "");
+		 IMailService mailService = new ExchangeMailService();
+		// mailService.SendMail("", str, "","", "");
 		 
 	        return service.getAllApplications();
 	    }

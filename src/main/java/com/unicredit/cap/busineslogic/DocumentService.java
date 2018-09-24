@@ -21,7 +21,7 @@ import com.unicredit.cap.model.Document;
 import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.service.ExchangeMailService;
-import com.unicredit.cap.service.MailService;
+import com.unicredit.cap.service.IMailService;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class DocumentService {
 	@Autowired
 	private Environment env;
 	
-	private MailService mailService = new ExchangeMailService();
+	private IMailService mailService = new ExchangeMailService();
 	
 	
 	public Document getDocumentById(Long id)

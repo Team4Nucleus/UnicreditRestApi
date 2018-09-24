@@ -19,6 +19,7 @@ import com.unicredit.cap.model.TaskStatus;
 import com.unicredit.cap.model.User;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.service.ExchangeMailService;
+import com.unicredit.cap.service.IMailService;
 import com.unicredit.cap.service.MailService;
 
 @Service
@@ -27,7 +28,8 @@ public class PlacementTransferService {
 	
 	@Autowired
 	private DbContext db;
-	private MailService mailService = new ExchangeMailService();
+	
+	private MailService mailService = new MailService();
 	
 	@Autowired
 	private Environment env;
@@ -102,7 +104,7 @@ public class PlacementTransferService {
 	    if(placementTransfer.getToUser() != null)
 	    toRecipients.add(toUser.getEmail());
 	    
-	    new ExchangeMailService().SendMail("", toRecipients,"Predmet kretanje", emailContent, "");
+	    mailService.SendMail("", toRecipients,"Predmet kretanje", emailContent, "", env);
 		
 		return placementTransfer;
 		

@@ -23,8 +23,9 @@ import com.unicredit.cap.model.TaskDetail;
 import com.unicredit.cap.model.TaskStatus;
 import com.unicredit.cap.model.User;
 import com.unicredit.cap.repository.DbContext;
-import com.unicredit.cap.service.ExchangeMailService;
-import com.unicredit.cap.service.GmailService;
+import com.unicredit.cap.service.MailService;
+
+
 
 @Service
 public class TaskService {
@@ -34,6 +35,9 @@ public class TaskService {
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private MailService mailService = new MailService();
 	
 	public Task getTaskById(Long id){
 		
@@ -103,7 +107,8 @@ public class TaskService {
 		    if (taskDetail.getToUser() != null)
 		    	toRecipients.add(toUser.getEmail());
 		    
-		    new ExchangeMailService().SendMail("", toRecipients,"Novi zadatak", emailContent, "");
+
+		    mailService.SendMail("", toRecipients,"Novi zadatak", emailContent, "", env);
 		}
 		
 		return task;
@@ -148,7 +153,7 @@ public class TaskService {
 		    if (firstTaskDetail.getToUser() != null)
 		    toRecipients.add(firstTaskDetail.getToUserDetails().getEmail());
 		    
-		    new ExchangeMailService().SendMail("", toRecipients,"Zatvaranje zadatka", emailContent, "");
+		    mailService.SendMail("", toRecipients,"Zatvaranje zadatka", emailContent, "", env);
 		    
 		}
 		

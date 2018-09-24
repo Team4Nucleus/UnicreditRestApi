@@ -19,6 +19,7 @@ import com.unicredit.cap.model.TaskDetail;
 import com.unicredit.cap.model.User;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.service.ExchangeMailService;
+import com.unicredit.cap.service.MailService;
 
 @Service
 public class TaskDetailService {
@@ -29,6 +30,8 @@ public class TaskDetailService {
 	
 	@Autowired
 	private Environment env;
+	
+	private MailService mailService = new MailService();
 	
 	public TaskDetail getTaskDetailById(Long id){
 		
@@ -97,7 +100,7 @@ public class TaskDetailService {
 	    
 	    toRecipients.add(toUser.getEmail());
 	    
-	    new ExchangeMailService().SendMail("", toRecipients,"Zadatak", emailContent, "");
+		mailService.SendMail("", toRecipients,"Zadatak", emailContent, "", env);
 	       
 		return taskDetail;
 		

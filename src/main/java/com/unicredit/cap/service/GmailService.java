@@ -11,14 +11,16 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.core.env.Environment;
 
-public class GmailService implements MailService {
+
+public class GmailService implements IMailService {
 
 
 
 	
 	@Override
-	public boolean SendMail(String from, List<String> to, String subject,String text, String link) {
+	public boolean SendMail(String from, List<String> to, String subject,String text, String link, Environment env) {
 
 		final String username = "team4nucleus@gmail.com";
 		final String password = "TeamNucleus123.";

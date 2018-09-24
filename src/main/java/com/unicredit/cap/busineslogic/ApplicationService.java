@@ -23,7 +23,7 @@ import com.unicredit.cap.model.TaskDetail;
 import com.unicredit.cap.model.TaskTimeConsument;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.service.ExchangeMailService;
-import com.unicredit.cap.service.MailService;
+import com.unicredit.cap.service.IMailService;
 
 @Service
 public class ApplicationService {
@@ -31,7 +31,7 @@ public class ApplicationService {
 
 	@Autowired
 	private DbContext db;
-	private MailService mailService = new ExchangeMailService();
+	private IMailService mailService = new ExchangeMailService();
 	
 	public Application getApplicationById(long id){
 		
