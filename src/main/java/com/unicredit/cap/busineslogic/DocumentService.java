@@ -50,12 +50,12 @@ public class DocumentService {
 	public Document getDocumentById(Long id)
 	{
 		
-		Optional<Document> doc = db.Document().findById(id);
+		Document doc = db.Document().findOne(id);
 		
-		if(!doc.isPresent())
+		if(doc == null)
 			throw new CapNotFoundException("Document with id=" + id + " was not found");
 		
-		return doc.get();
+		return doc;
 	}
 	
 	
@@ -78,12 +78,12 @@ public class DocumentService {
 	public List<Document> getDocumentsByPlacement(Long id)
 	{
 		
-		Optional<Placement> plac = db.Placement().findById(id);
+		Placement plac = db.Placement().findOne(id);
 		
-		if (!plac.isPresent())
+		if (plac == null)
 		throw new CapNotFoundException("Placement with id="+id+" was not found!");
 		
-		return plac.get().getDocuments();
+		return plac.getDocuments();
 
 	}
 	
@@ -96,12 +96,12 @@ public class DocumentService {
 	
 	public Document createDocumentInPlacement(Document document, Long id)
 	{
-		Optional<Placement> plac = db.Placement().findById(id);
+		Placement plac = db.Placement().findOne(id);
 		
-		if(!plac.isPresent())
+		if(plac == null)
 		throw new CapNotFoundException("Placement with id="+id+" was not found!");
 		
-		document.setPlacement(plac.get());
+		document.setPlacement(plac);
 		
 		db.Document().save(document);
 		
@@ -139,9 +139,9 @@ public class DocumentService {
 	public ResponseEntity<?> uploadDocumentInPlacement(Long idPlacement, MultipartFile[] uploadFiles, int type, int attachUser, String fileType) {
 		// TODO Auto-generated method stub
 		
-		Optional<Placement> plac = db.Placement().findById(idPlacement);
+		Placement plac = db.Placement().findOne(idPlacement);
 		
-		if(!plac.isPresent())
+		if(plac == null)
 		throw new CapNotFoundException("Placement with id="+idPlacement+" was not found!");
 		
 		 String uploadedFileName = Arrays.stream(uploadFiles).map(x -> x.getOriginalFilename())
@@ -162,7 +162,7 @@ public class DocumentService {
 	            document.setName(uploadFiles[0].getOriginalFilename());
 	            document.setPath(env.getProperty("document.location")+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
 	            document.setFileType(fileType);
-	            document.setPlacement(plac.get());
+	            document.setPlacement(plac);
 	            
 	            Path path = Paths.get(env.getProperty("document.location")+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
 	            BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
@@ -186,15 +186,15 @@ public class DocumentService {
 	
 	public ResponseEntity<ByteArrayResource> getFile(Long id){
 		
-		 Optional<Document> document = db.Document().findById(id);
+		 Document document = db.Document().findOne(id);
 		 
-		 if(!document.isPresent())
+		 if(document == null)
 				throw new CapNotFoundException("Document with id="+id+" was not found!");
 		 
 		 	try {
 		 
-	     Path path = Paths.get(document.get().getPath());
-	     File file = new File(document.get().getPath());
+	     Path path = Paths.get(document.getPath());
+	     File file = new File(document.getPath());
 	     String contentType = Files.probeContentType(path);
 	     if(contentType == null) {
 	    	 contentType = "application/octet-stream";
@@ -215,12 +215,12 @@ public class DocumentService {
 	}
 	
 	public void deleteDocument(Long id) {
-		Optional<Document> documentOp = db.Document().findById(id);
+		Document documentOp = db.Document().findOne(id);
 		
-		if(!documentOp.isPresent())
+		if(documentOp == null)
 			throw new CapNotFoundException("Document with id="+id+" was not found!");
 		
-		db.Document().delete(documentOp.get());
+		db.Document().delete(documentOp);
 
 	}
 	

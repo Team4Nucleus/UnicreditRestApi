@@ -20,12 +20,12 @@ public class PlacementTypeService {
 	
 	public PlacementType getPlacementTypeById(Long id)
 	{
-		Optional<PlacementType> placementType = db.PlacementType().findById(id);
+		PlacementType placementType = db.PlacementType().findOne(id);
 		
-		if(!placementType.isPresent())
+		if(placementType == null)
 			 throw new CapNotFoundException("Placement Type with id=" + id + " was not found");
 		
-		return placementType.get();
+		return placementType;
 	}
 	
 	

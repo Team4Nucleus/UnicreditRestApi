@@ -19,12 +19,12 @@ public class OrganizationService {
 	
 	public Organization getOrganizationById(Long id){
 		
-		Optional<Organization> organization = db.Orgnaization().findById(id);
+		Organization organization = db.Orgnaization().findOne(id);
 		
-		if(!organization.isPresent())
+		if(organization == null)
 			 throw new CapNotFoundException("Organization with id=" + id + " was not found");
 		
-		return organization.get();
+		return organization;
 	}
 	
 	

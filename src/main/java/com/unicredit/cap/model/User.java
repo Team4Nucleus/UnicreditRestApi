@@ -3,6 +3,7 @@ package com.unicredit.cap.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
@@ -14,7 +15,7 @@ import javax.persistence.Table;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
 	private long id;
     

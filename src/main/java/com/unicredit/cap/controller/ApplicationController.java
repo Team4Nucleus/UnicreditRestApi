@@ -83,7 +83,7 @@ public class ApplicationController {
 	    }
 	 
 	 @PostMapping(value = "/create")
-	    public Optional<Application> createApplication(@RequestBody final Application application) {	       
+	    public Application createApplication(@RequestBody final Application application) {	       
 		 return service.saveNewApplication(application);         
 	    }
 	 

@@ -5,12 +5,11 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -21,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 public class PlacementTransfer {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private long ID;
 	
@@ -31,18 +30,15 @@ public class PlacementTransfer {
 	*/
 	
 	@Column(name = "FROM_ORG")
-	@Nullable
 	private Long fromOrg;
 	
 	@Column(name = "FROM_USER")
-	@Nullable
 	private Long fromUser;
 	
 	@Column(name = "TO_ORG")
 	private Long toOrg;
 	
 	@Column(name = "TO_USER")
-	@Nullable
 	private Long toUser;
 	
 	@Column(name = "DATE_FROM")
@@ -85,7 +81,6 @@ public class PlacementTransfer {
 
 	@JsonView(PlacementTransfer.class)
     @ManyToOne
-    @Nullable
 	@JoinColumn(name ="TO_USER", insertable=false, updatable=false)
     private User toUserDetails;
     

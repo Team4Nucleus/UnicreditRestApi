@@ -19,12 +19,12 @@ public class TaskStatusService {
 	
 	public TaskStatus getTaskStatusById(Long id){
 		
-		Optional<TaskStatus> taskStatus = db.TaskStatus().findById(id);
+		TaskStatus taskStatus = db.TaskStatus().findOne(id);
 		
-		if(!taskStatus.isPresent())
+		if(taskStatus == null)
 			throw new CapNotFoundException("Task Status with id=" + id + " was not found");
 		
-		return taskStatus.get();
+		return taskStatus;
 	}
 	
 	

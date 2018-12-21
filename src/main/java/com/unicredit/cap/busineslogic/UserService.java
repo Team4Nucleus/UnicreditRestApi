@@ -28,24 +28,24 @@ public class UserService {
 		
 	public User getUserById(Long id){
 		
-		Optional<User> user = db.User().findById(id);
+		User user = db.User().findOne(id);
 		
-		if(!user.isPresent())
+		if(user == null)
 			 throw new CapNotFoundException("User with id=" + id + " was not found");
 		
-		return user.get();
+		return user;
 		
 	}
 	
 	public AppUserWrapper getUserAndAppuserById(Long id){
 		
-		Optional<User> user = db.User().findById(id);
+		User user = db.User().findOne(id);
 		
-		if(!user.isPresent())
+		if(user == null)
 			 throw new CapNotFoundException("User with id=" + id + " was not found");
 		
 		
-		User userNew = user.get();
+		User userNew = user;
 		AppUser appUserNew = db.AppUser().findByUsername(userNew.getUsername());
 		List<AppRola> appRolaNew = appUserNew.getRoles();
 		

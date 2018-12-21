@@ -41,12 +41,12 @@ public class TaskService {
 	
 	public Task getTaskById(Long id){
 		
-		Optional<Task> task = db.Task().findById(id);
+		Task task = db.Task().findOne(id);
 		
-		if(!task.isPresent())
+		if(task == null)
 			 throw new CapNotFoundException("Task with id=" + id + " was not found");
 		
-		return task.get();
+		return task;
 	}
 	
 	public List<Task> getAllTask(){
@@ -56,20 +56,20 @@ public class TaskService {
 	}
 	
 	public List<Task> getAllTaskByPlacement(Long id){
-			Optional<Placement> placement = db.Placement().findById(id);
+			Placement placement = db.Placement().findOne(id);
 		
-		if (!placement.isPresent())
+		if (placement == null )
 			 throw new CapNotFoundException("Placement with id=" + id + " was not found");
 		
 		
-		return placement.get().getTasks();
+		return placement.getTasks();
 	}
 	
 	public Task createNewTask(Task task, Long id) throws Exception{
 		
-		Optional<Placement> placement = db.Placement().findById(id);
+		Placement placement = db.Placement().findOne(id);
 
-		if (!placement.isPresent())
+		if (placement == null)
 			 throw new CapNotFoundException("Placement with id=" + id + " was not found");
 		
 		for (TaskDetail taskDetail : task.getTaskdetails())
@@ -79,7 +79,7 @@ public class TaskService {
 			}
 		
 		task.setCreateDate(new Date());
-		task.setPlacement(placement.get());
+		task.setPlacement(placement);
 
 		task = db.Task().save(task);
 		
@@ -88,17 +88,22 @@ public class TaskService {
 		
 		if(taskDetail != null) {
 						
-			User fromUser = db.User().findById((long)taskDetail.getFromUser()).get();
-			User toUser = db.User().findById((long)taskDetail.getToUser()).get();
-			Organization fromOrg = db.Orgnaization().findById((long)taskDetail.getFromOrg()).get();
-			TaskStatus status = db.TaskStatus().findById((long)task.getStatus()).get();
+			User fromUser = db.User().findOne((long)taskDetail.getFromUser());
+			User toUser = db.User().findOne((long)taskDetail.getToUser());
+			Organization fromOrg = db.Orgnaization().findOne((long)taskDetail.getFromOrg());
+			TaskStatus status = db.TaskStatus().findOne((long)task.getStatus());
+			
 			
 			HashMap<String, String> emailTemplateModel = new HashMap<>();
 			emailTemplateModel.put("clientName", "Zadatak od: " + fromUser.getName() + " [" + fromOrg.getName() +"]");
-			emailTemplateModel.put("placementType", "Plasman: " + placement.get().getPlacementtype().getName() + ", " + placement.get().getClientName());
+			emailTemplateModel.put("placementType", "Plasman: " + placement.getPlacementtype().getName() + ", " + placement.getClientName());
 			emailTemplateModel.put("status", "Status: " + status.getName() + ", Prioritet: " + task.getPriority());
 			emailTemplateModel.put("description", "[" + taskDetail.getFromDate() + "] " + taskDetail.getText());
 			emailTemplateModel.put("link", env.getProperty("app.domain")+ "/user-tasks/details/" + task.getId() );
+			emailTemplateModel.put("headerText", "Zadatak od: " + fromUser.getName() );
+			emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
+			emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
+			
 			
 		    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
 		    
@@ -116,13 +121,13 @@ public class TaskService {
 	}
 	
 	public Task confirmTask(Long id) throws Exception {
-		Optional<Task> taskOp = db.Task().findById(id);
+		Task taskOp = db.Task().findOne(id);
 		
-		if (!taskOp.isPresent()) {
+		if (taskOp == null) {
 			throw new CapNotFoundException("Task with id="+ id +" was not found");
 		}
 		
-		Task task = taskOp.get();
+		Task task = taskOp;
 		
 	    TaskDetail taskDetail = db.TaskDetail().getLastDetailOfTask(task.getId());
 	    
@@ -145,7 +150,10 @@ public class TaskService {
 		    emailTemplateModel.put("status", "Status: " + firstTaskDetail.getTask().getTaskstatus().getName() + ", Prioritet: " + taskDetail.getTask().getPriority());
 		    emailTemplateModel.put("description", "Ovaj zadatak je uspješno izvršen!");
 		    emailTemplateModel.put("link", env.getProperty("app.domain")+ "/user-tasks/details/" + id );
-		    
+		    emailTemplateModel.put("headerText", "Zadatak od: " + firstTaskDetail.getFromUserDetails().getName() );
+		    emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
+			emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
+			
 		    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
 		    
 		    List<String> toRecipients = new ArrayList<String>();
@@ -161,9 +169,9 @@ public class TaskService {
 	}
 	
 	public List<Task> getAllTasksByUserId(Long id){
-		Optional<AppUser> appUser = db.AppUser().findById(id);
+		AppUser appUser = db.AppUser().findOne(id);
 		
-		if(!appUser.isPresent()) {
+		if(appUser == null) {
 			throw new CapNotFoundException("User with id="+ id +" was not found");
 		}
 		

@@ -22,7 +22,7 @@ public class AppUser {
 
 	
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
 	private Long id;
 	

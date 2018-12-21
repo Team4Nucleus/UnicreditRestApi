@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
+import org.apache.log4j.Logger;
 import org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,14 +37,15 @@ public class PlacementService {
 	private IMailService mailService = new ExchangeMailService();
 	
 	
+	
 	public Placement getPlacementById(long id){
 		
-		Optional<Placement> plac = db.Placement().findById(id);
+		Placement plac = db.Placement().findOne(id);
 		
-		if (!plac.isPresent())
+		if (plac == null)
 			throw new CapNotFoundException("Placement with id=" + id + " was not found");     
 			
-		return plac.get();
+		return plac;
 	}
 	
 	public List<Placement> getAllPlacements(){
@@ -51,17 +53,18 @@ public class PlacementService {
 		List<Placement> list = db.Placement().findAll();		
 		return list;
 		
+		
 	}
 	
 	public Placement saveNewPlacement(Placement placement, Long id){
 		
 	
 		
-		Optional<Application> app = db.Application().findById(id);
-		if (!app.isPresent())
+		Application app = db.Application().findOne(id);
+		if (app == null)
 			throw new CapNotFoundException("Appliaction with id=" + id + " was not found"); 
 		
-		Application application  = app.get();
+		Application application  = app;
 		
 		
 		
@@ -108,14 +111,14 @@ public class PlacementService {
 	public Placement updatePlacement(Placement placement)
 	{
 		
-		 Optional<Placement> currentPlacement = db.Placement().findById(placement.getId());
+		 Placement currentPlacement = db.Placement().findOne(placement.getId());
 		 
-	        if (!currentPlacement.isPresent())
+	        if (currentPlacement == null)
 	        {
 	        	throw new CapNotFoundException("Placement with id=" + placement.getId() + " was not found");         		
 	        }
 	             
-	        Placement plac = currentPlacement.get();
+	        Placement plac = currentPlacement;
 	 
 	        plac.setClientCoreNo(placement.getClientCoreNo());
 	        plac.setClientEmail(placement.getClientEmail());
@@ -178,12 +181,12 @@ public class PlacementService {
 	
 	public Placement UpdateStatus(Long id, int IdStatus)
 	{
-		Optional<Placement> plac = db.Placement().findById(id);
+		Placement plac = db.Placement().findOne(id);
 		
-		if (!plac.isPresent())
+		if (plac == null)
 			throw new CapNotFoundException("Placement with id=" + id + " was not found");    
 		
-		Placement placement = plac.get();
+		Placement placement = plac;
 		
 		placement.setStatus(IdStatus);
 		db.Placement().save(placement);

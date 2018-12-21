@@ -19,12 +19,12 @@ public class PlacementStatusService {
 	
 	public PlacementStatus getPlacementStatusById(Long id){
 		
-		Optional<PlacementStatus> placementStatus = db.PlacementStatus().findById(id);
+		PlacementStatus placementStatus = db.PlacementStatus().findOne(id);
 		
-		if(!placementStatus.isPresent())
+		if(placementStatus == null)
 			throw new CapNotFoundException("Placement Status with id=" + id + " was not found");
 		
-		return placementStatus.get();
+		return placementStatus;
 	}
 	
 	

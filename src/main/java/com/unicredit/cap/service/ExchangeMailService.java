@@ -3,9 +3,11 @@ package com.unicredit.cap.service;
 import java.net.URI;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
+import com.unicredit.cap.busineslogic.PlacementService;
 
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
@@ -20,7 +22,8 @@ public class ExchangeMailService implements IMailService {
 	
 	@Override
 	public boolean SendMail(String from, List<String> to, String subject,String text, String link, Environment env){
-		
+	
+	Logger logger = Logger.getLogger(PlacementService.class);
 		
 		 Boolean flag = false;
 	        try {
@@ -47,6 +50,9 @@ public class ExchangeMailService implements IMailService {
 	            msg.send(); //send email
 	            flag = true;
 	        } catch (Exception e) {
+	        	
+	        	logger.error(e.getMessage());
+	        	
 	            e.printStackTrace();
 	        }
 

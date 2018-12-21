@@ -5,12 +5,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -21,7 +21,7 @@ public class TaskDetail {
 
 	
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
 	private long id;
     
@@ -40,7 +40,6 @@ public class TaskDetail {
 	private int fromOrg;
 	
     @Column(name = "TO_USER")
-    @Nullable
 	private Integer toUser;
 	
     @Column(name = "TO_ORG")
@@ -73,7 +72,6 @@ public class TaskDetail {
 
 	@JsonView(TaskDetail.class)
     @ManyToOne
-    @Nullable
 	@JoinColumn(name ="TO_USER", insertable=false, updatable=false)
     private User toUserDetails;
     

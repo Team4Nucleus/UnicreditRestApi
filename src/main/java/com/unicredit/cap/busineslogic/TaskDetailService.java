@@ -35,12 +35,12 @@ public class TaskDetailService {
 	
 	public TaskDetail getTaskDetailById(Long id){
 		
-		Optional<TaskDetail> taskDetail = db.TaskDetail().findById(id);
+		TaskDetail taskDetail = db.TaskDetail().findOne(id);
 		
-		if(!taskDetail.isPresent())
+		if(taskDetail == null)
 			 throw new CapNotFoundException("TaskDetail with id=" + id + " was not found");
 		
-		return taskDetail.get();
+		return taskDetail;
 	}
 	
 	public List<TaskDetail> getAllTaskDetail(){
@@ -50,19 +50,19 @@ public class TaskDetailService {
 	}
 	
 	public List<TaskDetail> getAllTaskDetailByTask(Long id){
-		Optional<Task> task = db.Task().findById(id);
+		Task task = db.Task().findOne(id);
 	
-			if (!task.isPresent())
+			if (task == null)
 				throw new CapNotFoundException("Task with id=" + id + " was not found");
 	
-				return task.get().getTaskdetails();
+				return task.getTaskdetails();
 		}
 	
 	public TaskDetail createNewTaskDetail(TaskDetail taskDetail, Long id) throws Exception{
 		
-		Optional<Task> task = db.Task().findById(id);
+		Task task = db.Task().findOne(id);
 
-		if (!task.isPresent())
+		if (task == null)
 			 throw new CapNotFoundException("Task with id=" + id + " was not found");
 		
 		TaskDetail taskDetailPrevious = db.TaskDetail().getLastDetailOfTask(id);
@@ -70,29 +70,32 @@ public class TaskDetailService {
 		db.TaskDetail().save(taskDetailPrevious);
 		
 		taskDetail.setFromDate(new Date());
-		taskDetail.setTask(task.get());
+		taskDetail.setTask(task);
 		db.TaskDetail().save(taskDetail);	
 				
-		int taskStatus = taskDetail.getToUser() == (task.get().getCreateUser() == null ? -1 : task.get().getCreateUser().intValue()) ? 36 : 35;
-		Task taskWithStatusUpdate = task.get();
+		int taskStatus = taskDetail.getToUser() == (task.getCreateUser() == null ? -1 : task.getCreateUser().intValue()) ? 36 : 35;
+		Task taskWithStatusUpdate = task;
 		taskWithStatusUpdate.setStatus(taskStatus);
 		
 		db.Task().save(taskWithStatusUpdate);
 		
-		User fromUser = db.User().findById((long)taskDetail.getFromUser()).get();
-		User toUser = db.User().findById((long)taskDetail.getToUser()).get();
-		Organization fromOrg = db.Orgnaization().findById((long)taskDetail.getFromOrg()).get();
-		Placement placement = task.get().getPlacement();
+		User fromUser = db.User().findOne((long)taskDetail.getFromUser());
+		User toUser = db.User().findOne((long)taskDetail.getToUser());
+		Organization fromOrg = db.Orgnaization().findOne((long)taskDetail.getFromOrg());
+		Placement placement = task.getPlacement();
 		
 		
 		HashMap<String, String> emailTemplateModel = new HashMap<>();
 		emailTemplateModel.put("clientName", "Zadatak od: " + fromUser.getName() + " [" + fromOrg.getName() +"]");
 		emailTemplateModel.put("placementType", "Plasman: " + placement.getPlacementtype().getName() + ", " + placement.getClientName());
-		emailTemplateModel.put("status", "Status: " + task.get().getTaskstatus().getName() + ", Prioritet: " + task.get().getPriority());
+		emailTemplateModel.put("status", "Status: " + task.getTaskstatus().getName() + ", Prioritet: " + task.getPriority());
 		emailTemplateModel.put("description", "[" + taskDetail.getFromDate() + "] " + taskDetail.getText());
-		emailTemplateModel.put("link", "/task/" + id);
-		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/user-tasks/details/" + task.get().getId() );
-	        
+	//	emailTemplateModel.put("link", "/task/" + id);
+		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/user-tasks/details/" + task.getId() );
+		emailTemplateModel.put("headerText", "Zadatak od: " + fromUser.getName() );
+		emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
+		emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
+		 
 	    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
 	    
 	    List<String> toRecipients = new ArrayList<String>();

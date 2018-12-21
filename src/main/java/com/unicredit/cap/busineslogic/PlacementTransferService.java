@@ -36,12 +36,12 @@ public class PlacementTransferService {
 	
 	public PlacementTransfer getPlacementTransferById(Long id){
 		
-		Optional<PlacementTransfer> placementTransfer = db.PlacementTransfer().findById(id);
+		PlacementTransfer placementTransfer = db.PlacementTransfer().findOne(id);
 		
-		if(!placementTransfer.isPresent())
+		if(placementTransfer == null)
 			 throw new CapNotFoundException("Placement Transfer with id=" + id + " was not found");
 		
-		return placementTransfer.get();
+		return placementTransfer;
 		
 	}
 	
@@ -54,19 +54,19 @@ public class PlacementTransferService {
 	
 	public List<PlacementTransfer> getAllPlacementTransferByPlacement(Long id){
 		
-		Optional<Placement> plac = db.Placement().findById(id);
-		if(!plac.isPresent())
+		Placement plac = db.Placement().findOne(id);
+		if(plac == null)
 			 throw new CapNotFoundException("Placement with id=" + id + " was not found");
 		
-		return plac.get().getTransfers();
+		return plac.getTransfers();
 		
 	}
 	
 	
 	public PlacementTransfer createNewPlacementTransfer(PlacementTransfer placementTransfer, Long id){
 		
-		Optional<Placement> plac = db.Placement().findById(id);
-		if(!plac.isPresent())
+		Placement plac = db.Placement().findOne(id);
+		if(plac == null)
 			 throw new CapNotFoundException("Placement with id=" + id + " was not found");
 		
 		try {
@@ -76,26 +76,29 @@ public class PlacementTransferService {
 		db.PlacementTransfer().save(placementTransferLast);
 		
 		placementTransfer.setDateFrom(new Date());
-		placementTransfer.setPlacement(plac.get());
+		placementTransfer.setPlacement(plac);
 		db.PlacementTransfer().save(placementTransfer);
 		
-		Placement placement = plac.get();
+		Placement placement = plac;
 		placement.setCurrentOrg(placementTransfer.getToOrg());
 		placement.setCurrentUser(placementTransfer.getToUser());
 		db.Placement().save(placement);
 		
 				
-		User fromUser = db.User().findById((long)placementTransfer.getFromUser()).get();
-		User toUser = db.User().findById((long)placementTransfer.getToUser()).get();
-		Organization fromOrg = db.Orgnaization().findById((long)placementTransfer.getFromOrg()).get();
+		User fromUser = db.User().findOne((long)placementTransfer.getFromUser());
+		User toUser = db.User().findOne((long)placementTransfer.getToUser());
+		Organization fromOrg = db.Orgnaization().findOne((long)placementTransfer.getFromOrg());
 
 		
 		HashMap<String, String> emailTemplateModel = new HashMap<>();
 		emailTemplateModel.put("clientName", "Zadatak od: " + fromUser.getName() + " [" + fromOrg.getName() +"]");
-		emailTemplateModel.put("placementType", "Plasman: " + plac.get().getPlacementtype().getName() + ", " + plac.get().getClientName());
-		emailTemplateModel.put("status", "Status: " +  plac.get().getPlacementstatus().getName());
+		emailTemplateModel.put("placementType", "Plasman: " + plac.getPlacementtype().getName() + ", " + plac.getClientName());
+		emailTemplateModel.put("status", "Status: " +  plac.getPlacementstatus().getName());
 		emailTemplateModel.put("description", "Komentar: " + placementTransfer.getUserComment());
-		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/loan-requests/placement/" + plac.get().getId() );
+		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/loan-requests/placement/" + plac.getId() );
+		emailTemplateModel.put("headerText", "Zadatak od: " + fromUser.getName() );
+		emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
+		emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
 		
 	    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
 	    

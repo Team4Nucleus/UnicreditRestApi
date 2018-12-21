@@ -19,12 +19,12 @@ public class DocumentTypeService {
 	
 	public DocumentType getDocumentTypebyId(Long id)
 	{
-		Optional<DocumentType> doctype = db.Documenttype().findById(id);
+		DocumentType doctype = db.Documenttype().findOne(id);
 		
-		if(!doctype.isPresent())
+		if(doctype == null)
 			 throw new CapNotFoundException("Document Type with id=" + id + " was not found");
 		
-		return doctype.get();
+		return doctype;
 		
 	}
 	

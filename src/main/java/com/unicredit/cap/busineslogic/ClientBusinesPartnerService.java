@@ -25,12 +25,12 @@ public class ClientBusinesPartnerService {
 	public ClientBusinesPartner getClientByCodeNo(Long id)
 	{
 		
-		Optional<ClientBusinesPartner> client = db.ClientBusinesPartner().findById(id);
+		ClientBusinesPartner client = db.ClientBusinesPartner().findOne(id);
 		
-		if(!client.isPresent())
+		if(client == null)
 			 throw new CapNotFoundException("Client with CoreNo=" + id + " was not found");
 		
-		return client.get();
+		return client;
 		
 	}
 	

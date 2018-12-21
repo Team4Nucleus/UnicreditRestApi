@@ -35,12 +35,12 @@ public class ApplicationService {
 	
 	public Application getApplicationById(long id){
 		
-		 Optional<Application> app = db.Application().findById(id);
+		 Application app = db.Application().findOne(id);
 		
-		 if (!app.isPresent())
+		 if (app == null)
 			 throw new CapNotFoundException("Application with id=" + id + " was not found");
 		 
-		 return app.get(); 
+		 return app; 
 	}
 	
 	public List<Application> getAllApplications() {
@@ -57,7 +57,7 @@ public class ApplicationService {
 		return list;
 	}
 	
-	public Optional<Application> saveNewApplication(Application application){
+	public Application saveNewApplication(Application application){
 				
 		
 		for (Placement placement : application.getPlacements())
@@ -103,21 +103,21 @@ public class ApplicationService {
 		
 		 db.Application().save(application);	 
 		 
-		 Optional<Application> app = db.Application().findById(application.getId());		
+		 Application app = db.Application().findOne(application.getId());		
 		 return app;
 
 		}
 
 	public Application updateApplication(Application application)  {
 		
-		 Optional<Application> currentApplication = db.Application().findById(application.getId());
+		 Application currentApplication = db.Application().findOne(application.getId());
 
-	        if (!currentApplication.isPresent())
+	        if (currentApplication == null)
 	        {
 	        	throw new CapNotFoundException("Application with id=" + application.getId() + " was not found"); 		
 	        }
 
-	        Application App = currentApplication.get();
+	        Application App = currentApplication;
 	 
 	        App.setApplicationDate(application.getApplicationDate());
 	        App.setCode(application.getCode());

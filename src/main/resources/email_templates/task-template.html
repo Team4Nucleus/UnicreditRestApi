@@ -200,11 +200,7 @@
 
         <!-- Visually Hidden Preheader Text : BEGIN -->
         <div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-            (PREPORUKA ZA UPIS PODATAKA) 
-            This text will appear in the inbox preview, but not the email body. 
-            It can be used to supplement the email subject line or even summarize the email's contents. 
-            Extended text preheaders (~490 characters) seems like a better UX for anyone using a screenreader or voice-command apps like Siri to dictate the contents of an email. 
-            If this text is not included, email clients will automatically populate it using the text (including image alt text) at the start of the email's body.
+            ${headerText}
         </div>
         <!-- Visually Hidden Preheader Text : END -->
 
@@ -268,9 +264,8 @@
                                         Poslovni proces odobravanja kredita</h2>
 
                                         <p style="margin: 0;">
-                                                Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. 
-                                                U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje.
-                                            </p>
+                                        ${poruka-uvod}
+                                                </p>
                                             <br>
                                     <ul style="padding: 0; margin: 0 0 10px 0; list-style-type: disc;">
 										<li style="margin:0 0 10px 30px;" class="list-item-first">${clientName}</li>
@@ -376,7 +371,7 @@
                     <td style="padding: 10px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;">
                         <!-- <webversion style="color: #cccccc; text-decoration: underline; font-weight: bold;">View as a Web Page</webversion> -->
                         <br><br>
-						UniCredit Bank Banja Luka<br><span class="unstyle-auto-detected-links">Marija Bursać 7<br>051 243 200</span>
+						UniCredit Bank Banja Luka<br><span class="unstyle-auto-detected-links">${poruka-footer} <br>051 243 200</span>
                         <br><br>
                         <!-- <unsubscribe style="color: #888888; text-decoration: underline;">unsubscribe</unsubscribe> -->
                     </td>
