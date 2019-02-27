@@ -169,9 +169,11 @@ public class TaskService {
 	}
 	
 	public List<Task> getAllTasksByUserId(Long id){
-		AppUser appUser = db.AppUser().findOne(id);
 		
-		if(appUser == null) {
+		User hrUser = db.User().findOne(id);
+	//	AppUser appUser = db.AppUser().findOne(id);
+		
+		if(hrUser == null) {
 			throw new CapNotFoundException("User with id="+ id +" was not found");
 		}
 		
