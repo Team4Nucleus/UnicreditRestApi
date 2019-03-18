@@ -88,14 +88,14 @@ public class PlacementTransferService {
 		User fromUser = db.User().findOne((long)placementTransfer.getFromUser());
 		User toUser = db.User().findOne((long)placementTransfer.getToUser());
 		Organization fromOrg = db.Orgnaization().findOne((long)placementTransfer.getFromOrg());
-
+		Organization toOrg = db.Orgnaization().findOne((long)placementTransfer.getToOrg());
 		
 		HashMap<String, String> emailTemplateModel = new HashMap<>();
 		emailTemplateModel.put("clientName", "Zadatak od: " + fromUser.getName() + " [" + fromOrg.getName() +"]");
 		emailTemplateModel.put("placementType", "Plasman: " + plac.getPlacementtype().getName() + ", " + plac.getClientName());
 		emailTemplateModel.put("status", "Status: " +  plac.getPlacementstatus().getName());
 		emailTemplateModel.put("description", "Komentar: " + placementTransfer.getUserComment());
-		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/loan-requests/placement/" + plac.getId() );
+		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/loan-requests/placement/" + plac.getId() );
 		emailTemplateModel.put("headerText", "Zadatak od: " + fromUser.getName() );
 		emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
 		emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
@@ -106,6 +106,13 @@ public class PlacementTransferService {
 	    
 	    if(placementTransfer.getToUser() != null)
 	    toRecipients.add(toUser.getEmail());
+	    else
+	    {
+	    	if(toOrg.getEmail() != null && !toOrg.getEmail().equals("") )
+	    		toRecipients.add(toOrg.getEmail());
+	    }
+	    	
+	    
 	    
 	    mailService.SendMail("", toRecipients,"Predmet kretanje", emailContent, "", env);
 		

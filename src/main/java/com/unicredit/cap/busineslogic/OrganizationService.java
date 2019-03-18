@@ -33,4 +33,19 @@ public class OrganizationService {
 		return db.Orgnaization().findAll();
 	}
 	
+	public Organization updateOrganization(Organization org)
+	{
+		Organization organization = db.Orgnaization().getOne(org.getId());
+		
+		organization.setCode(org.getCode());
+		organization.setName(org.getName());
+		organization.setDescription(org.getDescription());
+		organization.setEmail(org.getEmail());
+		
+		db.Orgnaization().save(organization);
+		
+		return organization;
+		
+	}
+	
 }

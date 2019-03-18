@@ -126,6 +126,17 @@ public class Placement {
     private int status;
     
     @JsonView(Placement.class)
+    @Column(name = "CURRENCY")
+    private String currency;
+    
+    @JsonView(Placement.class)
+    @Column(name = "AMOUNT_IN_BAM", columnDefinition = "NUMBER(30,5)")
+    private Number amountInBam;
+    
+    
+  
+
+	@JsonView(Placement.class)
     @ManyToOne
 	@JoinColumn(name = "status", insertable=false, updatable=false)
     private PlacementStatus placementstatus;
@@ -175,7 +186,21 @@ public class Placement {
     private User currentUserDetails;
     
     
-    
+    public String getCurrency() {
+  		return currency;
+  	}
+
+  	public void setCurrency(String currency) {
+  		this.currency = currency;
+  	}
+
+  	public Number getAmountInBam() {
+  		return amountInBam;
+  	}
+
+  	public void setAmountInBam(Number amountInBam) {
+  		this.amountInBam = amountInBam;
+  	}
 
 	public Application getApplication() {
 		return application;

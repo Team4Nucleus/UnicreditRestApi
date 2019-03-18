@@ -82,6 +82,7 @@ public class TaskDetailService {
 		User fromUser = db.User().findOne((long)taskDetail.getFromUser());
 		User toUser = db.User().findOne((long)taskDetail.getToUser());
 		Organization fromOrg = db.Orgnaization().findOne((long)taskDetail.getFromOrg());
+		Organization toOrg = db.Orgnaization().findOne((long)taskDetail.getToOrg());
 		Placement placement = task.getPlacement();
 		
 		
@@ -91,7 +92,7 @@ public class TaskDetailService {
 		emailTemplateModel.put("status", "Status: " + task.getTaskstatus().getName() + ", Prioritet: " + task.getPriority());
 		emailTemplateModel.put("description", "[" + taskDetail.getFromDate() + "] " + taskDetail.getText());
 	//	emailTemplateModel.put("link", "/task/" + id);
-		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/user-tasks/details/" + task.getId() );
+		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/user-tasks/details/" + task.getId() );
 		emailTemplateModel.put("headerText", "Zadatak od: " + fromUser.getName() );
 		emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
 		emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
@@ -100,8 +101,10 @@ public class TaskDetailService {
 	    
 	    List<String> toRecipients = new ArrayList<String>();
 	    
-	    
-	    toRecipients.add(toUser.getEmail());
+	    if (toUser != null)
+	    	toRecipients.add(toUser.getEmail());
+	    else
+	    	toRecipients.add(toOrg.getEmail());	
 	    
 		mailService.SendMail("", toRecipients,"Zadatak", emailContent, "", env);
 	       

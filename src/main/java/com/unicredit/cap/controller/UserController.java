@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unicredit.cap.busineslogic.AppUserService;
 import com.unicredit.cap.busineslogic.UserService;
+import com.unicredit.cap.helper.AccountPassword;
 import com.unicredit.cap.model.AppRola;
 import com.unicredit.cap.model.AppUser;
 import com.unicredit.cap.model.AppUserWrapper;
@@ -47,10 +48,24 @@ public class UserController {
 	    }
 	 
 	 
+	 @PostMapping(value = "/update")
+	 public AppUserWrapper updateUser(@RequestBody final AppUserWrapper userWrapper ) {       
+	        
+		 return service.updateUser(userWrapper.getUser(),  userWrapper.getAppUser(), userWrapper.getAppRola());
+		 
+	    }
+	 
 	 @GetMapping(value = "/name/{username}")
 	 public AppUserWrapper findByUsername(@PathVariable final String username){
 		
 	    return service.getUserAndAppuserByUsername(username);
+	    }
+	 
+	
+	 @PostMapping(value = "/changePassword")
+	 public AccountPassword changePassword(@RequestBody final AccountPassword account){
+		
+	    return service.changePassword(account);
 	    }
 	 
 	 

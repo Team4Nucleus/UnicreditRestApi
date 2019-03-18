@@ -31,6 +31,9 @@ public class Organization {
     @Column(name = "DESCRIPTION")
 	private String description;
 
+    @Column(name = "EMAIL")
+    private String email;
+    
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "hrOrganization")
     private List<User> users = new ArrayList<>();
 
@@ -72,6 +75,14 @@ public class Organization {
 
 	public void setUsers(List<User> users) {
 		this.users = users;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
     
     

@@ -141,7 +141,8 @@ public class PlacementService {
 	        plac.setTotalExposure(placement.getTotalExposure());
 	        plac.setType(placement.getType());
 	        plac.setUserComment(placement.getUserComment());
-	        
+	        plac.setCurrency(placement.getCurrency());
+	        plac.setAmountInBam(placement.getAmountInBam());
      
 	        db.Placement().save(plac);
 		

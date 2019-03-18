@@ -36,6 +36,12 @@ public class DbContext {
 	private AppUserRepository appUser;
 	@Autowired
 	private AppRolaRepository rola;
+	@Autowired
+	private CurrencyRepository currencies;
+	
+	public CurrencyRepository Currencies() {
+		return currencies;
+	}
 	
 	@Autowired
 	private PlacementTimeConsumentRepository placementTime;
