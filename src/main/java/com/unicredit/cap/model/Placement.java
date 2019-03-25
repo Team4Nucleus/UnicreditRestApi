@@ -103,7 +103,7 @@ public class Placement {
     
     @JsonView(Placement.class)
     @Column(name = "LOAN_AMOUNT")
-	private long loanAmount;
+	private Long loanAmount;
     
     @JsonView(Placement.class)
     @Column(name = "PAYMENT_PERIOD")
@@ -115,7 +115,7 @@ public class Placement {
     
     @JsonView(Placement.class)
     @Column(name = "TOTAL_EXPOSURE")
-	private long totalExposure;
+	private Long totalExposure;
     
     @JsonView(Placement.class)
     @Column(name = "USER_COMMENT")
@@ -131,10 +131,8 @@ public class Placement {
     
     @JsonView(Placement.class)
     @Column(name = "AMOUNT_IN_BAM", columnDefinition = "NUMBER(30,5)")
-    private Number amountInBam;
+    private Double amountInBam;
     
-    
-  
 
 	@JsonView(Placement.class)
     @ManyToOne
@@ -194,11 +192,11 @@ public class Placement {
   		this.currency = currency;
   	}
 
-  	public Number getAmountInBam() {
+  	public Double getAmountInBam() {
   		return amountInBam;
   	}
 
-  	public void setAmountInBam(Number amountInBam) {
+  	public void setAmountInBam(Double amountInBam) {
   		this.amountInBam = amountInBam;
   	}
 
@@ -339,11 +337,11 @@ public class Placement {
 		this.currentUser = currentUser;
 	}
 
-	public long getLoanAmount() {
+	public Long getLoanAmount() {
 		return loanAmount;
 	}
 
-	public void setLoanAmount(long loanAmount) {
+	public void setLoanAmount(Long loanAmount) {
 		this.loanAmount = loanAmount;
 	}
 
@@ -363,11 +361,11 @@ public class Placement {
 		this.loanUsage = loanUsage;
 	}
 
-	public long getTotalExposure() {
+	public Long getTotalExposure() {
 		return totalExposure;
 	}
 
-	public void setTotalExposure(long totalExposure) {
+	public void setTotalExposure(Long totalExposure) {
 		this.totalExposure = totalExposure;
 	}
 

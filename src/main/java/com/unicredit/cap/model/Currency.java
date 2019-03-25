@@ -17,7 +17,7 @@ public class Currency {
 		private String name;
 		
 	    @Column(name = "EXCHANGERATE", columnDefinition = "NUMBER(10,5)")
-		private Number exchangerate;
+		private double exchangerate;
 
 		public String getCode() {
 			return code;
@@ -35,11 +35,11 @@ public class Currency {
 			this.name = name;
 		}
 
-		public Number getExchangerate() {
+		public double getExchangerate() {
 			return exchangerate;
 		}
 
-		public void setExchangerate(Number exchangerate) {
+		public void setExchangerate(double exchangerate) {
 			this.exchangerate = exchangerate;
 		}
 	

@@ -35,7 +35,7 @@ public class OrganizationService {
 	
 	public Organization updateOrganization(Organization org)
 	{
-		Organization organization = db.Orgnaization().getOne(org.getId());
+		Organization organization = db.Orgnaization().findOne(org.getId());
 		
 		organization.setCode(org.getCode());
 		organization.setName(org.getName());

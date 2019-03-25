@@ -24,6 +24,10 @@ public interface ApplicationRepository  extends JpaRepository<Application, Long>
 	
 	@Query(value = "SELECT * FROM APPLICATION WHERE CREATE_USER = ? AND ROWNUM <= 100 ORDER BY CREATE_DATE DESC",  nativeQuery = true)
 	public List<Application> findTop100ByCreateUserOrderByCreateDateDesc(int createUser);
+
+
+	@Query(value = "SELECT * FROM APPLICATION WHERE CURRENT_ORG = ? ORDER BY ID DESC",  nativeQuery = true)
+	public List<Application> getAllApplicationByCurrentOrg(long currentOrg);
 	
 	
 

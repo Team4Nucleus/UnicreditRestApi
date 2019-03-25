@@ -93,6 +93,16 @@ public class ApplicationController {
 	    return service.updateApplication(application);  
 	    }
 	 
+	 @GetMapping(value = "/org/{id}")
+	 	public List<Application> getAllApplicationByCurrentOrg(@PathVariable final long id){
+		return service.getAllApplicationByCurrentOrg(id); 
+	 	}
+	 
+	 @PostMapping(value="/{id}/user/{user}")
+	 	public Application setApplicationCurrentUser(@PathVariable final long id, @PathVariable final long user){
+		 return service.setApplicationCurrentUser(id, user);
+	 }
+	 
 	 /*
 	 @GetMapping(value="podaci")
 	 public Collection<SimpleGrantedAuthority> podaci(){
@@ -105,5 +115,7 @@ public class ApplicationController {
 	 public List<TimeConsumeWrapper> getTimeConsumentByPlacement(@PathVariable final Long id){
 	    return service.getTimeConsumentByApplication(id);
 	    }
+	 
+	 
 	
 }

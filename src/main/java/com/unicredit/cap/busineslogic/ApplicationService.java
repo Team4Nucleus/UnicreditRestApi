@@ -1,17 +1,21 @@
 package com.unicredit.cap.busineslogic;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
 import com.unicredit.cap.exception.CapNotFoundException;
+import com.unicredit.cap.helper.EmailTemplateHelper;
 import com.unicredit.cap.helper.TimeConsumeWrapper;
 import com.unicredit.cap.model.Application;
 import com.unicredit.cap.model.Document;
@@ -21,6 +25,7 @@ import com.unicredit.cap.model.PlacementTransfer;
 import com.unicredit.cap.model.Task;
 import com.unicredit.cap.model.TaskDetail;
 import com.unicredit.cap.model.TaskTimeConsument;
+import com.unicredit.cap.model.User;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.IMailService;
@@ -33,6 +38,9 @@ public class ApplicationService {
 	private DbContext db;
 	private IMailService mailService = new ExchangeMailService();
 	
+	@Autowired
+	private Environment env;
+	
 	public Application getApplicationById(long id){
 		
 		 Application app = db.Application().findOne(id);
@@ -41,6 +49,62 @@ public class ApplicationService {
 			 throw new CapNotFoundException("Application with id=" + id + " was not found");
 		 
 		 return app; 
+	}
+	
+	public List<Application> getAllApplicationByCurrentOrg(long currentOrg)
+	{
+		return db.Application().getAllApplicationByCurrentOrg(currentOrg);
+	}
+	
+	public Application setApplicationCurrentUser(long id, Long user) {
+		
+		Application app = db.Application().findOne(id);
+		
+		 if (app == null)
+			 throw new CapNotFoundException("Application with id=" + id + " was not found");
+		 
+		User u = db.User().findOne(user);
+		 if (u == null)
+			 throw new CapNotFoundException("User with id=" + user + " was not found");
+		 
+		app.setCurrentUser(user);
+		
+		db.Application().save(app);
+		
+		try {
+		//********* slanje maila ****** //
+		//User fromUser = db.User().findOne((long)placementTransfer.getFromUser());
+		//User toUser = db.User().findOne((long)placementTransfer.getToUser());
+		//Organization fromOrg = db.Orgnaization().findOne((long)placementTransfer.getFromOrg());
+		//Organization toOrg = db.Orgnaization().findOne((long)placementTransfer.getToOrg());
+		
+		HashMap<String, String> emailTemplateModel = new HashMap<>();
+		emailTemplateModel.put("clientName", "Vaš predpostaljeni Vam je dodjelio aplikaciju!");
+		emailTemplateModel.put("placementType", "Aplikacija: " + app.getCode() + ", " + app.getDescription());
+		emailTemplateModel.put("status", "Status: Aktivno");
+		emailTemplateModel.put("description", "Komentar: " + app.getDescription());
+		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/" + app.getId() );
+		emailTemplateModel.put("headerText", "");
+		emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
+		emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
+		
+	    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
+	    
+	    List<String> toRecipients = new ArrayList<String>();
+	    
+	    toRecipients.add(u.getEmail());
+	   
+	    mailService.SendMail("", toRecipients,"Predmet kretanje", emailContent, "", env);
+		//******************************//
+		} catch(Exception ex) {
+			
+		}
+		
+		
+		return app;
+		
+		
+		
 	}
 	
 	public List<Application> getAllApplications() {
@@ -100,7 +164,11 @@ public class ApplicationService {
 		}
 		
 		 application.setCreateDate(new Date());
-		
+		 application.setCurrentUser(application.getCreateUser());
+		 
+		 Long IdOrg = db.User().findOne(application.getCreateUser()).getHrOrganization();
+		 application.setCurrentOrg(IdOrg);
+		 
 		 db.Application().save(application);	 
 		 
 		 Application app = db.Application().findOne(application.getId());		

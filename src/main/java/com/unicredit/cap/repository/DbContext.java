@@ -38,6 +38,8 @@ public class DbContext {
 	private AppRolaRepository rola;
 	@Autowired
 	private CurrencyRepository currencies;
+	@Autowired
+	private ApplicationTransferRepository applicationTransfer;
 	
 	public CurrencyRepository Currencies() {
 		return currencies;
@@ -101,6 +103,10 @@ public class DbContext {
 	}
 	public UserRepository User() {
 		return useres;
+	}
+	
+	public ApplicationTransferRepository ApplicationTransfer() {
+		return applicationTransfer;
 	}
 	
 	

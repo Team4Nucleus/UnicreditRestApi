@@ -60,10 +60,12 @@ public class PlacementController {
 	 public Placement changeStatus(@PathVariable final Long id, @PathVariable final int IdStatus )
 	 {
 		Placement placement = service.UpdateStatus(id, IdStatus);
-		return placement;
-		
-		 
+		return placement;		 
 	 }
-	 
+	 	 
+	 @PostMapping(value = "/{id}/user/{user}")
+	 public Placement setPlacementCurrentUser(@PathVariable final Long id, @PathVariable final Long user) {
+	        return service.setPlacementCurrentUser(id, user);    
+	    }
 	 
 }

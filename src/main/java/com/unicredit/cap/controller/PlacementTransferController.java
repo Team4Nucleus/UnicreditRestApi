@@ -40,7 +40,7 @@ public class PlacementTransferController {
 	
 	 @PostMapping(value = "/create/{id}")
 	    public PlacementTransfer createPlacementTransfer(@RequestBody final PlacementTransfer placementTransfer, @PathVariable final Long id) {	       
-		 return service.createNewPlacementTransfer(placementTransfer, id);       
+		 return service.createNewPlacementTransfer(placementTransfer, id, true);       
 	    }
 	 
 }

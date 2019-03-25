@@ -35,12 +35,10 @@ public class Application  {
     @Column(name = "CODE")
 	private String code;
     
-	
 	@JsonView(Application.class)
     @Column(name = "CREATE_USER")
-	private long createUser;
-		
-    
+	private Long createUser;
+		   
 	@JsonView(Application.class)
     @Column(name = "APPLICATION_DATE")
 	private Date applicationDate;
@@ -52,6 +50,14 @@ public class Application  {
 	@JsonView(Application.class)
     @Column(name = "DESCRIPTION")
 	private String description;
+	
+	@JsonView(Application.class)
+    @Column(name = "CURRENT_USER")
+	private Long currentUser;
+	
+	@JsonView(Application.class)
+    @Column(name = "CURRENT_ORG")
+	private Long currentOrg;
 	
 	
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "application", cascade = CascadeType.ALL)
@@ -65,6 +71,26 @@ public class Application  {
   
     
     
+	public Long getCurrentUser() {
+		return currentUser;
+	}
+
+
+	public void setCurrentUser(Long currentUser) {
+		this.currentUser = currentUser;
+	}
+
+
+	public Long getCurrentOrg() {
+		return currentOrg;
+	}
+
+
+	public void setCurrentOrg(Long currentOrg) {
+		this.currentOrg = currentOrg;
+	}
+
+
 	public long getId() {
 		return id;
 	}

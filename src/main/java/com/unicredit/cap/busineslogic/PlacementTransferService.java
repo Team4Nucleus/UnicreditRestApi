@@ -63,7 +63,7 @@ public class PlacementTransferService {
 	}
 	
 	
-	public PlacementTransfer createNewPlacementTransfer(PlacementTransfer placementTransfer, Long id){
+	public PlacementTransfer createNewPlacementTransfer(PlacementTransfer placementTransfer, Long id, boolean sendMail){
 		
 		Placement plac = db.Placement().findOne(id);
 		if(plac == null)
@@ -113,7 +113,7 @@ public class PlacementTransferService {
 	    }
 	    	
 	    
-	    
+	    if (sendMail)
 	    mailService.SendMail("", toRecipients,"Predmet kretanje", emailContent, "", env);
 		
 		return placementTransfer;
