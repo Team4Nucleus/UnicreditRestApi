@@ -84,6 +84,11 @@ public class Document {
 	@JoinColumn(name = "placement")
     private Placement placement;
 
+    @ManyToOne
+    @JsonIgnore
+	@JoinColumn(name = "application")
+    private Application application;
+    
     
     @JsonView(Document.class)
     @ManyToOne
@@ -222,6 +227,16 @@ public class Document {
 	public void setAttachUserDetails(User attachUserDetails) {
 		this.attachUserDetails = attachUserDetails;
 
+	}
+
+
+	public Application getApplication() {
+		return application;
+	}
+
+
+	public void setApplication(Application application) {
+		this.application = application;
 	}
 	
 	

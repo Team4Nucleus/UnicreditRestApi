@@ -37,9 +37,9 @@ public class ApplicationTransferController {
 	    }	 
 	 
 	 
-	 @PostMapping(value = "/create/{id}")
-	    public ApplicationTransfer createApplicationTransfer(@RequestBody final ApplicationTransfer appTransfer, @PathVariable final long id) {
-	        return service.createApplicationTransfer(appTransfer, id);
+	 @PostMapping(value = "/create/{id}/{s}")
+	    public ApplicationTransfer createApplicationTransfer(@RequestBody final ApplicationTransfer appTransfer, @PathVariable final long id, @PathVariable final int s) {
+	        return service.createApplicationTransfer(appTransfer, id, s);
 	    }
 	 
 	 @PostMapping(value = "/{id}/status/{status}")

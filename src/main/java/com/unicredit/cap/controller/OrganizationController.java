@@ -34,6 +34,13 @@ public class OrganizationController {
 	    return service.getOrganizationById(id);
 	    }
 	 
+	 
+	 @PostMapping(value = "/create")
+	 public Organization createOrganization(@RequestBody final Organization organization) {
+	        return service.createOrganization(organization);    
+	    }
+	 
+	 
 	 @PostMapping(value = "/update")
 	 public Organization updateOrganization(@RequestBody final Organization organization) {
 	        return service.updateOrganization(organization);    

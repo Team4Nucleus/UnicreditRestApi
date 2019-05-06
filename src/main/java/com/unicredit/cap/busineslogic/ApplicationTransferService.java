@@ -57,7 +57,7 @@ public class ApplicationTransferService {
 	}
 	
 	
-	public ApplicationTransfer createApplicationTransfer(ApplicationTransfer appTrans, Long id )
+	public ApplicationTransfer createApplicationTransfer(ApplicationTransfer appTrans, Long id , int s)
 	{
 		Application app = db.Application().findOne(id);
 		
@@ -71,19 +71,25 @@ public class ApplicationTransferService {
 		 
 		 db.ApplicationTransfer().save(appTrans);
 		 
+		 if (s == 1)
+			return updateApplicationTransferStatus("APPROVED", appTrans.getId() ); 
+		 
+		 else {
+		 
 		 try {
+			 
 			User fromUser = db.User().findOne((long)appTrans.getFromUser());
-			User toUser = db.User().findOne((long)appTrans.getToUser());
+			User toUser = appTrans.getToUser() == null ? null : db.User().findOne((long)appTrans.getToUser());
 			Organization fromOrg = db.Orgnaization().findOne((long)appTrans.getFromOrg());
 			Organization toOrg = db.Orgnaization().findOne((long)appTrans.getToOrg());
 			
 			HashMap<String, String> emailTemplateModel = new HashMap<>();
-			emailTemplateModel.put("clientName", "Proslijeđena Vam je aplikacija od: " + fromUser.getName() + " [" + fromOrg.getName() +"]");
+			emailTemplateModel.put("clientName", "Korisnik " + fromUser.getName() + " [" + fromOrg.getName() +"] je inicirao kretanje prema " + toOrg.getName());
 			emailTemplateModel.put("placementType", "Aplikacija: " + app.getCode() + ", " + app.getDescription());
 			emailTemplateModel.put("status", "Status: REQUESTED");
 			emailTemplateModel.put("description", "");
-			emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/" + appTrans.getId() );
-			emailTemplateModel.put("headerText", "Zadatak od: " + fromUser.getName() );
+			emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/loan-requests/details/" + app.getId() );
+			emailTemplateModel.put("headerText", "Prosledjivanje predmeta prema: " + toUser.getName() );
 			emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
 			emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
 			
@@ -91,19 +97,20 @@ public class ApplicationTransferService {
 		    
 		    List<String> toRecipients = new ArrayList<String>();
 		    
-		    if(appTrans.getToUser() != null)
-		    toRecipients.add(toUser.getEmail());
-		    else
+		    List<User> emailUsers = db.User().findHrManagerOfOrg(fromOrg.getId());
+		    
+		    for (User u : emailUsers)
 		    {
-		    	if(toOrg.getEmail() != null && !toOrg.getEmail().equals("") )
-		    		toRecipients.add(toOrg.getEmail());
+		    	toRecipients.add(u.getEmail());
 		    }
-		    	
+		    
+		    if (emailUsers.size() > 0)
 		    mailService.SendMail("", toRecipients,"Predmet kretanje", emailContent, "", env);
 		 }
 		 catch(Exception ex) {}
 		 
 		    return appTrans;
+		 }
 	}
 
 	public ApplicationTransfer updateApplicationTransferStatus(String status, Long id )
@@ -124,7 +131,7 @@ public class ApplicationTransferService {
 		{
 			 try {
 					User fromUser = db.User().findOne((long)appTran.getFromUser());
-					User toUser = db.User().findOne((long)appTran.getToUser());
+					User toUser = appTran.getToUser() == null ? null : db.User().findOne((long)appTran.getToUser());
 					Organization fromOrg = db.Orgnaization().findOne((long)appTran.getFromOrg());
 					Organization toOrg = db.Orgnaization().findOne((long)appTran.getToOrg());
 					
@@ -132,8 +139,8 @@ public class ApplicationTransferService {
 					emailTemplateModel.put("clientName", "Prosledjivanje aplikacije je odbijeno. Sa " + fromUser.getName() + " [" + fromOrg.getName() +"], na " + toUser.getName() + " [" + toOrg.getName() +"] za " );
 					emailTemplateModel.put("placementType", "Aplikacija: " + app.getCode() + ", " + app.getDescription());
 					emailTemplateModel.put("status", "Status: REJECTED");
-					emailTemplateModel.put("description", "");
-					emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/" + appTran.getId() );
+					emailTemplateModel.put("description", "Poruka: " + appTran.getNote());
+					emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/loan-requests/details/" + app.getId() );
 					emailTemplateModel.put("headerText", "Odgovorna osoba za privatanje aplikacije je odbacila prezaduženje");
 					emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
 					emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
@@ -163,7 +170,7 @@ public class ApplicationTransferService {
 				pt.setFromUser(appTran.getFromUser());
 				pt.setToOrg(appTran.getToOrg());
 				pt.setToUser(appTran.getToUser());
-				pt.setMovementType("Prezaduženje Plasmana usled prezaduženja aplikacije / predmeta");
+				pt.setMovementType("Prezaduženje aplikacije");
 							
 				//dodat parametar da se ne salje mail
 				PlacementTransfer rez = tranService.createNewPlacementTransfer(pt, placement.getId(), false);
@@ -175,16 +182,16 @@ public class ApplicationTransferService {
 			
 			 try {
 					User fromUser = db.User().findOne((long)appTran.getFromUser());
-					User toUser = db.User().findOne((long)appTran.getToUser());
+					User toUser = appTran.getToUser() == null ? null : db.User().findOne((long)appTran.getToUser());
 					Organization fromOrg = db.Orgnaization().findOne((long)appTran.getFromOrg());
 					Organization toOrg = db.Orgnaization().findOne((long)appTran.getToOrg());
 					
 					HashMap<String, String> emailTemplateModel = new HashMap<>();
-					emailTemplateModel.put("clientName", "Proslijeđena je aplikacija od: " + fromUser.getName() + " [" + fromOrg.getName() +"] za " + toUser.getName() + " [" + toOrg.getName() +"] za " );
+					emailTemplateModel.put("clientName", "Proslijeđena je aplikacija od: " + fromUser.getName() + " [" + fromOrg.getName() +"] za " + toUser.getName() + " [" + toOrg.getName() +"]" );
 					emailTemplateModel.put("placementType", "Aplikacija: " + app.getCode() + ", " + app.getDescription());
 					emailTemplateModel.put("status", "Status: APPROVED");
-					emailTemplateModel.put("description", "");
-					emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/" + appTran.getId() );
+					emailTemplateModel.put("description", "Poruka: " + appTran.getNote());
+					emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/loan-requests/details/" + app.getId() );
 					emailTemplateModel.put("headerText", "Aplikacija i svi plasmani su prenešeni i prihvaćeni od strane nove Org. jedinice");
 					emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
 					emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
@@ -194,6 +201,7 @@ public class ApplicationTransferService {
 				    List<String> toRecipients = new ArrayList<String>();
 				    
 				    toRecipients.add(fromUser.getEmail());
+				    
 				    if(appTran.getToUser() != null)
 				    toRecipients.add(toUser.getEmail());
 				    else

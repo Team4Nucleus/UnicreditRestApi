@@ -48,4 +48,15 @@ public class OrganizationService {
 		
 	}
 	
+	
+	public Organization createOrganization(Organization org)
+	{
+		if (org.getName().equals(""))
+			 throw new CapNotFoundException("Organization name must not be empty");
+		
+		db.Orgnaization().save(org);
+		
+		return org;
+		
+	}
 }

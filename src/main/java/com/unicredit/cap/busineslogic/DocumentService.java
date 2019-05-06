@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.unicredit.cap.exception.CapNotFoundException;
+import com.unicredit.cap.model.Application;
 import com.unicredit.cap.model.Document;
 import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.repository.DbContext;
@@ -68,10 +69,12 @@ public class DocumentService {
 	public List<Document> getDocumentsByApplication(Long id)
 	{
 		
-		// dodati kad se poveze u modelu
-		//db.Application().findById(id)
-		throw new CapNotFoundException("Not implemented in REST yet");
-
+		Application app = db.Application().findOne(id);
+		
+		if (app == null)
+		throw new CapNotFoundException("Application with id="+id+" was not found!");
+		
+		return app.getDocuments();
 	}
 	
 	
@@ -90,7 +93,16 @@ public class DocumentService {
 	
 	public Document createDocumentInApplication(Document document, Long id)
 	{
-		throw new CapNotFoundException("Not implemented in REST yet");
+		Application app = db.Application().findOne(id);
+		
+		if(app == null)
+		throw new CapNotFoundException("Application with id="+id+" was not found!");
+		
+		document.setApplication(app);
+		
+		db.Document().save(document);
+		
+		return document;
 	}
 	
 	
@@ -110,39 +122,40 @@ public class DocumentService {
 	}
 	
 	
-	 private void saveUploadedFiles(List<MultipartFile> files, Long idPlacement) throws IOException {
+	private void saveUploadedFiles(List<MultipartFile> files, Long idPlacement, Long idApplication) throws IOException {
 
 	        for (MultipartFile file : files) {
 
 	            if (file.isEmpty()) {
 	                continue; 
 	            }
-
 	            
-	            File directory = new File(env.getProperty("document.location")+idPlacement);
+	            Long id = idPlacement == 0 ? idApplication : idPlacement;
+	            
+	            File directory = new File(env.getProperty("document.location")+id);
 	            if (! directory.exists()){
 	                directory.mkdir();
 	            }
 	            
-	            
-	            
+	            	            
 	            byte[] bytes = file.getBytes();
 	            Path path = Paths.get(directory+"/"+file.getOriginalFilename());
 	            Files.write(path, bytes);
-
 
 	        }
 
 	    }
 
 
-	public ResponseEntity<?> uploadDocumentInPlacement(Long idPlacement, MultipartFile[] uploadFiles, int type, int attachUser, String fileType) {
+	public ResponseEntity<?> uploadDocumentInPlacementOrApplication(Long idPlacement, Long idApplication, MultipartFile[] uploadFiles, int type, int attachUser, String fileType) {
 		// TODO Auto-generated method stub
 		
 		Placement plac = db.Placement().findOne(idPlacement);
+		Application app = db.Application().findOne(idApplication);
+		Long id = idPlacement == 0 ? idApplication : idPlacement;
 		
-		if(plac == null)
-		throw new CapNotFoundException("Placement with id="+idPlacement+" was not found!");
+		if(plac == null && app == null)
+		throw new CapNotFoundException("Placement and Application were not found!");
 		
 		 String uploadedFileName = Arrays.stream(uploadFiles).map(x -> x.getOriginalFilename())
 	                .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
@@ -153,18 +166,23 @@ public class DocumentService {
 
 	        try {
         	
-	            saveUploadedFiles(Arrays.asList(uploadFiles), idPlacement);
+	            saveUploadedFiles(Arrays.asList(uploadFiles), idPlacement, idApplication);
 	            
 	            Document document = new Document();
 	            document.setAttachUser(attachUser);
 	            document.setType(type);
 	            document.setOriginal(0);
 	            document.setName(uploadFiles[0].getOriginalFilename());
-	            document.setPath(env.getProperty("document.location")+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
+	            document.setPath(env.getProperty("document.location")+id+"/"+uploadFiles[0].getOriginalFilename());
 	            document.setFileType(fileType);
+	            
+	            if (plac != null)
 	            document.setPlacement(plac);
 	            
-	            Path path = Paths.get(env.getProperty("document.location")+idPlacement+"/"+uploadFiles[0].getOriginalFilename());
+	            if (app != null)
+	            document.setApplication(app);
+	            
+	            Path path = Paths.get(env.getProperty("document.location")+id+"/"+uploadFiles[0].getOriginalFilename());
 	            BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
 	            FileOwnerAttributeView ownerAttributeView = Files.getFileAttributeView(path, FileOwnerAttributeView.class);
 	            

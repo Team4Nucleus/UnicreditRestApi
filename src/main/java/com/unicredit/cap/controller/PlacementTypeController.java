@@ -34,11 +34,20 @@ public class PlacementTypeController {
 	    return service.getPlacementTypeById(id);
 	    }
 	 
+	 @GetMapping(value = "/category/{id}")
+	    public List<PlacementType> findAll(@PathVariable final Long id) {
+	        return service.getPlacementTypeByCategory(id);
+	    }
+	 
 	 
 	 @PostMapping(value = "/create")
 	    public PlacementType createPlacementType(@RequestBody final PlacementType placementType) {	       
 		 return service.createNewPlacementType(placementType);         
 	    }
 	 
+	 @PostMapping(value = "/update")
+	    public PlacementType updatePlacementType(@RequestBody final PlacementType placementType) {	       
+		 return service.createNewPlacementType(placementType);         
+	    }
 	 
 }

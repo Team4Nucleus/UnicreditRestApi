@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -32,6 +34,10 @@ public class PlacementType {
     @JsonView(Placement.class)
 	private int active;
 
+    @Column(name = "CATEGORY")
+    @JsonView(Placement.class)
+    private Long category;
+    
     
     public PlacementType(){}
     
@@ -65,6 +71,14 @@ public class PlacementType {
 
 	public void setActive(int active) {
 		this.active = active;
+	}
+
+	public Long getCategory() {
+		return category;
+	}
+
+	public void setCategory(Long category) {
+		this.category = category;
 	}
 	
    

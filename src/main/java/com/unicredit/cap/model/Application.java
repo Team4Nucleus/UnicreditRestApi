@@ -64,6 +64,9 @@ public class Application  {
     private List<Placement> placements = new ArrayList<Placement>();
     
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "application", fetch = FetchType.LAZY)
+    private List<Document> documents = new ArrayList<Document>();
+    
 	@JsonView(Application.class)
     @ManyToOne
     @JoinColumn(name = "CREATE_USER", insertable=false, updatable=false)
@@ -168,6 +171,16 @@ public class Application  {
 
 	public void setCreateUserDetails(User createUserDetails) {
 		this.createUserDetails = createUserDetails;
+	}
+
+
+	public List<Document> getDocuments() {
+		return documents;
+	}
+
+
+	public void setDocuments(List<Document> documents) {
+		this.documents = documents;
 	}
 	
 

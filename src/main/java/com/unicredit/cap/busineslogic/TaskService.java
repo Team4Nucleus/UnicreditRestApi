@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.unicredit.cap.exception.CapNotFoundException;
 import com.unicredit.cap.helper.EmailTemplateHelper;
 import com.unicredit.cap.model.AppUser;
+import com.unicredit.cap.model.Application;
 import com.unicredit.cap.model.Organization;
 import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.model.Task;
@@ -89,7 +90,7 @@ public class TaskService {
 		if(taskDetail != null) {
 						
 			User fromUser = db.User().findOne((long)taskDetail.getFromUser());
-			User toUser = db.User().findOne((long)taskDetail.getToUser());
+			User toUser = taskDetail.getToUser() == null ? null : db.User().findOne((long)taskDetail.getToUser());
 			Organization fromOrg = db.Orgnaization().findOne((long)taskDetail.getFromOrg());
 			Organization toOrg = db.Orgnaization().findOne((long)taskDetail.getToOrg());
 			TaskStatus status = db.TaskStatus().findOne((long)task.getStatus());
@@ -189,5 +190,68 @@ public class TaskService {
 		
 		return db.Task().getAllTasksByUserId(id);
 	}
+	
+	
+	public List<Task> getAllTaskByAppOrg(Long id){
+		
+		return db.Task().findAllActiveTasksByApplicationCurrentOrg(id);
+	}
+
+
+	public Task asignUserToTask(Long taskId, Integer userId)
+	{
+		Task task = db.Task().findOne(taskId);
+		
+		TaskDetail taskDetail = db.TaskDetail().getLastDetailOfTask(taskId);
+		
+		taskDetail.setToUser(userId);
+		
+		db.TaskDetail().save(taskDetail);
+		
+		
+		if(taskDetail != null) {
+			
+			try {
+			User toUser = db.User().findOne((long)userId);
+			TaskStatus status = db.TaskStatus().findOne((long)task.getStatus());
+			Organization toOrg = db.Orgnaization().findOne((long)taskDetail.getToOrg());
+			Placement placement = task.getPlacement();
+			
+			HashMap<String, String> emailTemplateModel = new HashMap<>();
+			emailTemplateModel.put("clientName", "Rukovodilac Vam je raspodjelio zadatak poslat prema: " +  toOrg.getName() );
+			emailTemplateModel.put("placementType", "Plasman: " + placement.getPlacementtype().getName() + ", " + placement.getClientName());
+			emailTemplateModel.put("status", "Status: " + status.getName() + ", Prioritet: " + task.getPriority());
+			emailTemplateModel.put("description", "[" + taskDetail.getFromDate() + "] " + taskDetail.getText());
+			emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/user-tasks/details/" + task.getId() );
+			emailTemplateModel.put("headerText", "Raspodjela zadatka" );
+			emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
+			emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
+			
+			
+		    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
+		    
+		    List<String> toRecipients = new ArrayList<String>();
+		    
+		    /*
+		    if (taskDetail.getToUser() != null)
+		    	toRecipients.add(toUser.getEmail());
+		    */
+		    
+		    if (toUser != null)
+		    	toRecipients.add(toUser.getEmail());
+		    else
+		    	toRecipients.add(toOrg.getEmail());	
+		    
+
+		    mailService.SendMail("", toRecipients,"Novi zadatak", emailContent, "", env);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		
+		
+		return task;
+	}
+
 	
 }

@@ -89,7 +89,7 @@ public class PlacementService {
 				emailTemplateModel.put("placementType", "Plasman: " + plac.getPlacementtype().getName() + ", " + plac.getClientName());
 				emailTemplateModel.put("status", "Status: " + plac.getPlacementstatus().getName());
 				emailTemplateModel.put("description", "");
-				emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/" + plac.getId() );
+				emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/loan-requests/placement/" + plac.getId() );
 				emailTemplateModel.put("headerText", "Dodjeljivanje Plasmana");
 				emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
 				emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
@@ -197,7 +197,7 @@ public class PlacementService {
 	        plac.setUserComment(placement.getUserComment());
 	        plac.setCurrency(placement.getCurrency());
 	        plac.setAmountInBam(placement.getAmountInBam());
-     
+	        plac.setSocialRisk(placement.getSocialRisk());
 	        db.Placement().save(plac);
 		
 	        return plac;

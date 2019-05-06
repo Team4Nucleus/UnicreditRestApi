@@ -45,7 +45,7 @@ public class DocumentController {
 	    return service.getDocumentById(id); 
 	 }
 	 
-	 
+	 //NEW !!!
 	 @GetMapping(value = "/application/{id}")
 	 public List<Document> findByApplicationId(@PathVariable final Long id){	
 	    return service.getDocumentsByApplication(id);   
@@ -56,6 +56,8 @@ public class DocumentController {
 	    return service.getDocumentsByPlacement(id);
 	 }
 	 
+	 
+	 //NEW !!!
 	 @PostMapping(value = "/create/application/{id}")
 	 public Document  createDocumentInApplication (@RequestBody Document document, @PathVariable final Long id){		
 		    return service.createDocumentInApplication(document, id);
@@ -73,15 +75,18 @@ public class DocumentController {
 		    return new ResponseEntity<String>("Document successfully deleted",HttpStatus.OK);
 		 }
 	 
+	 
+	 //IZMJENE
 	 @PostMapping(value = "/upload")
 	 public ResponseEntity<?>  uploadDocument ( 
 			 @RequestParam("idPlacement") Long idPlacement, 
+			 @RequestParam("idApplication") Long idApplication, //tu
 			 @RequestParam("files")  MultipartFile[] uploadFiles,
 			 @RequestParam("type") int type,
 			 @RequestParam("fileType") String fileType,
 			 @RequestParam("attachUser") int attachUser){
 		 
-		    return service.uploadDocumentInPlacement(idPlacement, uploadFiles, type, attachUser, fileType);
+		    return service.uploadDocumentInPlacementOrApplication(idPlacement, idApplication, uploadFiles, type, attachUser, fileType);
 		    
 		 }
 	 

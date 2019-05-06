@@ -40,6 +40,8 @@ public class DbContext {
 	private CurrencyRepository currencies;
 	@Autowired
 	private ApplicationTransferRepository applicationTransfer;
+	@Autowired
+	private PlacementTypeCategoryRepository placementTypeCategory;
 	
 	public CurrencyRepository Currencies() {
 		return currencies;
@@ -49,6 +51,19 @@ public class DbContext {
 	private PlacementTimeConsumentRepository placementTime;
 	@Autowired
 	private TaskTimeConsumentRepository taskTime;
+	
+	@Autowired
+	private TransferRulesRepository transferRules;
+	
+	@Autowired
+	private DocumentReceiveRepository documentReceive;
+	
+	
+	
+	public DocumentReceiveRepository documentReceive()
+	{
+		return documentReceive;
+	}
 	
 	public PlacementTimeConsumentRepository placementTime() {
 		return placementTime;
@@ -109,9 +124,15 @@ public class DbContext {
 		return applicationTransfer;
 	}
 	
+	public PlacementTypeCategoryRepository PlacementTypeCategory()
+	{
+		return placementTypeCategory;
+	}
 	
-	
-
+	public TransferRulesRepository TransferRules()
+	{
+		return transferRules;
+	}
 	
 	
 	

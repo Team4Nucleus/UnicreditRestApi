@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -103,13 +104,15 @@ public class ApplicationController {
 		 return service.setApplicationCurrentUser(id, user);
 	 }
 	 
-	 /*
-	 @GetMapping(value="podaci")
-	 public Collection<SimpleGrantedAuthority> podaci(){
-		 Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-		 return authorities;
+	 
+	 @GetMapping(value="/podaci")
+	 public String podaci(){
+		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		 String currentPrincipalName = authentication.getName();
+		 
+		 return currentPrincipalName;
 	 }
-	 */
+	 
 	 
 	 @GetMapping(value = "/timeConsument/{id}")
 	 public List<TimeConsumeWrapper> getTimeConsumentByPlacement(@PathVariable final Long id){

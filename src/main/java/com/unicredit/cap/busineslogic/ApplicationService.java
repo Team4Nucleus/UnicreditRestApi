@@ -3,11 +3,13 @@ package com.unicredit.cap.busineslogic;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Sort;
@@ -69,6 +71,12 @@ public class ApplicationService {
 		 
 		app.setCurrentUser(user);
 		
+		for (Placement plac : app.getPlacements())
+		{
+			plac.setCurrentUser(user);
+			db.Placement().save(plac);
+		}
+		
 		db.Application().save(app);
 		
 		try {
@@ -83,7 +91,7 @@ public class ApplicationService {
 		emailTemplateModel.put("placementType", "Aplikacija: " + app.getCode() + ", " + app.getDescription());
 		emailTemplateModel.put("status", "Status: Aktivno");
 		emailTemplateModel.put("description", "Komentar: " + app.getDescription());
-		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/" + app.getId() );
+		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/loan-requests/details/" + app.getId() );
 		emailTemplateModel.put("headerText", "");
 		emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
 		emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
@@ -165,6 +173,12 @@ public class ApplicationService {
 		
 		 application.setCreateDate(new Date());
 		 application.setCurrentUser(application.getCreateUser());
+		 
+		 Calendar cal = Calendar.getInstance();
+		 cal.setTime(new Date());
+		 int year = cal.get(Calendar.YEAR);
+		 int month = cal.get(Calendar.MONTH) + 1;
+		 application.setCode(year + "-"+ month + "-" + RandomStringUtils.randomAlphanumeric(7).toUpperCase());
 		 
 		 Long IdOrg = db.User().findOne(application.getCreateUser()).getHrOrganization();
 		 application.setCurrentOrg(IdOrg);

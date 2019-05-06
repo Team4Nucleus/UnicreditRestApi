@@ -49,10 +49,14 @@ public class ApplicationTransfer {
 	 	@Column(name = "RESPOND_DATE")
 	 	private Date respondDate;
 
-	 	@ManyToOne
+	 	@Column(name = "NOTE")
+	 	private String note;
+	 	
+	 	
+		@ManyToOne
 	    @JsonIgnore
-		@JoinColumn(name = "application")
-	    private Application application;
+		@JoinColumn(name = "APPLICATION")
+	    private Application applicationDetails;
 	 	
 	 	@JsonView(ApplicationTransfer.class)
 	    @ManyToOne
@@ -85,13 +89,20 @@ public class ApplicationTransfer {
 		}
 
 		public Application getApplication() {
-			return application;
+			return applicationDetails;
 		}
 
 		public void setApplication(Application application) {
-			this.application = application;
+			this.applicationDetails = application;
+		}
+		
+		public String getNote() {
+			return note;
 		}
 
+		public void setNote(String note) {
+			this.note = note;
+		}
 		public Long getFromOrg() {
 			return fromOrg;
 		}

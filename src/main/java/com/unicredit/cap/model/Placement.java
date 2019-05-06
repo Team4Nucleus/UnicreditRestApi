@@ -133,6 +133,10 @@ public class Placement {
     @Column(name = "AMOUNT_IN_BAM", columnDefinition = "NUMBER(30,5)")
     private Double amountInBam;
     
+    @JsonView(Placement.class)
+    @Column(name = "SOCIALRISK")
+    private String socialRisk;
+    
 
 	@JsonView(Placement.class)
     @ManyToOne
@@ -459,7 +463,16 @@ public class Placement {
 		this.currentUserDetails = currentUserDetails;
 	}
 
+	public String getSocialRisk() {
+		return socialRisk;
+	}
 
+	public void setSocialRisk(String socialRisk) {
+		this.socialRisk = socialRisk;
+	}
+
+
+	
 	
 	
 	

@@ -52,4 +52,17 @@ public class TaskController {
 	    public List<Task> findAllByUserId(@PathVariable final Long id) {	       		 
 		 return service.getAllTasksByUserId(id);         
 	   }
+	 
+	 
+	 @GetMapping(value = "/appOrg/{orgId}")
+	    public List<Task> findTaskByAppOrg(@PathVariable final Long orgId) {	       		 
+		 return service.getAllTaskByAppOrg(orgId);        
+	   }
+	 
+	 @PostMapping(value = "/{taskId}/user/{userId}")
+	    public Task asignUserToTask(@PathVariable final Long taskId, @PathVariable final Integer userId) throws Exception {	       		 
+		 return service.asignUserToTask(taskId, userId);         
+	   }
+	 
+	 
 }

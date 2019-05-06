@@ -80,7 +80,7 @@ public class TaskDetailService {
 		db.Task().save(taskWithStatusUpdate);
 		
 		User fromUser = db.User().findOne((long)taskDetail.getFromUser());
-		User toUser = db.User().findOne((long)taskDetail.getToUser());
+		User toUser = taskDetail.getToUser() == null ? null : db.User().findOne((long)taskDetail.getToUser());
 		Organization fromOrg = db.Orgnaization().findOne((long)taskDetail.getFromOrg());
 		Organization toOrg = db.Orgnaization().findOne((long)taskDetail.getToOrg());
 		Placement placement = task.getPlacement();

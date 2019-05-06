@@ -28,6 +28,12 @@ public class PlacementTypeService {
 		return placementType;
 	}
 	
+	public List<PlacementType> getPlacementTypeByCategory(Long id)
+	{
+		List<PlacementType> list = db.PlacementType().findByCategory(id);
+		
+		return list;
+	}
 	
 	public List<PlacementType> getAllPlacementType(){
 		

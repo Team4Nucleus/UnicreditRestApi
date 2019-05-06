@@ -86,7 +86,7 @@ public class PlacementTransferService {
 		
 				
 		User fromUser = db.User().findOne((long)placementTransfer.getFromUser());
-		User toUser = db.User().findOne((long)placementTransfer.getToUser());
+		User toUser = placementTransfer.getToUser() == null ? null : db.User().findOne((long)placementTransfer.getToUser());
 		Organization fromOrg = db.Orgnaization().findOne((long)placementTransfer.getFromOrg());
 		Organization toOrg = db.Orgnaization().findOne((long)placementTransfer.getToOrg());
 		
