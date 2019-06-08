@@ -31,8 +31,8 @@ public class Task {
     
     /*
     @Column(name = "PLACEMENT")
-	private long placement;
-    */
+	private long idPlacement;
+   */
     
     @Column(name = "DESCRIPTION")
 	private String description;
@@ -69,8 +69,13 @@ public class Task {
 	@JoinColumn(name = "placement")
     private Placement placement;
     
-    
-    @ManyToOne
+    /*
+    public long getIdPlacement() {
+		return idPlacement;
+	}
+*/
+
+	@ManyToOne
 	@JoinColumn(name ="CREATE_USER", insertable=false, updatable=false)
     private User createUserDetails;
 	
