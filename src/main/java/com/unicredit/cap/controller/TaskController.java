@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.unicredit.cap.busineslogic.TaskService;
+import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.model.Task;
 
 @RestController
@@ -63,6 +65,12 @@ public class TaskController {
 	    public Task asignUserToTask(@PathVariable final Long taskId, @PathVariable final Integer userId) throws Exception {	       		 
 		 return service.asignUserToTask(taskId, userId);         
 	   }
+	 
+	 @GetMapping(value = "/{id}/placement")
+	 public Placement getPlacementByTaskId(@PathVariable final Long id){
+		
+	    return service.getPlacementByTaskId(id);
+	    }
 	 
 	 
 }

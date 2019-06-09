@@ -253,5 +253,15 @@ public class TaskService {
 		return task;
 	}
 
+	public Placement getPlacementByTaskId(Long id)
+	{
+		Task task = db.Task().findOne(id);
+		
+		if(task == null)
+			 throw new CapNotFoundException("Task with id=" + id + " was not found");
+		
+		Placement plac = task.getPlacement();
+		return plac;
+	}
 	
 }
