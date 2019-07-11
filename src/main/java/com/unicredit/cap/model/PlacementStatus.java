@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.unicredit.cap.helper.ViewProfile;
 
 @Entity
 @Table(name="PLACEMENTSTATUS")
@@ -16,19 +17,19 @@ public class PlacementStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
 	private long id;
     
     @Column(name = "CODE")
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
 	private String code;
     
     @Column(name = "NAME")
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
 	private String name;
     
     @Column(name = "ACTIVE")
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
 	private int active;
 
 	public long getId() {

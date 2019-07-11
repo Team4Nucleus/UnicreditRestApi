@@ -13,27 +13,36 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.unicredit.cap.helper.ViewProfile;
+
 @Entity
 @Table(name="HRORGANIZATION")
 public class Organization {
 
     @Id
+    @JsonView(ViewProfile.Placement.class)
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
 	private long id;
     
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CODE")
 	private String code;
     
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "NAME")
 	private String name;
     
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "DESCRIPTION")
 	private String description;
-
+    
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "EMAIL")
     private String email;
     
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "hrOrganization")
     private List<User> users = new ArrayList<>();
 

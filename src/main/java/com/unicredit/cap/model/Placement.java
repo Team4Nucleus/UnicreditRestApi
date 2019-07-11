@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.unicredit.cap.helper.ViewProfile;
 
 @Entity
 @Table(name = "PLACEMENT")
@@ -29,7 +30,7 @@ public class Placement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
 	private long id;
     
 
@@ -39,111 +40,111 @@ public class Placement {
 	private int application;
 */
 	
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "DECISION_NUMBER")
 	private String decisionNumber;
 	
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CLIENT_CORE_NO")
     private long clientCoreNo;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CLIENT_NAME")
 	private String clientName;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CLIENT_JIB")
 	private String clientJib;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CLIENT_PERSONAL_DOC")
 	private String clientPersonalDoc;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CLIENT_PHONE")
 	private String clientPhone;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CLIENT_EMAIL")
 	private String clientEmail;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "TYPE")
 	private int type;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "REQUEST_DATE")
 	private Date requestDate;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CREATING_DATE")
 	private Date cretaingDate;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CLOSING_DATE")
 	private Date closingDate;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CREATING_ORG")
 	private Long creatingOrg;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CURRENT_ORG")
 	private Long currentOrg;
     
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CREATE_USER")
 	private Long createUser;
 	
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CURRENT_USER")
 	private Long currentUser;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "LOAN_AMOUNT")
 	private Long loanAmount;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "PAYMENT_PERIOD")
 	private String paymentPeriod;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "LOAN_USAGE")
 	private String loanUsage;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "TOTAL_EXPOSURE")
 	private Long totalExposure;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "USER_COMMENT")
 	private String userComment;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "STATUS")
     private int status;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "CURRENCY")
     private String currency;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "AMOUNT_IN_BAM", columnDefinition = "NUMBER(30,5)")
     private Double amountInBam;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "SOCIALRISK")
     private String socialRisk;
     
 
-	@JsonView(Placement.class)
+	@JsonView(ViewProfile.Placement.class)
     @ManyToOne
 	@JoinColumn(name = "status", insertable=false, updatable=false)
     private PlacementStatus placementstatus;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @ManyToOne
    	@JoinColumn(name = "type", insertable=false, updatable=false)
     private PlacementType placementtype;
@@ -165,24 +166,24 @@ public class Placement {
     private Application application;
     
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @ManyToOne
 	@JoinColumn(name ="CREATING_ORG", insertable=false, updatable=false)
     private Organization creatingOrgDetails;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @ManyToOne
 	@JoinColumn(name ="CURRENT_ORG", insertable=false, updatable=false)
     private Organization currentOrgDetails;
     
 
 
-	@JsonView(Placement.class)
+	@JsonView(ViewProfile.Placement.class)
     @ManyToOne
 	@JoinColumn(name ="CREATE_USER", insertable=false, updatable=false)
     private User createUserDetails;
     
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     @ManyToOne
 	@JoinColumn(name ="CURRENT_USER", insertable=false, updatable=false)
     private User currentUserDetails;

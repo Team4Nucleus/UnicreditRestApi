@@ -20,54 +20,55 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.unicredit.cap.helper.ViewProfile;
 
 @Entity
 @Table(name="APPLICATION")
 public class Application  {
 
-	@JsonView(Application.class)
+	@JsonView(ViewProfile.Application.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
 	private long id;
     
-	@JsonView(Application.class)
+	@JsonView(ViewProfile.Application.class)
     @Column(name = "CODE")
 	private String code;
     
-	@JsonView(Application.class)
+	@JsonView(ViewProfile.Application.class)
     @Column(name = "CREATE_USER")
 	private Long createUser;
 		   
-	@JsonView(Application.class)
+	@JsonView(ViewProfile.Application.class)
     @Column(name = "APPLICATION_DATE")
 	private Date applicationDate;
     
-	@JsonView(Application.class)
+	@JsonView(ViewProfile.Application.class)
     @Column(name = "CREATE_DATE")
 	private Date createDate;
     
-	@JsonView(Application.class)
+	@JsonView(ViewProfile.Application.class)
     @Column(name = "DESCRIPTION")
 	private String description;
 	
-	@JsonView(Application.class)
+	@JsonView(ViewProfile.Application.class)
     @Column(name = "CURRENT_USER")
 	private Long currentUser;
 	
-	@JsonView(Application.class)
+	@JsonView(ViewProfile.Application.class)
     @Column(name = "CURRENT_ORG")
 	private Long currentOrg;
 	
-	
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "application", cascade = CascadeType.ALL)
+	@JsonView(ViewProfile.Application.class)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "application", cascade = CascadeType.ALL)
     private List<Placement> placements = new ArrayList<Placement>();
     
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "application", fetch = FetchType.LAZY)
     private List<Document> documents = new ArrayList<Document>();
     
-	@JsonView(Application.class)
+	@JsonView(ViewProfile.Application.class)
     @ManyToOne
     @JoinColumn(name = "CREATE_USER", insertable=false, updatable=false)
 	private User createUserDetails;

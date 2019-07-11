@@ -10,24 +10,32 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.unicredit.cap.helper.ViewProfile;
+
 @Entity
 @Table(name="HRUSER")
 public class User {
 
     @Id
+    @JsonView(ViewProfile.Placement.class)
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
 	private long id;
     
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "HRORGANIZATION")
 	private long hrOrganization;
 	
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "NAME")
 	private String name;
 	
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "USERNAME")
 	private String username;
 	
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "EMAIL")
 	private String email;
 

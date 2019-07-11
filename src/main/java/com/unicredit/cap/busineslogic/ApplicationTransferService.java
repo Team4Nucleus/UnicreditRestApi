@@ -5,11 +5,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.unicredit.cap.exception.CapNotFoundException;
+import com.unicredit.cap.helper.CustomEmail;
 import com.unicredit.cap.helper.EmailTemplateHelper;
 import com.unicredit.cap.model.Application;
 import com.unicredit.cap.model.ApplicationTransfer;
@@ -20,6 +22,7 @@ import com.unicredit.cap.model.User;
 import com.unicredit.cap.repository.DbContext;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.IMailService;
+import com.unicredit.cap.service.MailService;
 
 @Service
 public class ApplicationTransferService {
@@ -33,7 +36,9 @@ public class ApplicationTransferService {
 	@Autowired
 	private Environment env;
 	
-	private IMailService mailService = new ExchangeMailService();
+	private MailService mailService = new MailService();
+	
+	Logger logger = Logger.getLogger(ApplicationTransferService.class);
 	
 //REQUESTED, APPROVED, REJECTED
 	
@@ -89,7 +94,7 @@ public class ApplicationTransferService {
 			emailTemplateModel.put("status", "Status: REQUESTED");
 			emailTemplateModel.put("description", "");
 			emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/loan-requests/details/" + app.getId() );
-			emailTemplateModel.put("headerText", "Prosledjivanje predmeta prema: " + toUser.getName() );
+			emailTemplateModel.put("headerText", "Prosledjivanje predmeta prema: " + ( toUser == null ? "" : toUser.getName() )  );
 			emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
 			emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
 			
@@ -105,9 +110,12 @@ public class ApplicationTransferService {
 		    }
 		    
 		    if (emailUsers.size() > 0)
-		    mailService.SendMail("", toRecipients,"Predmet kretanje", emailContent, "", env);
+		    mailService.SendMail("", toRecipients,"Predmet kretanje: "  + app.getDescription(), emailContent, "", env);
 		 }
-		 catch(Exception ex) {}
+		 catch(Exception ex) {
+			 logger.error(ex.getMessage());
+				logger.error(ex.getStackTrace().toString());
+		 }
 		 
 		    return appTrans;
 		 }
@@ -136,7 +144,7 @@ public class ApplicationTransferService {
 					Organization toOrg = db.Orgnaization().findOne((long)appTran.getToOrg());
 					
 					HashMap<String, String> emailTemplateModel = new HashMap<>();
-					emailTemplateModel.put("clientName", "Prosledjivanje aplikacije je odbijeno. Sa " + fromUser.getName() + " [" + fromOrg.getName() +"], na " + toUser.getName() + " [" + toOrg.getName() +"] za " );
+					emailTemplateModel.put("clientName", "Prosledjivanje aplikacije je odbijeno. Sa " + fromUser.getName() + " [" + fromOrg.getName() +"], na " + ( toUser == null ? "" : toUser.getName() ) + " [" + toOrg.getName() +"] za " );
 					emailTemplateModel.put("placementType", "Aplikacija: " + app.getCode() + ", " + app.getDescription());
 					emailTemplateModel.put("status", "Status: REJECTED");
 					emailTemplateModel.put("description", "Poruka: " + appTran.getNote());
@@ -151,9 +159,12 @@ public class ApplicationTransferService {
 				    
 				    toRecipients.add(fromUser.getEmail());
 				    	
-				    mailService.SendMail("", toRecipients,"Predmet kretanje", emailContent, "", env);
+				    mailService.SendMail("", toRecipients,"Predmet kretanje: " + app.getDescription(), emailContent, "", env);
 				 }
-				 catch(Exception ex) {}
+				 catch(Exception ex) {
+					 logger.error(ex.getMessage());
+						logger.error(ex.getStackTrace().toString());
+				 }
 		}
 		
 		if (status.equals("APPROVED"))
@@ -187,7 +198,7 @@ public class ApplicationTransferService {
 					Organization toOrg = db.Orgnaization().findOne((long)appTran.getToOrg());
 					
 					HashMap<String, String> emailTemplateModel = new HashMap<>();
-					emailTemplateModel.put("clientName", "Proslijeđena je aplikacija od: " + fromUser.getName() + " [" + fromOrg.getName() +"] za " + toUser.getName() + " [" + toOrg.getName() +"]" );
+					emailTemplateModel.put("clientName", "Proslijeđena je aplikacija od: " + fromUser.getName() + " [" + fromOrg.getName() +"] za " + ( toUser == null ? "" : toUser.getName() ) + " [" + toOrg.getName() +"]" );
 					emailTemplateModel.put("placementType", "Aplikacija: " + app.getCode() + ", " + app.getDescription());
 					emailTemplateModel.put("status", "Status: APPROVED");
 					emailTemplateModel.put("description", "Poruka: " + appTran.getNote());
@@ -210,12 +221,62 @@ public class ApplicationTransferService {
 				    		toRecipients.add(toOrg.getEmail());
 				    }
 				    	
-				    mailService.SendMail("", toRecipients,"Predmet kretanje", emailContent, "", env);
+				    mailService.SendMail("", toRecipients,"Predmet kretanje: " + app.getDescription(), emailContent, "", env);
 				 }
-				 catch(Exception ex) {}
+				 catch(Exception ex) {	 
+						logger.error(ex.getMessage());
+						logger.error(ex.getStackTrace().toString());
+				 }
 				 
 			
 		}
+		 
+		return appTran;
+	}
+
+
+	public ApplicationTransfer addWatchersToApplication(List<CustomEmail> emails, long id) {
+		
+		ApplicationTransfer appTran = db.ApplicationTransfer().findOne(id);
+		
+		 if (appTran == null)
+			 throw new CapNotFoundException("Application transfer with id=" + id + " was not found");
+		 
+		 Application app = appTran.getApplication();
+		 
+		 try {
+				User fromUser = db.User().findOne((long)appTran.getFromUser());
+				User toUser = appTran.getToUser() == null ? null : db.User().findOne((long)appTran.getToUser());
+				Organization fromOrg = db.Orgnaization().findOne((long)appTran.getFromOrg());
+				Organization toOrg = db.Orgnaization().findOne((long)appTran.getToOrg());
+				
+				HashMap<String, String> emailTemplateModel = new HashMap<>();
+				emailTemplateModel.put("clientName", "Prosledjivanje aplikacije: Sa " + fromUser.getName() + " [" + fromOrg.getName() +"], na " + ( toUser == null ? "" : toUser.getName() ) + " [" + toOrg.getName() +"]" );
+				emailTemplateModel.put("placementType", "Aplikacija: " + app.getCode() + ", " + app.getDescription());
+				emailTemplateModel.put("status", "Status: REJECTED");
+				emailTemplateModel.put("description", "Poruka: " + appTran.getNote());
+				emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/loan-requests/details/" + app.getId() );
+				emailTemplateModel.put("headerText", "Korisnik " + fromUser.getName() + " Vas obavještava da je izvršeno kretanje aplikacije na " +toOrg.getName());
+				emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
+				emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
+				
+			    String emailContent = EmailTemplateHelper.processEmailTemplate("task-template.html", emailTemplateModel);
+			    
+			    List<String> toRecipients = new ArrayList<String>();
+			    
+			    for(CustomEmail em : emails  )
+			    {
+			    	toRecipients.add(em.getEmail());
+			    }
+			    
+			    mailService.SendMail("", toRecipients,"Predmet kretanje:"  + app.getDescription(), emailContent, "", env);
+			 }
+			 catch(Exception ex) {
+				 logger.error("Greška kod slanja maila - Kretanje Aplikacije - dodatni korisnici - id: " + id);
+				 logger.error(ex.getMessage());
+					logger.error(ex.getStackTrace().toString());
+			 }
+		
 		 
 		return appTran;
 	}

@@ -95,7 +95,7 @@ public class PlacementTransferService {
 		emailTemplateModel.put("placementType", "Plasman: " + plac.getPlacementtype().getName() + ", " + plac.getClientName());
 		emailTemplateModel.put("status", "Status: " +  plac.getPlacementstatus().getName());
 		emailTemplateModel.put("description", "Komentar: " + placementTransfer.getUserComment());
-		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/loan-requests/placement/" + plac.getId() );
+		emailTemplateModel.put("link", env.getProperty("app.domain")+ "/#/loan-requests/placement/" + plac.getId() + "/-" );
 		emailTemplateModel.put("headerText", "Zadatak od: " + fromUser.getName() );
 		emailTemplateModel.put("poruka-uvod", "Ova poruka Vam je poslana jer ste učesnik u poslovnom procesu odobravanja kredita. U poruci su sadržane sve bitne informacije te postoji veza do programskog rješenje gdje možete izvršiti dalje radnje." );
 		emailTemplateModel.put("poruka-footer", "Marija Bursać 7");
@@ -114,7 +114,7 @@ public class PlacementTransferService {
 	    	
 	    
 	    if (sendMail)
-	    mailService.SendMail("", toRecipients,"Predmet kretanje", emailContent, "", env);
+	    mailService.SendMail("", toRecipients,"plasman kretanje", emailContent, "", env);
 		
 		return placementTransfer;
 		

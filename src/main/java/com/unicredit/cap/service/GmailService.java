@@ -1,8 +1,10 @@
 package com.unicredit.cap.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -41,14 +43,15 @@ public class GmailService implements IMailService {
 		  });
 
 		try {
-
+			
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("team4nucleus@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse("gogom.markovic@gmail.com"));
-			message.setSubject("Testing Subject");
-			message.setText("Dear Mail Crawler,"
-				+ "\n\n No spam to my email, please!");		
+					 to.toArray(new InternetAddress[to.size()])
+			//	InternetAddress.parse("gogom.markovic@gmail.com")
+				);
+			message.setSubject(subject);
+			message.setText(text);		
 			Transport.send(message);
 					
 		return true;

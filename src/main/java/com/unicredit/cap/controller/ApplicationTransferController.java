@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.unicredit.cap.busineslogic.ApplicationTransferService;
+import com.unicredit.cap.helper.CustomEmail;
 import com.unicredit.cap.model.Application;
 import com.unicredit.cap.model.ApplicationTransfer;
 
@@ -47,5 +48,9 @@ public class ApplicationTransferController {
 	        return service.updateApplicationTransferStatus(status, id);
 	    }
 	 
+	 @PostMapping(value = "/{id}/additionalNotice")
+	    public ApplicationTransfer addWatchersToApplication(@RequestBody final List<CustomEmail> emails, @PathVariable final long id) {
+	        return service.addWatchersToApplication(emails, id);
+	    }
 	 
 }

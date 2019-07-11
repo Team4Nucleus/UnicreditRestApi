@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.unicredit.cap.busineslogic.PlacementService;
 import com.unicredit.cap.helper.TimeConsumeWrapper;
+import com.unicredit.cap.helper.ViewProfile;
 import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.model.PlacementTimeConsument;
 
@@ -27,7 +28,7 @@ public class PlacementController {
 	 @Autowired
 	 private PlacementService service;
 	 
-	 @JsonView(Placement.class)
+	 @JsonView(ViewProfile.Placement.class)
 	 @GetMapping(value = "/all")
 	    public List<Placement> findAll() {
 	        return service.getAllPlacements();

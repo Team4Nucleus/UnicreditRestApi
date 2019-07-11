@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.unicredit.cap.helper.ViewProfile;
 
 @Entity
 @Table(name="PLACEMENTTYPECATEGORY")
@@ -23,15 +24,15 @@ public class PlacementTypeCategory {
 	    @Id
 	    @GeneratedValue(strategy = GenerationType.AUTO)
 	    @Column(name = "ID")
-	    @JsonView(Placement.class)
+	    @JsonView(ViewProfile.Placement.class)
 		private long id;
 	    
 	    @Column(name = "CODE")
-	    @JsonView(Placement.class)
+	    @JsonView(ViewProfile.Placement.class)
 		private String code;
 	    
 		@Column(name = "NAME")
-	    @JsonView(Placement.class)
+	    @JsonView(ViewProfile.Placement.class)
 		private String name;
 		
 	    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL)

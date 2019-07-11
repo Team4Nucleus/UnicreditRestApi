@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 
 import com.unicredit.cap.exception.CapNotFoundException;
+import com.unicredit.cap.helper.ApplicationWithPlacements;
 import com.unicredit.cap.helper.EmailTemplateHelper;
 import com.unicredit.cap.helper.TimeConsumeWrapper;
 import com.unicredit.cap.model.Application;
@@ -102,7 +103,7 @@ public class ApplicationService {
 	    
 	    toRecipients.add(u.getEmail());
 	   
-	    mailService.SendMail("", toRecipients,"Predmet kretanje", emailContent, "", env);
+	    mailService.SendMail("", toRecipients,"Predmet kretanje: " + app.getDescription(), emailContent, "", env);
 		//******************************//
 		} catch(Exception ex) {
 			
@@ -226,6 +227,23 @@ public class ApplicationService {
 		}
 		
 		return result;
+		
+	}
+	
+	
+	public List<ApplicationWithPlacements> getAllApplicationsWithPlacements(){
+		
+		List<ApplicationWithPlacements> list = new ArrayList<ApplicationWithPlacements>();
+		List<Application> apps = db.Application().findAll();
+		
+		for(Application app : apps) {
+			
+			ApplicationWithPlacements awp = new ApplicationWithPlacements();
+			awp.setApplication(app);
+			awp.setPlacements(app.getPlacements());
+		}
+		
+		return list;
 		
 	}
 }

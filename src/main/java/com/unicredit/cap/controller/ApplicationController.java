@@ -27,7 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.unicredit.cap.busineslogic.ApplicationService;
 import com.unicredit.cap.busineslogic.PlacementService;
+import com.unicredit.cap.helper.ApplicationWithPlacements;
 import com.unicredit.cap.helper.TimeConsumeWrapper;
+import com.unicredit.cap.helper.ViewProfile;
 import com.unicredit.cap.model.Application;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.IMailService;
@@ -44,14 +46,20 @@ public class ApplicationController {
 	 @Autowired 
 	 private PlacementService PlacementBusinesLogic;
 	 
-	 @JsonView(Application.class)
+	 @JsonView(ViewProfile.Application.class)
 	 @GetMapping(value = "/all")
-	 @PreAuthorize("hasRole('ROLE_RM')")
+//	 @PreAuthorize("hasRole('ROLE_RM')")
 	    public List<Application> findAll() {
 	        return service.getAllApplications();
 	    }
 
-	 @JsonView(Application.class)
+	 
+	 @GetMapping(value = "/allapplications")
+	    public List<ApplicationWithPlacements> findAllwithPlacements() {
+	        return service.getAllApplicationsWithPlacements();
+	    }
+	 
+	 @JsonView(ViewProfile.Application.class)
 	 @GetMapping(value = "/allapp")
 	    public List<Application> findAllApp() {
 		 
@@ -63,8 +71,8 @@ public class ApplicationController {
 	    }
 	 
 	 
-	 @JsonView(Application.class)
-	 @Secured("ROLE_RM")
+	 @JsonView(ViewProfile.Application.class)
+//	 @Secured("ROLE_RM")
 	 @GetMapping(value = "/user/{id}")
 	    public List<Application> findByUser(@PathVariable final int id) {
 	        return  service.getApplicationsByUser(id);

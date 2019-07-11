@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.unicredit.cap.helper.ViewProfile;
 
 
 @Entity
@@ -19,23 +20,23 @@ public class PlacementType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
 	private long id;
     
     @Column(name = "CODE")
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
 	private String code;
     
     @Column(name = "NAME")
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
 	private String name;
     
     @Column(name = "ACTIVE")
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
 	private int active;
 
     @Column(name = "CATEGORY")
-    @JsonView(Placement.class)
+    @JsonView(ViewProfile.Placement.class)
     private Long category;
     
     
