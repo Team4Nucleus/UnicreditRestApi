@@ -85,11 +85,6 @@ public class ApplicationController {
 	    }
 
 	 
-	 @GetMapping(value = "/test/{id}")
-	 public Application findById1(@PathVariable final long id){
-		String a = PlacementBusinesLogic.Test(id);
-	    return service.getApplicationById(id);								
-	    }
 	 
 	 @PostMapping(value = "/create")
 	    public Application createApplication(@RequestBody final Application application) {	       

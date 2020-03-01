@@ -69,4 +69,22 @@ public class PlacementController {
 	        return service.setPlacementCurrentUser(id, user);    
 	    }
 	 
+	 
+	 @GetMapping(value = "/{id}/opinionAndDecision/{OKR}/{NBCO}/{decision}")
+	 public Placement opinionAndDecision(@PathVariable final Long id, @PathVariable final String OKR, @PathVariable final String NBCO, 
+			 @PathVariable final String decision)
+	 {
+		Placement placement = service.SetOpinionAndDecision(id, OKR, NBCO, decision);
+		return placement;		 
+	 }
+	 
+	 
+	 @GetMapping(value = "/{id}/setApprovedAmount/{amount}")
+	 public Placement SetApprovedAmount(@PathVariable final Long id, @PathVariable final Double amount )
+	 {
+		Placement placement = service.SetApprovedAmount(id, amount);
+		return placement;		 
+	 }
+	 	 
+	 
 }

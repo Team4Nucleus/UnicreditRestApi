@@ -61,6 +61,10 @@ public class Application  {
 	private Long currentOrg;
 	
 	@JsonView(ViewProfile.Application.class)
+    @Column(name = "COMPETENCYHOLDER")
+	private Long competencyHolder;
+	
+	@JsonView(ViewProfile.Application.class)
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "application", cascade = CascadeType.ALL)
     private List<Placement> placements = new ArrayList<Placement>();
     
@@ -73,7 +77,11 @@ public class Application  {
     @JoinColumn(name = "CREATE_USER", insertable=false, updatable=false)
 	private User createUserDetails;
   
-    
+	@JsonView(ViewProfile.Application.class)
+    @ManyToOne
+    @JoinColumn(name = "COMPETENCYHOLDER", insertable=false, updatable=false)
+	private CompetencyHolder competencyHolderDetails;
+	
     
 	public Long getCurrentUser() {
 		return currentUser;
@@ -182,6 +190,26 @@ public class Application  {
 
 	public void setDocuments(List<Document> documents) {
 		this.documents = documents;
+	}
+
+
+	public Long getCompetencyHolder() {
+		return competencyHolder;
+	}
+
+
+	public void setCompetencyHolder(Long competencyHolder) {
+		this.competencyHolder = competencyHolder;
+	}
+
+
+	public CompetencyHolder getCompetencyHolderDetails() {
+		return competencyHolderDetails;
+	}
+
+
+	public void setCompetencyHolderDetails(CompetencyHolder competencyHolderDetails) {
+		this.competencyHolderDetails = competencyHolderDetails;
 	}
 	
 

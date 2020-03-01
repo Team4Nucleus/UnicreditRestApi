@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
+import org.hibernate.hql.internal.ast.tree.IsNullLogicOperatorNode;
 import org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -178,9 +179,9 @@ public class PlacementService {
 	        plac.setClientEmail(placement.getClientEmail());
 	        plac.setClientJib(placement.getClientJib());
 	        plac.setClientName(placement.getClientName());
-	        plac.setClientPersonalDoc(placement.getClientName());
+	        plac.setClientPersonalDoc(placement.getClientPersonalDoc());
 	        plac.setClientPhone(placement.getClientPhone());
-	        plac.setClosingDate(placement.getClosingDate());
+	     //   plac.setClosingDate(placement.getClosingDate());
 	        plac.setCreateUser(placement.getCreateUser());
 	     //   plac.setCreatingOrg(placement.getCreatingOrg());
 	     //   plac.setCretaingDate(placement.getCretaingDate());
@@ -198,21 +199,15 @@ public class PlacementService {
 	        plac.setCurrency(placement.getCurrency());
 	        plac.setAmountInBam(placement.getAmountInBam());
 	        plac.setSocialRisk(placement.getSocialRisk());
+	        
+	        plac.setAmountInBamApproved(placement.getAmountInBamApproved() );
+	      //  plac.setDecision(placement.getDecision());
+	      //  plac.setOpinionOKR(placement.getOpinionOKR());
+	     //   plac.setOpinionNBCO(placement.getOpinionNBCO());
+	        
 	        db.Placement().save(plac);
 		
 	        return plac;
-	}
-	
-	public String Test(long x)  {
-		
-	
-
-		long a = 2 / (x-1);
-		
-		return "";
-		
-		
-		
 	}
 	
 	
@@ -244,10 +239,65 @@ public class PlacementService {
 		Placement placement = plac;
 		
 		placement.setStatus(IdStatus);
+		
+		placement.setClosingDate(new Date());
 		db.Placement().save(placement);
 		
 		return placement;
 		
+	}
+	
+	
+	public Placement SetApprovedAmount(Long id, Double amount)
+	{
+		Placement plac = db.Placement().findOne(id);
+		
+		if (plac == null)
+			throw new CapNotFoundException("Placement with id=" + id + " was not found");    
+		
+		Placement placement = plac;
+		
+		placement.setAmountInBamApproved(amount);
+		db.Placement().save(placement);
+		
+		return placement;
+	}
+	
+	public Placement SetOpinionAndDecision(Long id, String opinionOKR, String opinionNBCO, String decision)
+	{
+		Placement plac = db.Placement().findOne(id);
+		
+		if (plac == null)
+			throw new CapNotFoundException("Placement with id=" + id + " was not found");    
+		
+		Placement placement = plac;
+		
+		if (!opinionOKR.equals("0"))
+		placement.setOpinionOKR(opinionOKR);
+		
+		if (opinionOKR.equals("NULL"))
+			placement.setOpinionOKR(null);
+		
+		if (!opinionNBCO.equals("0"))
+		placement.setOpinionNBCO(opinionNBCO);
+		
+		if (opinionNBCO.equals("NULL"))
+			placement.setOpinionNBCO(null);
+		
+		if (!decision.equals("0")) {
+		placement.setDecision(decision);
+		placement.setDecisionDate(new Date());
+		}
+		
+		if (decision.equals("NULL")) {
+			placement.setDecision(null);
+			placement.setDecisionDate(null);
+			}
+		
+		
+		db.Placement().save(placement);
+		
+		return placement;
 	}
 	
 }

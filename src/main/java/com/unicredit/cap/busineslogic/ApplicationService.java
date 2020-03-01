@@ -205,6 +205,7 @@ public class ApplicationService {
 	        App.setApplicationDate(application.getApplicationDate());
 	        App.setCode(application.getCode());
 	        App.setDescription(application.getDescription());
+	        App.setCompetencyHolder(application.getCompetencyHolder());
         
 	        db.Application().save(App);
 		

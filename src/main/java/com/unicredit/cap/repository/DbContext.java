@@ -42,6 +42,11 @@ public class DbContext {
 	private ApplicationTransferRepository applicationTransfer;
 	@Autowired
 	private PlacementTypeCategoryRepository placementTypeCategory;
+	@Autowired
+	private CompetencyHolderRepository competencyHolder;
+	
+	
+	
 	
 	public CurrencyRepository Currencies() {
 		return currencies;
@@ -135,5 +140,9 @@ public class DbContext {
 	}
 	
 	
+	public CompetencyHolderRepository CompetencyHolder()
+	{
+		return competencyHolder;	
+	}
 	
 }

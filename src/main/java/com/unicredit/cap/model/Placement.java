@@ -138,7 +138,27 @@ public class Placement {
     @Column(name = "SOCIALRISK")
     private String socialRisk;
     
-
+    
+    @JsonView(ViewProfile.Placement.class)
+    @Column(name = "AMOUNT_IN_BAM_APPROVED", columnDefinition = "NUMBER(30,5)")
+    private Double amountInBamApproved;
+    
+    @JsonView(ViewProfile.Placement.class)
+    @Column(name = "OPINION_OKR")
+    private String opinionOKR;
+    
+    @JsonView(ViewProfile.Placement.class)
+    @Column(name = "OPINION_NBCO")
+    private String opinionNBCO;
+    
+    @JsonView(ViewProfile.Placement.class)
+    @Column(name = "DECISION")
+    private String decision;
+    
+    @JsonView(ViewProfile.Placement.class)
+    @Column(name = "DECISION_DATE")
+	private Date decisionDate;
+    
 	@JsonView(ViewProfile.Placement.class)
     @ManyToOne
 	@JoinColumn(name = "status", insertable=false, updatable=false)
@@ -470,6 +490,46 @@ public class Placement {
 
 	public void setSocialRisk(String socialRisk) {
 		this.socialRisk = socialRisk;
+	}
+
+	public Double getAmountInBamApproved() {
+		return amountInBamApproved;
+	}
+
+	public void setAmountInBamApproved(Double amountInBamApproved) {
+		this.amountInBamApproved = amountInBamApproved;
+	}
+
+	public String getOpinionOKR() {
+		return opinionOKR;
+	}
+
+	public void setOpinionOKR(String opinionOKR) {
+		this.opinionOKR = opinionOKR;
+	}
+
+	public String getOpinionNBCO() {
+		return opinionNBCO;
+	}
+
+	public void setOpinionNBCO(String opinionNBCO) {
+		this.opinionNBCO = opinionNBCO;
+	}
+
+	public String getDecision() {
+		return decision;
+	}
+
+	public void setDecision(String decision) {
+		this.decision = decision;
+	}
+
+	public Date getDecisionDate() {
+		return decisionDate;
+	}
+
+	public void setDecisionDate(Date decisionDate) {
+		this.decisionDate = decisionDate;
 	}
 
 
