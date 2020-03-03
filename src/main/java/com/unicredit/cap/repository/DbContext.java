@@ -44,9 +44,14 @@ public class DbContext {
 	private PlacementTypeCategoryRepository placementTypeCategory;
 	@Autowired
 	private CompetencyHolderRepository competencyHolder;
-	
-	
-	
+	@Autowired
+	private Report1Repository report1;
+	@Autowired
+	private Report2Repository report2;
+	@Autowired
+	private Report21Repository report21;
+	@Autowired
+	private Report3Repository report3;
 	
 	public CurrencyRepository Currencies() {
 		return currencies;
@@ -145,4 +150,23 @@ public class DbContext {
 		return competencyHolder;	
 	}
 	
+	public Report1Repository Report1()
+	{
+		return report1;	
+	}
+	
+	public Report2Repository Report2()
+	{
+		return report2;	
+	}
+	
+	public Report21Repository Report21()
+	{
+		return report21;	
+	}
+	
+	public Report3Repository Report3()
+	{
+		return report3;	
+	}
 }

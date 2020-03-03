@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -14,11 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.metamodel.Metamodel;
 
 import com.unicredit.cap.exception.CapNotFoundException;
 import com.unicredit.cap.helper.ApplicationWithPlacements;
 import com.unicredit.cap.helper.EmailTemplateHelper;
+import com.unicredit.cap.helper.Report1;
+import com.unicredit.cap.helper.Report2;
+import com.unicredit.cap.helper.Report21;
+import com.unicredit.cap.helper.Report3;
 import com.unicredit.cap.helper.TimeConsumeWrapper;
 import com.unicredit.cap.model.Application;
 import com.unicredit.cap.model.Document;
@@ -43,6 +50,7 @@ public class ApplicationService {
 	
 	@Autowired
 	private Environment env;
+	
 	
 	public Application getApplicationById(long id){
 		
@@ -246,5 +254,21 @@ public class ApplicationService {
 		
 		return list;
 		
+	}
+	
+	public List<Report1> getReport1(Date dateFrom, Date dateTo ){	
+		return db.Report1().getReport1(dateFrom, dateTo,dateFrom, dateTo,dateFrom, dateTo );			
+	}
+	
+	public List<Report2> getReport2(Date dateFrom, Date dateTo ){	
+		return db.Report2().getReport2(dateFrom, dateTo,dateFrom, dateTo,dateFrom, dateTo );			
+	}
+	
+	public List<Report21> getReport21(Date dateFrom, Date dateTo ){	
+		return db.Report21().getReport21(dateFrom, dateTo,dateFrom, dateTo );			
+	}
+	
+	public List<Report3> getReport3(Date dateFrom, Date dateTo ){	
+		return db.Report3().getReport3(dateFrom, dateTo );			
 	}
 }

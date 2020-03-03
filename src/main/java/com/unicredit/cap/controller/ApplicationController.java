@@ -2,9 +2,11 @@ package com.unicredit.cap.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,9 +30,15 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.unicredit.cap.busineslogic.ApplicationService;
 import com.unicredit.cap.busineslogic.PlacementService;
 import com.unicredit.cap.helper.ApplicationWithPlacements;
+import com.unicredit.cap.helper.Report1;
+import com.unicredit.cap.helper.Report2;
+import com.unicredit.cap.helper.Report21;
+import com.unicredit.cap.helper.Report3;
 import com.unicredit.cap.helper.TimeConsumeWrapper;
 import com.unicredit.cap.helper.ViewProfile;
 import com.unicredit.cap.model.Application;
+import com.unicredit.cap.repository.DbContext;
+import com.unicredit.cap.repository.Report1Repository;
 import com.unicredit.cap.service.ExchangeMailService;
 import com.unicredit.cap.service.IMailService;
 
@@ -42,6 +50,7 @@ public class ApplicationController {
 	 
 	 @Autowired 
 	 private ApplicationService service;
+	 
 	 
 	 @Autowired 
 	 private PlacementService PlacementBusinesLogic;
@@ -123,5 +132,51 @@ public class ApplicationController {
 	    }
 	 
 	 
+	 @GetMapping(value = "/report1/{DateFromS}/{DateToS}")
+	 public List<Report1> getReport1(@PathVariable final Long DateFromS, @PathVariable final Long DateToS ){
+		
+		 ///{DateFrom}/{DateTo}
+		 //@PathVariable final Long DateFromS, @PathVariable final Long DateToS
+		 
+	//	 Logger logger = Logger.getLogger(PlacementService.class);
+		 
+		Date DateFrom = new Date(DateFromS);
+		Date DateTo = new Date(DateToS);
+		
+	//	logger.error(DateFrom.toString() + " " + DateTo.toString());
+		
+	    return service.getReport1(DateFrom, DateTo);
+	    
+	    }
+	 
+
+	 @GetMapping(value = "/report2/{DateFromS}/{DateToS}")
+	 public List<Report2> getReport2(@PathVariable final Long DateFromS, @PathVariable final Long DateToS ){
+		
+		Date DateFrom = new Date(DateFromS);
+		Date DateTo = new Date(DateToS);
 	
+	    return service.getReport2(DateFrom, DateTo);
+	    
+	    }
+	 
+	 @GetMapping(value = "/report21/{DateFromS}/{DateToS}")
+	 public List<Report21> getReport21(@PathVariable final Long DateFromS, @PathVariable final Long DateToS ){
+		
+		Date DateFrom = new Date(DateFromS);
+		Date DateTo = new Date(DateToS);
+	
+	    return service.getReport21(DateFrom, DateTo);
+	    
+	    }
+	 
+	 @GetMapping(value = "/report3/{DateFromS}/{DateToS}")
+	 public List<Report3> getReport3(@PathVariable final Long DateFromS, @PathVariable final Long DateToS ){
+		
+		Date DateFrom = new Date(DateFromS);
+		Date DateTo = new Date(DateToS);
+	
+	    return service.getReport3(DateFrom, DateTo);
+	    
+	    }
 }
