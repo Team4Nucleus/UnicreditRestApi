@@ -11,6 +11,9 @@ public class Report3 {
 
 	
 	 @Id
+	 @Column(name = "ID", columnDefinition = "NUMBER(38)")
+	 public Integer Id;
+	 
 	 @Column(name = "CODEPARENT", length = 3, columnDefinition = "char")
 	public String orgJedinica;
 
@@ -52,7 +55,7 @@ public class Report3 {
 		 public Date poslednjekretanjeUrisk;
 		
 		 @Column(name = "BROJITERACIJA")
-		 public int brojIteracija;
+		 public Integer brojIteracija;
 		
 		 @Column(name = "OPINION_OKR")
 		 public String opinionOkr;

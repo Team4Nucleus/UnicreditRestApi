@@ -8,13 +8,18 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.hibernate.hql.internal.ast.tree.IsNullLogicOperatorNode;
 import org.hibernate.loader.plan.build.internal.returns.EntityAttributeFetchImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.unicredit.cap.exception.CapNotFoundException;
@@ -44,6 +49,9 @@ public class PlacementService {
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private JwtService jwtService;
 	
 	public Placement getPlacementById(long id){
 		
@@ -271,18 +279,40 @@ public class PlacementService {
 			throw new CapNotFoundException("Placement with id=" + id + " was not found");    
 		
 		Placement placement = plac;
+		User u = null;
 		
-		if (!opinionOKR.equals("0"))
+		try {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		String jwtToken = request.getHeader("Authorization");
+		String uname = jwtService.verifyToken(jwtToken);
+		
+		u = db.User().findByUsername(uname);
+		}
+		catch(Exception ex) {}
+		
+		if (u == null)
+			throw new CapNotFoundException("User couldn't be recognized from token");
+		
+		
+		if (!opinionOKR.equals("0")) {
 		placement.setOpinionOKR(opinionOKR);
+		placement.setOpinionOKRUser( u.getId());
+		}
 		
-		if (opinionOKR.equals("NULL"))
+		if (opinionOKR.equals("NULL")) {
 			placement.setOpinionOKR(null);
+			placement.setOpinionOKRUser(null);
+		}
 		
-		if (!opinionNBCO.equals("0"))
+		if (!opinionNBCO.equals("0")) {
 		placement.setOpinionNBCO(opinionNBCO);
+		placement.setOpinionNBCOUser( u.getId());
+		}
 		
-		if (opinionNBCO.equals("NULL"))
+		if (opinionNBCO.equals("NULL")) {
 			placement.setOpinionNBCO(null);
+			placement.setOpinionNBCOUser(null);
+		}
 		
 		if (!decision.equals("0")) {
 		placement.setDecision(decision);
@@ -293,6 +323,8 @@ public class PlacementService {
 			placement.setDecision(null);
 			placement.setDecisionDate(null);
 			}
+		
+		
 		
 		
 		db.Placement().save(placement);

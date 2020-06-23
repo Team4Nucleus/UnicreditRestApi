@@ -1,8 +1,16 @@
 package com.unicredit.cap.controller;
 
+import java.io.IOException;
+import java.security.Principal;
+import org.apache.commons.codec.binary.Base64;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,13 +18,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unicredit.cap.busineslogic.PlacementService;
 import com.unicredit.cap.helper.TimeConsumeWrapper;
 import com.unicredit.cap.helper.ViewProfile;
 import com.unicredit.cap.model.Placement;
 import com.unicredit.cap.model.PlacementTimeConsument;
+
+import io.jsonwebtoken.Claims;
 
 
 
@@ -86,5 +101,43 @@ public class PlacementController {
 		return placement;		 
 	 }
 	 	 
+	 
+	 @GetMapping(value = "/user")
+	 public String GetUser()
+	 {
+		 
+		 HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		    String jwtToken = request.getHeader("Authorization");
+		    
+		    String[] split_string = jwtToken.split("\\.");
+	        String base64EncodedHeader = split_string[0];
+	        String base64EncodedBody = split_string[1];
+	        String base64EncodedSignature = split_string[2];
+
+
+	        Base64 base64Url = new Base64(true);
+	        String header = new String(base64Url.decode(base64EncodedHeader));
+	        String body = new String(base64Url.decode(base64EncodedBody));
+	        
+	        try {
+	        	ObjectMapper mapper = new ObjectMapper();
+	        
+				JsonNode rootNode = mapper.readTree(body);
+				
+				return rootNode.get("sub").asText();
+				
+				
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        
+	        return "";
+			
+	 }
+		
 	 
 }

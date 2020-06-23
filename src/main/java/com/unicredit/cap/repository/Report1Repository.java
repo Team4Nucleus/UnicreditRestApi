@@ -57,13 +57,22 @@ public interface Report1Repository extends JpaRepository<Report1, String>{
 	  "    Select d1.APPLICATION, d1.ORG, d1.DATEFROM, d1.ST, d1.STATUS, d2.DATEFROM as DATETO, CALCULATE_TIME(d1.DATEFROM,d2.DATEFROM ) as TIME from DATA_1 d1   " +
 	  "    join DATA_1 d2 on d1.APPLICATION = d2.APPLICATION and  d1.RB = d2.RB - 1                                                                               " +
 	  "    ),                                                                                                                                                     " +
+	 
+	  " DATA_4 as ( "+
+	  "   Select APPLICATION, ORG, STATUS, SUM(TIME) as TIME, count(*) as iter " +
+	  "   from DATA_2 " +
+	  "	   group by APPLICATION, ORG, STATUS " +
+	  "	   order by APPLICATION " +
+	  "	   ), " +
+	  
+	  
 	  " DATA_3 as (                                                                                                                                               " +
 	  "    Select ORG,                                                                                                                                            " +
-	  "    SUM ( CASE WHEN ST='APP_INIT' THEN 1 else 0 end ) as BrojZapocetih,                                                                                    " +
-	  "    COUNT(*) as BrojIteracija,                                                                                                                             " +
-	  "    SUM ( CASE WHEN STATUS='CLOSED' AND ST='APP_INIT' THEN 1 else 0 end ) as BrojZavrsenih,                                                                " +
+	  "    count(*) as BrojZapocetih,                                                                                   " +
+	  "    COUNT( iter ) as BrojIteracija,                                                                                                                             " +
+	  "    SUM ( CASE WHEN STATUS='CLOSED' THEN 1 else 0 end ) as BrojZavrsenih,                                                                " +
 	  "    SUM ( CASE WHEN STATUS='CLOSED' THEN TIME ELSE 0 END) as UkupnoVrijemeZavrsenih                                                                        " +
-	  "    from DATA_2                                                                                                                                            " +
+	  "    from DATA_4                                                                                                                                            " +
 	  "    group by ORG                                                                                                                                           " +
 	  "    )                                                                                                                                                      " +
 	  "    Select o.NAME as ORG, BrojZapocetih as BROJZAPOCETIH, BrojIteracija as BROJITERACIJA, BrojZavrsenih as BROJZAVRSENIH,                                                                                     " +

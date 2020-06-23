@@ -152,6 +152,15 @@ public class Placement {
     private String opinionNBCO;
     
     @JsonView(ViewProfile.Placement.class)
+    @Column(name = "OPINION_OKR_USER")
+    private Long opinionOKRUser;
+    
+    @JsonView(ViewProfile.Placement.class)
+    @Column(name = "OPINION_NBCO_USER")
+    private Long opinionNBCOUser;
+     
+    
+    @JsonView(ViewProfile.Placement.class)
     @Column(name = "DECISION")
     private String decision;
     
@@ -208,6 +217,17 @@ public class Placement {
 	@JoinColumn(name ="CURRENT_USER", insertable=false, updatable=false)
     private User currentUserDetails;
     
+    
+    
+	@JsonView(ViewProfile.Placement.class)
+    @ManyToOne
+	@JoinColumn(name ="OPINION_OKR_USER", insertable=false, updatable=false)
+    private User OKRUserDetails;
+    
+    @JsonView(ViewProfile.Placement.class)
+    @ManyToOne
+	@JoinColumn(name ="OPINION_NBCO_USER", insertable=false, updatable=false)
+    private User NBCOUserDetails;
     
     public String getCurrency() {
   		return currency;
@@ -530,6 +550,38 @@ public class Placement {
 
 	public void setDecisionDate(Date decisionDate) {
 		this.decisionDate = decisionDate;
+	}
+
+	public Long getOpinionOKRUser() {
+		return opinionOKRUser;
+	}
+
+	public void setOpinionOKRUser(Long opinionOKRUser) {
+		this.opinionOKRUser = opinionOKRUser;
+	}
+
+	public Long getOpinionNBCOUser() {
+		return opinionNBCOUser;
+	}
+
+	public void setOpinionNBCOUser(Long opinionNBCOUser) {
+		this.opinionNBCOUser = opinionNBCOUser;
+	}
+
+	public User getOKRUserDetails() {
+		return OKRUserDetails;
+	}
+
+	public void setOKRUserDetails(User oKRUserDetails) {
+		OKRUserDetails = oKRUserDetails;
+	}
+
+	public User getNBCOUserDetails() {
+		return NBCOUserDetails;
+	}
+
+	public void setNBCOUserDetails(User nBCOUserDetails) {
+		NBCOUserDetails = nBCOUserDetails;
 	}
 
 

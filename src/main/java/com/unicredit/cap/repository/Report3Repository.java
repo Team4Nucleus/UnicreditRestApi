@@ -53,7 +53,7 @@ public interface Report3Repository extends JpaRepository<Report3, String>{
 						" ),                                                                                                                    " + 
 						" TIMEOKR as                                                                                                            " + 
 						" (                                                                                                                     " + 
-						" Select PLACEMENT, SUM (CALCULATE_TIME(DATE_FROM, DATE_TO)) as VRIJEME from PLACEMENTTRANSFER v                        " + 
+						" Select PLACEMENT, SUM (CALCULATE_TIME(DATE_FROM, NVL(DATE_TO, sysdate ))) as VRIJEME from PLACEMENTTRANSFER v                        " + 
 						" join HRORGANIZATION org on org.ID = v.TO_ORG                                                                          " + 
 						" WHERE org.CODE = 'RI'                                                                                                 " + 
 						" group by PLACEMENT                                                                                                    " + 
@@ -66,7 +66,7 @@ public interface Report3Repository extends JpaRepository<Report3, String>{
 						" join HRORGANIZATION org on org.ID = pt.TO_ORG                                                                         " + 
 						" group by PLACEMENT                                                                                                    " + 
 						" )                                                                                                                     " + 
-						" Select                                                                                                                " + 
+						" Select   p.ID,                                                                                                              " + 
 						" cs.CODEPARENT ,                                                                                                       " + 
 						" p.CLIENT_NAME,                                                                                                        " + 
 						" p.CLIENT_CORE_NO,                                                                                                     " + 
@@ -90,7 +90,7 @@ public interface Report3Repository extends JpaRepository<Report3, String>{
 						" p.OPINION_NBCO,                                                                                                       " + 
 						" trNBCO1.MAXDATE as ODLUKANBCO,                                                                                        " + 
 						" time.VRIJEME                                                                                                          " + 
-						" from PLACEMENT p                                                                                                      " + 
+						" from PLACEMENT p                                                                                                    " + 
 						" join APPLICATION a on a.ID = p.APPLICATION                                                                            " + 
 						" LEFT JOIN COMPETENCYHOLDER ch on ch.ID = a.COMPETENCYHOLDER                                                           " + 
 						" join HRORGANIZATION org on org.ID = p.CREATING_ORG                                                                    " + 

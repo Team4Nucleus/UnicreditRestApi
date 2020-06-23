@@ -176,6 +176,9 @@ public class ApplicationController {
 		Date DateFrom = new Date(DateFromS);
 		Date DateTo = new Date(DateToS);
 	
+		Logger logger = Logger.getLogger(PlacementService.class);
+		logger.error("datum:" + DateFrom.toString() + " " + DateTo.toString() );
+		
 	    return service.getReport3(DateFrom, DateTo);
 	    
 	    }
