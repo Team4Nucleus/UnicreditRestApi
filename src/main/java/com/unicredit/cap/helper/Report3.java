@@ -45,6 +45,9 @@ public class Report3 {
 		 @Column(name = "RM")
 		 public String rm;
 		
+		 @Column(name = "RISKUSER")
+		 public String riskuser; 
+		 
 		 @Column(name = "PRVIPUTURISK")
 		 public Date prviUpitPremaRisk;
 		

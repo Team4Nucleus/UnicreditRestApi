@@ -37,8 +37,8 @@ public class CompetencyHolderService {
 	
 	public CompetencyHolder createNew(CompetencyHolder competencyHolder) {
 		
-		if (competencyHolder.getName().equals("") )
-		throw new CapNotFoundException("Please set the competency holder name");
+		if (competencyHolder.getName().equals("") || competencyHolder.getOrg().equals(""))
+		throw new CapNotFoundException("Please set the competency holder name and org");
 		
 		db.CompetencyHolder().save(competencyHolder);
 		return competencyHolder;
@@ -51,6 +51,7 @@ public class CompetencyHolderService {
 			throw new CapNotFoundException("Competency Holder with id=" + competencyHolder.getId() + " was not found");   
 		
 		ch.setName(competencyHolder.getName());
+		ch.setOrg(competencyHolder.getOrg());
 		
 		db.CompetencyHolder().save(ch);
 		return ch;

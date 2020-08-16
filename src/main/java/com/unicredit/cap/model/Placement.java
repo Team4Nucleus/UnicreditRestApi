@@ -159,6 +159,13 @@ public class Placement {
     @Column(name = "OPINION_NBCO_USER")
     private Long opinionNBCOUser;
      
+    @JsonView(ViewProfile.Placement.class)
+    @Column(name = "OPINION_OKR_DATE")
+    private Date opinionOKRDate;
+    
+    @JsonView(ViewProfile.Placement.class)
+    @Column(name = "OPINION_NBCO_DATE")
+    private Date opinionNBCODate;
     
     @JsonView(ViewProfile.Placement.class)
     @Column(name = "DECISION")
@@ -167,6 +174,8 @@ public class Placement {
     @JsonView(ViewProfile.Placement.class)
     @Column(name = "DECISION_DATE")
 	private Date decisionDate;
+    
+    
     
 	@JsonView(ViewProfile.Placement.class)
     @ManyToOne
@@ -582,6 +591,22 @@ public class Placement {
 
 	public void setNBCOUserDetails(User nBCOUserDetails) {
 		NBCOUserDetails = nBCOUserDetails;
+	}
+
+	public Date getOpinionOKRDate() {
+		return opinionOKRDate;
+	}
+
+	public void setOpinionOKRDate(Date opinionOKRDate) {
+		this.opinionOKRDate = opinionOKRDate;
+	}
+
+	public Date getOpinionNBCODate() {
+		return opinionNBCODate;
+	}
+
+	public void setOpinionNBCODate(Date opinionNBCODate) {
+		this.opinionNBCODate = opinionNBCODate;
 	}
 
 

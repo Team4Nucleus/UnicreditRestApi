@@ -25,6 +25,11 @@ public class CompetencyHolder {
     @JsonView(ViewProfile.Application.class)
 	private String name;
 
+    
+    @Column(name = "ORG")
+    @JsonView(ViewProfile.Application.class)
+	private String org;
+    
 	public Long getId() {
 		return id;
 	}
@@ -39,6 +44,14 @@ public class CompetencyHolder {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getOrg() {
+		return org;
+	}
+
+	public void setOrg(String org) {
+		this.org = org;
 	}
     
     

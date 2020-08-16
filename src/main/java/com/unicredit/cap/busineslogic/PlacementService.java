@@ -297,21 +297,25 @@ public class PlacementService {
 		if (!opinionOKR.equals("0")) {
 		placement.setOpinionOKR(opinionOKR);
 		placement.setOpinionOKRUser( u.getId());
+		placement.setOpinionOKRDate(new Date());
 		}
 		
 		if (opinionOKR.equals("NULL")) {
 			placement.setOpinionOKR(null);
 			placement.setOpinionOKRUser(null);
+			placement.setOpinionOKRDate(null);
 		}
 		
 		if (!opinionNBCO.equals("0")) {
 		placement.setOpinionNBCO(opinionNBCO);
 		placement.setOpinionNBCOUser( u.getId());
+		placement.setOpinionNBCODate(new Date());
 		}
 		
 		if (opinionNBCO.equals("NULL")) {
 			placement.setOpinionNBCO(null);
 			placement.setOpinionNBCOUser(null);
+			placement.setOpinionNBCODate(null);
 		}
 		
 		if (!decision.equals("0")) {
