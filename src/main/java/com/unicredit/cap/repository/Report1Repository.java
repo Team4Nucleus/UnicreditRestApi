@@ -18,93 +18,114 @@ public interface Report1Repository extends JpaRepository<Report1, String>{
 
 	
 		@Query(value = 
-				"     WITH APPINPROCESS as																																							" +
-						"    (                                                                                                                                                                              " +
-						"    Select DISTINCT APPLICATION FROM PLACEMENT WHERE STATUS NOT IN  (32,33)                                                                                                        " +
-						"    ),                                                                                                                                                                             " +
-						"    APPFINISHED AS                                                                                                                                                                 " +
-						"    (                                                                                                                                                                              " +
-						"    Select p.APPLICATION, MAX( p.CLOSING_DATE ) as DATEFROM FROM PLACEMENT p                                                                                                       " +
-						"    left join APPINPROCESS s on s.APPLICATION = p.APPLICATION                                                                                                                      " +
-						"    WHERE s.APPLICATION IS NULL                                                                                                                                                    " +
-						"    GROUP BY p.APPLICATION                                                                                                                                                         " +
-						"    ),                                                                                                                                                                             " +
-						"    PLAC_DEC_DATE as                                                                                                                                                               " +
-						"    (                                                                                                                                                                              " +
-						"    Select a.ID,                                                                                                                                                                   " +
-						"    MAX(CASE WHEN ch.ORG = 'RI' then plac.DECISION_DATE                                                                                                                            " +
-						"         WHEN ch.ORG = 'CO' then plac.OPINION_OKR_DATE                                                                                                                             " +
-						"          WHEN ch.ORG = 'CC' then plac.OPINION_NBCO_DATE                                                                                                                           " +
-						"    END ) as DAT                                                                                                                                                                   " +
-						"    from PLACEMENT plac                                                                                                                                                            " +
-						"    join APPLICATION a on a.ID = plac.APPLICATION                                                                                                                                  " +
-						"    left join COMPETENCYHOLDER ch on ch.ID = a.COMPETENCYHOLDER                                                                                                                    " +
-						"    group by a.ID                                                                                                                                                                  " +
-						"    ),                                                                                                                                                                             " +
-						"                                                                                                                                                                                   " +
-						"    DATA AS (                                                                                                                                                                      " +
-						"    Select a.ID as APPLICATION, u.HRORGANIZATION as ORG, CREATE_DATE as DATEFROM , 'APP_INIT' as ST FROM APPLICATION a                                                             " +
-						"    join HRUSER u on u.ID = a.CREATE_USER                                                                                                                                          " +
-						" WHERE a.CREATE_DATE BETWEEN ? AND ? + 1                                                                                                   " +
-							  
-						"                                                                                                                                                                                   " +
-						"                                                                                                                                                                                   " +
-						"    UNION ALL                                                                                                                                                                      " +
-						"                                                                                                                                                                                   " +
-						"    Select t.APPLICATION, t.TO_ORG as ORG, t.RESPOND_DATE as DATEFROM , 'APP_TRANSFER' as ST from APPLICATIONTRANSFER t                                                            " +
-						"    JOIN APPLICATION a on a.ID = t.APPLICATION                                                                                                                                     " +
-						"    LEFT JOIN PLAC_DEC_DATE d on d.ID = t.APPLICATION                                                                                                                              " +
-						"    WHERE t.STATUS = 'APPROVED' AND NVL(d.DAT, sysdate) > t.RESPOND_DATE  and a.CREATE_DATE BETWEEN ? AND ? + 1                                                                                                            " +
-						"                                                                                                                                                                                   " +
-						"                                                                                                                                                                                   " +
-						"    UNION ALL                                                                                                                                                                      " +
-						"                                                                                                                                                                                   " +
-						"    SELECT a1.ID as APPLICATION, a1.CURRENT_ORG as ORG, NVL(d.DAT, SYSDATE) as DATEFROM, 'APP_CLOSED' as ST FROM APPLICATION a1                                                    " +
-						"    LEFT JOIN PLAC_DEC_DATE d on d.ID = a1.ID                                                                                                                                      " +
-						"    LEFT JOIN APPFINISHED o on o.APPLICATION = a1.ID                                                                                                                               " +
-						" WHERE a1.CREATE_DATE BETWEEN ? AND ? + 1                                                                                                  " +
-						"                                                                                                                                                                                   " +
-						"    )                                                                                                                                                                              " +
-						"                                                                                                                                                                                   " +
-						"    ,                                                                                                                                                                              " +
-						"                                                                                                                                                                                   " +
-						"                                                                                                                                                                                   " +
-						"    DATA_1 as (                                                                                                                                                                    " +
-						"    Select d.APPLICATION, d.ORG, d.DATEFROM, d.ST, CASE WHEN f.APPLICATION is NULL then 'OPEN' ELSE 'CLOSED' END as STATUS,  ROW_NUMBER()                                          " +
-						"       OVER (PARTITION BY d.APPLICATION ORDER BY d.APPLICATION, d.DATEFROM) as RB                                                                                                  " +
-						"       FROM DATA d                                                                                                                                                                 " +
-						"       LEFT JOIN APPFINISHED f on f.APPLICATION = d.APPLICATION                                                                                                                    " +
-						"       ),                                                                                                                                                                          " +
-						"    DATA_2 as (                                                                                                                                                                    " +
-						"       Select d1.APPLICATION, d1.ORG, d1.DATEFROM, d1.ST, d1.STATUS, d2.DATEFROM as DATETO, CALCULATE_TIME(d1.DATEFROM,d2.DATEFROM ) as TIME from DATA_1 d1                        " +
-						"       join DATA_1 d2 on d1.APPLICATION = d2.APPLICATION and  d1.RB = d2.RB - 1                                                                                                    " +
-						"       )                                                                                                                                                                           " +
-						"       ,                                                                                                                                                                           " +
-						"                                                                                                                                                                                   " +
-						"    DATA_4 as (                                                                                                                                                                    " +
-						"       Select APPLICATION, ORG, STATUS, SUM(TIME) as TIME,  CEIL(COUNT(*) / 2 - 0.5) as iter                                                                                       " +
-						"       from DATA_2                                                                                                                                                                 " +
-						"       group by APPLICATION, ORG, STATUS                                                                                                                                           " +
-						"       order by APPLICATION                                                                                                                                                        " +
-						"       ),                                                                                                                                                                          " +
-						"                                                                                                                                                                                   " +
-						"    DATA_3 as (                                                                                                                                                                    " +
-						"       Select ORG,                                                                                                                                                                 " +
-						"       count ( * ) as BrojZapocetih,                                                                                                                                               " +
-						"       SUM ( iter ) as BrojIteracija,                                                                                                                                              " +
-						"       SUM ( CASE WHEN pd.DAT is null THEN 0 ELSE 1 end ) as BrojZavrsenih,                                                                                                        " +
-						"       SUM ( CASE WHEN pd.DAT is null THEN 0 ELSE TIME end) as UkupnoVrijemeZavrsenih                                                                                              " +
-						"       from DATA_4 d                                                                                                                                                               " +
-						"       join APPLICATION a on a.ID = d.APPLICATION                                                                                                                                  " +
-						"       join PLAC_DEC_DATE pd on pd.ID = a.ID                                                                                                                                       " +
-						"       group by ORG                                                                                                                                                                " +
-						"       )                                                                                                                                                                           " +
-						"       Select o.NAME as ORG, BrojZapocetih, BrojIteracija, BrojZavrsenih,                                                                                                          " +
-						"       CASE WHEN BrojZavrsenih = 0 then 0 else  UkupnoVrijemeZavrsenih / BrojZavrsenih end as ProsjecnoVrijemeZavrsenih                                                            " +
-						"       from DATA_3 d                                                                                                                                                               " +
-						"    join HRORGANIZATION o on o.ID = d.ORG",  nativeQuery = true)
+				"				     WITH  PRODAJA AS																																				"+																															
+						"						   (                                                                                                                                                        "+
+						"						   Select 'PCZD' as CODE, 'CIB' as CODEPARENT from dual                                                                                                     "+
+						"						   UNION                                                                                                                                                    "+
+						"                           Select 'PCZ' as CODE, 'CIB' as CODEPARENT from dual                                                                                                     "+
+						"						   UNION                                                                                                                                                    "+
+						"						   Select 'PCID' as CODE, 'CIB' as CODEPARENT from dual                                                                                                     "+
+						"						   UNION                                                                                                                                                    "+
+						"						   Select 'PCI' as CODE, 'CIB' as CODEPARENT from dual                                                                                                      "+
+						"						   UNION                                                                                                                                                    "+
+						"						   Select 'PCIK' as CODE, 'CIB' as CODEPARENT from dual                                                                                                     "+
+						"						   UNION                                                                                                                                                    "+
+						"						   Select 'PCJF' as CODE, 'CIB' as CODEPARENT from dual                                                                                                     "+
+						"						   ),                                                                                                                                                       "+
+						"                           ZAPOCETE as                                                                                                                                             "+
+						"                           (                                                                                                                                                       "+
+						"                           Select TO_ORG AS ORG, COUNT(DISTINCT APPLICATION) as BR from APPLICATIONTRANSFER                                                                        "+
+						"                             WHERE STATUS = 'APPROVED'                                                                                                                             "+
+						"                                AND RESPOND_DATE BETWEEN ? AND ? + 1                                                                                                               "+
+						"                                group by TO_ORG                                                                                                                                    "+
+						"                                ),                                                                                                                                                 "+
+						"                            PLAC_DEC_DATE as                                                                                                                                       "+                         
+						"						    (                                                                                                                                                       "+
+						"						    Select                                                                                                                                                  "+
+						"                            plac.ID,                                                                                                                                               "+
+						"                            plac.APPLICATION,                                                                                                                                      "+
+						"                            ch.NAME,                                                                                                                                               "+
+						"                            ch.ORG,                                                                                                                                                "+
+						"						   ( CASE WHEN ch.ORG = 'RI' then plac.DECISION_DATE                                                                                                        "+                     
+						"						         WHEN ch.ORG = 'CO' then plac.OPINION_OKR_DATE                                                                                                      "+                        
+						"						          WHEN ch.ORG = 'CC' then plac.OPINION_NBCO_DATE                                                                                                    "+                        
+						"						    END ) as DAT                                                                                                                                            "+
+						"                                                                                                                                                                                   "+
+						"						    from PLACEMENT plac                                                                                                                                     "+                        
+						"						    join APPLICATION a on a.ID = plac.APPLICATION                                                                                                           "+                        
+						"						    left join COMPETENCYHOLDER ch on ch.ID = a.COMPETENCYHOLDER                                                                                             "+
+						"						    ),                                                                                                                                                      "+
+						"                            APP_DEC_DATE as                                                                                                                                        "+
+						"                            (                                                                                                                                                      "+
+						"                            Select q.APPLICATION, q.NAME, q.ORG, MIN(q.DAT) as DAT,  MIN (plac.ID) as FIRSTPLACEMENT                                                               "+
+						"                            from PLAC_DEC_DATE q                                                                                                                                   "+
+						"                            join PLACEMENT plac on plac.APPLICATION = q.APPLICATION                                                                                                "+
+						"                            WHERE NOT EXISTS ( Select 1 from PLAC_DEC_DATE WHERE APPLICATION = q.APPLICATION and DAT IS NULL )                                                     "+
+						"                            group by q.APPLICATION, q.NAME, q.ORG                                                                                                                  "+
+						"                            )                                                                                                                                                      "+
+						"                            ,                                                                                                                                                      "+
+						"						    DATA AS (                                                                                                                                               "+                        
+						"						    Select pt.APPLICATION, pt.TO_ORG as ORG, pt.FROM_ORG, pt.DATE_FROM as DATEFROM, pt.DATE_TO as DATETO, pt.DAT as ODLUKA,                                 "+
+						"                            CASE                                                                                                                                                   "+
+						"                            WHEN pt.DAT between pt.DATE_FROM AND NVL(pt.DATE_TO, SYSDATE) then CALCULATE_TIME(pt.DATE_FROM, pt.DAT)                                                "+
+						"                            WHEN pt.DAT < pt.DATE_FROM then 0                                                                                                                      "+
+						"                            WHEN pt.DAT > pt.DATE_FROM then CALCULATE_TIME(pt.DATE_FROM, NVL(pt.DATE_TO, SYSDATE))                                                                 "+
+						"                            END as VRIJEME                                                                                                                                         "+
+						"                            FROM (                                                                                                                                                 "+
+						"                            Select                                                                                                                                                 "+
+						"                            pd.APPLICATION, TO_ORG, FROM_ORG, DATE_FROM, DATE_TO, pd.DAT from PLACEMENTTRANSFER pt                                                                 "+
+						"                            join APP_DEC_DATE pd on pd.FIRSTPLACEMENT = pt.PLACEMENT                                                                                               "+
+						"                            UNION                                                                                                                                                  "+
+						"                            Select pd.APPLICATION, TO_ORG, FROM_ORG, FROM_DATE as DATE_FROM, TO_DATE as DATE_TO, pd.DAT from TASKDETAIL td                                         "+
+						"                            join TASK t on t.ID = td.TASK                                                                                                                          "+
+						"                            join APP_DEC_DATE pd on pd.FIRSTPLACEMENT = t.PLACEMENT                                                                                                "+
+						"                            ) pt                                                                                                                                                   "+
+						"                            JOIN APPLICATION a on a.ID = pt.APPLICATION                                                                                                            "+
+						"                            WHERE a.APPLICATION_DATE BETWEEN ? AND ? + 1                                                                                                     "+
+						"						    )                                                                                                                                                       "+
+						"                            ,                                                                                                                                                      "+
+						"                                                                                                                                                                                   "+
+						"                            UKUPNOVRIJEME as                                                                                                                                       "+
+						"                            (                                                                                                                                                      "+
+						"                                Select APPLICATION, SUM(VRIJEME) as VR from DATA                                                                                                   "+
+						"                                group BY APPLICATION                                                                                                                               "+
+						"                            ),                                                                                                                                                     "+
+						"                         ITERATIONS as                                                                                                                                             "+
+						"						  (                                                                                                                                                         "+
+						" 						 SELECT dat.APPLICATION, of1.ID as ORG, count(*) as BR  from DATA dat                                                                                       "+
+						" 						 join HRORGANIZATION of1 on of1.ID = dat.FROM_ORG                                                                                                           "+
+						" 						 join HRORGANIZATION ot on ot.ID = dat.ORG                                                                                                                  "+
+						" 						 WHERE of1.CODE not in ( Select CODE from PRODAJA )                                                                                                         "+
+						"                         AND ot.CODE in ( Select CODE from PRODAJA)                                                                                                                "+
+						" 						 AND dat.DATETO <  dat.ODLUKA                                                                                                                               "+
+						" 						 group by dat.APPLICATION , of1.ID                                                                                                                          "+
+						"                        ) ,                                                                                                                                                        "+
+						"                                                                                                                                                                                   "+
+						"                 DATA_3 as (                                                                                                                                                       "+              
+						"						       Select d.ORG,                                                                                                                                        "+
+						"                               1 as BrojZavrsenih,                                                                                                                                 "+
+						"                               SUM (d.VRIJEME) as Ukupno,                                                                                                                          "+
+						"                               u.VR as Sveukupno  ,                                                                                                                                "+          
+						"						       NVL(i.BR , 0 ) as BrojIteracija                                                                                                                      "+                                                                                                                                                                                                                      
+						"						       from DATA d                                                                                                                                          "+
+						"                               join UKUPNOVRIJEME u on u.APPLICATION = d.APPLICATION                                                                                               "+
+						"                               left join ITERATIONS i on i.APPLICATION = d.APPLICATION and i.ORG = d.ORG                                                                           "+
+						"                                                                                                                                                                                   "+
+						"						       group by d.ORG , u.VR  , i.BR                                                                                                                        "+                           
+						"						       )                                                                                                                                                    "+
+						"                                                                                                                                                                                   "+
+						"						       Select o.NAME as ORG,                                                                                                                                "+
+						"                               SUM(CASE WHEN z.BR is NULL then 1 else z.BR END) as BrojZapocetih,                                                                                  "+
+						"                               SUM(BrojIteracija) as BrojIteracija,                                                                                                                "+
+						"                               SUM (BrojZavrsenih) as BrojZavrsenih,                                                                                                               "+
+						"						       ROUND (SUM( Ukupno / Sveukupno) , 2 )  as ProsjecnoVrijemeZavrsenih                                                                                  "+
+						"						       from DATA_3 d                                                                                                                                        "+                        
+						"						    join HRORGANIZATION o on o.ID = d.ORG                                                                                                                   "+
+						"                             left join ZAPOCETE z on z.ORG = d.ORG                                                                                                                 "+
+						"                            group by o.NAME                                                                                                                                        "
+						,  nativeQuery = true)
 
-	  public List<Report1> getReport1(Date from, Date to, Date from1, Date to1, Date from2, Date to2);
+	  public List<Report1> getReport1(Date from, Date to, Date from1, Date to1);
 	  
 }
 

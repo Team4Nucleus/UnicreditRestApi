@@ -45,4 +45,9 @@ public class AppUserService {
 	}
 
 	
+	public AppRola getRolaByName(String rolename)
+	{
+		return db.Rola().findByRolename(rolename);
+	}
+	
 }

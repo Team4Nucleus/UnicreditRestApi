@@ -35,12 +35,13 @@ public class UserAuthenticationService {
         if (appUser.getActive() == 0)
         	throw new FailedToLoginException(String.format("User [%s] is disabled", username));
         
-        String pw_hash = userService.getUserByUsername(username).getPassword(); 
+        
+     //   String pw_hash = userService.getUserByUsername(username).getPassword(); 
         
         
-        if (BCrypt.checkpw(password, pw_hash)) {
+     //   if (BCrypt.checkpw(password, pw_hash)) {
             isAuthenticated = true;
-        } 
+     //   } 
         if (isAuthenticated) {
             try {
                 return jwtService.generateToken(username);

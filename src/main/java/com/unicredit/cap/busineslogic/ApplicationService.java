@@ -257,7 +257,7 @@ public class ApplicationService {
 	}
 	
 	public List<Report1> getReport1(Date dateFrom, Date dateTo ){	
-		return db.Report1().getReport1(dateFrom, dateTo,dateFrom, dateTo,dateFrom, dateTo );			
+		return db.Report1().getReport1(dateFrom, dateTo,dateFrom, dateTo );			
 	}
 	
 	public List<Report2> getReport2(Date dateFrom, Date dateTo ){	

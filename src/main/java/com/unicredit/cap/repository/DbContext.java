@@ -45,6 +45,8 @@ public class DbContext {
 	@Autowired
 	private CompetencyHolderRepository competencyHolder;
 	@Autowired
+	private HolidayRepository holidayRepository;
+	@Autowired
 	private Report1Repository report1;
 	@Autowired
 	private Report2Repository report2;
@@ -142,6 +144,11 @@ public class DbContext {
 	public TransferRulesRepository TransferRules()
 	{
 		return transferRules;
+	}
+	
+	public HolidayRepository Holiday()
+	{
+		return holidayRepository;
 	}
 	
 	

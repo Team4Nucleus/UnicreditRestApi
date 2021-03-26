@@ -58,9 +58,20 @@ public class ApplicationTransferService {
 	
 	public List<ApplicationTransfer> getAllApplicationTransfersByToOrgAndStatus(long to, String status)
 	{		
-		return db.ApplicationTransfer().getAllApplicationTransfersByToOrgAndStatus(to, status);
+		List<ApplicationTransfer> lst = db.ApplicationTransfer().getAllApplicationTransfersByToOrgAndStatus(to, status);
+		List<ApplicationTransfer> ret = new ArrayList<ApplicationTransfer>();
+
+		for (ApplicationTransfer at : lst)
+		{
+			if (at.getApplication().getCurrentOrg() == to )
+				ret.add(at);
+
+		}
+		
+		return ret;
 	}
 	
+
 	
 	public ApplicationTransfer createApplicationTransfer(ApplicationTransfer appTrans, Long id , int s)
 	{

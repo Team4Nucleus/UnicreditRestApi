@@ -1,9 +1,9 @@
 spring:
   datasource:
-    driverClassName: oracle.jdbc.driver.OracleDriver
-    url: jdbc:oracle:thin:@//192.168.100.7:1521/xe
-    username: DEVELOPER
-    password: admin
+    driverClassName: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@exa1-sca:1521:exaubbt1
+    username: CAP_UBB
+    password: UBB_CAP
   jpa:
     hibernate.ddl-auto: validate
     generate-ddl: true

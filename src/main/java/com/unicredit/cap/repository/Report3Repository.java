@@ -65,6 +65,7 @@ public interface Report3Repository extends JpaRepository<Report3, String>{
 						"   Select PLACEMENT,                                                                                                                               " +
 						"   SUM ( CASE WHEN p.DECISION_DATE is null then  0                                               " +
 						"              WHEN p.DECISION_DATE between DATE_FROM AND NVL(DATE_TO, SYSDATE) then CALCULATE_TIME(DATE_FROM, DECISION_DATE)                       " +
+						"              WHEN p.DECISION_DATE < DATE_FROM then 0  " +
 						"              ELSE  CALCULATE_TIME(DATE_FROM, NVL(DATE_TO, SYSDATE)) END                                                                           " +
 						"   ) as VRIJEME                                                                                                                                    " +
 						"   from PLACEMENTTRANSFER v                                                                                                                        " +
@@ -115,13 +116,13 @@ public interface Report3Repository extends JpaRepository<Report3, String>{
 						"   trRI.MAXDATE as POslednjiPuTuRISK,                                                                                                              " +
 						"   NVL( it.BR, 0 ) as BrojIteracija,                                                                                                               " +
 						"   p.OPINION_OKR,                                                                                                                                  " +
-						"   trRI1.MAXDATE as DAtumMisljenjeOKR,                                                                                                             " +
+						"   p.OPINION_OKR_DATE as DAtumMisljenjeOKR,                                                                                                             " +
 						"   ch.NAME as NosilacKOmpetencije,                                                                                                                 " +
 						"   p.DECISION as Odluka,                                                                                                                           " +
 						"   p.DECISION_DATE as DtumOdluke,                                                                                                                  " +
 						"   trNBCO.MINDATE as DatumSlanjaNaNBCO,                                                                                                            " +
 						"   p.OPINION_NBCO,                                                                                                                                 " +
-						"   trNBCO1.MAXDATE as OdlukaNBCO,                                                                                                                  " +
+						"   p.OPINION_NBCO_DATE as OdlukaNBCO,                                                                                                                  " +
 						"   time.VRIJEME                                                                                                                                    " +
 						"   from PLACEMENT p                                                                                                                                " +
 						"   join APPLICATION a on a.ID = p.APPLICATION                                                                                                      " +
