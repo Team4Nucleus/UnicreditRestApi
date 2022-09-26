@@ -33,6 +33,8 @@ public interface Report3Repository extends JpaRepository<Report3, String>{
 						"   Select 'PCIK' as CODE, 'CIB' as CODEPARENT from dual                                                                                            " +
 						"   UNION                                                                                                                                           " +
 						"   Select 'PCJF' as CODE, 'CIB' as CODEPARENT from dual                                                                                            " +
+						"   UNION                                                                                                                                           " +
+						"   Select 'SPB' as CODE, 'SPB' as CODEPARENT from dual                                                                                            " +
 						"   ),                                                                                                                                              " +
 						"   APP_PLCS as                                                                                                                                     " +
 						"   (                                                                                                                                               " +
@@ -51,7 +53,7 @@ public interface Report3Repository extends JpaRepository<Report3, String>{
 						"   join HRORGANIZATION org on org.ID = pt.TO_ORG                                                                                                   " +
 						"   join HRORGANIZATION org1 on org1.ID = pt.FROM_ORG                                                                                               " +
 						"   where org1.CODE = 'RI'                                                                                                                          " +
-						"   and org.CODE  in ('PCZD','PCZ','PCID','PCI','PCIK','PCJF')                                                                                      " +
+						"   and org.CODE  in ('PCZD','PCZ','PCID','PCI','PCIK','PCJF','SPB')                                                                                      " +
 						"   group by PLACEMENT,  org.CODE                                                                                                                   " +
 						"   ),                                                                                                                                              " +
 						"   TRANSFERS_FROM as                                                                                                                               " +
@@ -90,10 +92,18 @@ public interface Report3Repository extends JpaRepository<Report3, String>{
 						
 						"      RISKUSER as (									" +
 						"      Select PLACEMENT, NAME from (                    " +
-						"      Select v.PLACEMENT, MAX(v.TO_USER) as USER1      " +
+						"      Select v.PLACEMENT, MAX(                         " +
+						" CASE WHEN org.CODE = 'RI'  and v.TO_USER is not null THEN v.TO_USER " +
+                        " WHEN org2.CODE = 'RI'  and v.FROM_USER is not null THEN v.FROM_USER " +
+                        " END																	" +
+						
+						"  ) as USER1  " +
+						
 						"      from PLACEMENTTRANSFER v                         " +                                                                                               
 						"	  join HRORGANIZATION org on org.ID = v.TO_ORG      " +
-						"	  WHERE org.CODE = 'RI'  and v.TO_USER is not null  " +
+						"     join HRORGANIZATION org2 on org2.ID = v.FROM_ORG  " +
+						"	  WHERE ( org.CODE = 'RI'  and v.TO_USER is not null )  " +
+						"      or ( org2.CODE = 'RI'  and v.FROM_USER is not null )  "+
 						"      group by PLACEMENT ) p                           " +
 						"      join HRUSER u on u.ID = p.USER1                  " +
 						"      )                                                " +
@@ -113,7 +123,7 @@ public interface Report3Repository extends JpaRepository<Report3, String>{
 						"   rus.NAME as RISKUSER,   " +
 						"   trRI.MINDATE as PrviPutURISK,                                                                                                                   " +
 						"   trVPO.MINDATE as PrviPutUVPO,                                                                                                                   " +
-						"   trRI.MAXDATE as POslednjiPuTuRISK,                                                                                                              " +
+						"    CASE WHEN trRI.MAXDATE = trRI.MINDATE then NULL ELSE trRI.MAXDATE END as POslednjiPuTuRISK,                                                                                                                 " +
 						"   NVL( it.BR, 0 ) as BrojIteracija,                                                                                                               " +
 						"   p.OPINION_OKR,                                                                                                                                  " +
 						"   p.OPINION_OKR_DATE as DAtumMisljenjeOKR,                                                                                                             " +
@@ -140,7 +150,7 @@ public interface Report3Repository extends JpaRepository<Report3, String>{
 						"   left join ITERATIONS it on it.PLACEMENT = p.ID                                                                                                  " +
 						"   left join TIMEOKR time on time.PLACEMENT = p.ID                                                                                                " +
 						" left join RISKUSER rus on rus.PLACEMENT = p.ID " +
-						"   WHERE p.CREATING_DATE BETWEEN ? AND ? + 1  ",  nativeQuery = true)
+						"   WHERE p.DECISION_DATE BETWEEN ? AND ? + 1  ",  nativeQuery = true)
 	  public List<Report3> getReport3(Date from, Date to);
 	  
 }
